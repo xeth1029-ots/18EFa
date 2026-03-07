@@ -8,6 +8,7 @@
 /.vs/WDACC/v17/DocumentLayout.backup.json
 /.vs/WDACC/v17/DocumentLayout.json
 /.vs/WDACC/v17/fileList.bin
+.vs/
 node_modules/
 temp_logs/
 bin/
