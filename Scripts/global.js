@@ -1505,7 +1505,11 @@ function popupWindow(windowConfig, contentUrl, title, jsonParam, closeCallback, 
     });
 
     ifrWin.talk = function (name, value) {
-      ifrWin.postMessage({ "cmd": name, "args": value }, "*");
+      //OWASP-679F629634E622D0E27FDBB7B49CB2ABF51AB5B491C0C8AD12FE013B340073B02E0481F6602D4A282EC7F8D7D708BCF61FCD0811359F98931F269AD1B30B33F2
+      //修正：僅允許訊息傳送到當前網站的同源網域，防止資料洩漏給惡意來源-OWASP
+      var sendValue = { "cmd": name, "args": value };
+      var targetOrigin = window.location.origin;
+      ifrWin.postMessage(sendValue, targetOrigin);
     }
 
     //關閉對話視窗

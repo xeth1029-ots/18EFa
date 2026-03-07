@@ -7,7 +7,7 @@ var console = window.console || { "log": function () { }, "debug": function () {
 var globalSetting = { domain: "corecompetencies.wda.gov.tw" };
 var HiPKULocalServer = "http://localhost:61161";
 var MSG_NotInstallPKILocalServer = "您的電腦尚未安裝【中華電信自然人憑證跨平台網頁元件】!\n或沒有啟動元件服務!\n或沒有正確連接讀卡機!";
-var TBS = "13141806";
+var TBS = "8C62AD740573F17C5DB754A0A58396736FD2AD226FEEC13D06C57B5E4F224C05"; //加密:8C62AD740573F17C5DB754A0A58396736FD2AD226FEEC13D06C57B5E4F224C05
 
 var _responseTimeout = 3500;
 var _UA = window.navigator.userAgent;

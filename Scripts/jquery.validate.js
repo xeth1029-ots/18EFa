@@ -61,21 +61,13 @@
         });
 
         // Validate the form on submit
-        this.on("submit.validate", function (event) {
-          if (validator.settings.debug) {
-
-            // Prevent form submit to be able to see console output
-            event.preventDefault();
-          }
-
+        // 1. 定義具名的處理函式，確保邏輯結構清晰且可被預測-OWASP
+        var handleFormSubmit = function (event) {
+          var validator = $.data(this, "validator"); // 確保取得當前正確的 validator 實例
+          // Prevent form submit to be able to see console output
+          if (validator.settings.debug) { event.preventDefault(); }
           function handle() {
             var hidden, result;
-
-            // Insert a hidden input as a replacement for the missing submit button
-            // The hidden input is inserted in two cases:
-            //   - A user defined a `submitHandler`
-            //   - There was a pending request due to `remote` method and `stopRequest()`
-            //     was called to submit the form in case it's valid
             if (validator.submitButton && (validator.settings.submitHandler || validator.formSubmitted)) {
               hidden = $("<input type='hidden'/>")
                 .attr("name", validator.submitButton.name)
@@ -86,8 +78,6 @@
             if (validator.settings.submitHandler && !validator.settings.debug) {
               result = validator.settings.submitHandler.call(validator, validator.currentForm, event);
               if (hidden) {
-
-                // And clean up afterwards; thanks to no-block-scope, hidden can be referenced
                 hidden.remove();
               }
               if (result !== undefined) {
@@ -103,6 +93,7 @@
             validator.cancelSubmit = false;
             return handle();
           }
+
           if (validator.form()) {
             if (validator.pendingRequest) {
               validator.formSubmitted = true;
@@ -113,7 +104,12 @@
             validator.focusInvalid();
             return false;
           }
-        });
+        };
+        // 2. 修正 Race Condition：綁定具名事件處理器-OWASP
+        this.on("submit.validate", handleFormSubmit);
+        // 3. 補償機制：如果表單在腳本執行到此處前已經觸發了提交(例如透過快取)，手動補發驗證-OWASP
+        if (this[0] && $.data(this[0], "submitted")) { this.trigger("submit.validate"); }
+
       }
 
       return validator;
