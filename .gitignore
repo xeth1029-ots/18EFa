@@ -2,8 +2,13 @@
 # 這個 .gitignore 檔案由 Microsoft(R) Visual Studio 自動建立。
 ################################################################################
 
-/.vs/WDACC/FileContentIndex
 /WDACC.csproj.user
+/.vs/WDACC/FileContentIndex
 /.vs/WDACC/v17/.suo
 /.vs/WDACC/v17/DocumentLayout.backup.json
 /.vs/WDACC/v17/DocumentLayout.json
+/.vs/WDACC/v17/fileList.bin
+node_modules/
+temp_logs/
+bin/
+obj/
