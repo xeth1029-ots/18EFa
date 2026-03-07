@@ -1,0 +1,43 @@
+﻿/*中推會宋體（來源定義，技檢 1.0 使用）*/
+@font-face {
+  font-family: CMEXSung;
+  src: local("中推會宋體用字"), url("/fonts/CMEXSung.ttf") format("truetype");
+}
+
+/*全字庫正楷體（來源定義）*/
+@font-face {
+  font-family: CNSKai;
+  src: local("全字庫正楷體 Ext-B"), url("/fonts/CNS/TW-Kai-Ext-B-98.ttf") format("truetype");
+  src: local("全字庫正楷體 Plus"), url("/fonts/CNS/TW-Kai-Plus-98.ttf") format("truetype");
+  src: local("全字庫正楷體"), url("/fonts/CNS/TW-Kai-98.ttf") format("truetype");
+}
+
+/*系統預設字體：中推會宋體（十萬多字）*/
+.sysFontCMEXSung {
+  font-family: CMEXSung;
+}
+
+/*系統預設字體：全字庫正楷體*/
+.sysFontCMEXKai {
+  font-family: CNSKai;
+}
+
+/*系統預設字體：微軟細明體*/
+.sysFontMing {
+  font-family: "細明體", MingLiU, CMEXSung;
+}
+
+/*系統預設字體：微軟新細明體*/
+.sysFontMingNew {
+  font-family: "新細明體", PMingLiU, CMEXSung;
+}
+
+/*系統預設字體：微軟標楷體*/
+.sysFontKai {
+  font-family: "標楷體", "DFKai-SB", CMEXSung;
+}
+
+/*系統預設字體：微軟正黑體*/
+.sysFontHei {
+  font-family: "微軟正黑體", "Microsoft JhengHei", CMEXSung;
+}

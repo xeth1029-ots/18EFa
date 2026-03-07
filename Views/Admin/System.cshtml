@@ -1,0 +1,42 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "系統管理";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+
+<div class="submenu">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#btnc1">計畫簡介修改</a></li>
+        <li><a data-toggle="tab" href="#btnc2">課程簡介修改</a></li>
+        <!--<li><a data-toggle="tab" href="#btnc3">聯絡方式修改</a></li>-->
+        <li><a data-toggle="tab" href="#btnc4">師資積分說明</a></li>
+        <li><a data-toggle="tab" href="#btnc5">教材分享說明</a></li>
+        <li><a data-toggle="tab" href="#btnc6">積分時間設定</a></li>
+    </ul>
+</div>
+
+<div class="news-content">
+    <div class="tab-content">
+        <div id="btnc1" class="tab-pane fade in active">
+            @Html.Partial("System/_PlanIntro")
+        </div>
+        <div id="btnc2" class="tab-pane fade">
+            @Html.Partial("System/_CourseIntro")
+        </div>
+        @*<div id="btnc3" class="tab-pane fade">
+        </div>*@
+        <div id="btnc4" class="tab-pane fade">
+            @Html.Partial("System/_ScoreIntro")
+        </div>
+        <div id="btnc5" class="tab-pane fade">
+            @Html.Partial("System/_ShareIntro")
+        </div>
+        <div id="btnc6" class="tab-pane fade">
+            @Html.Partial("System/_ScoreDate")
+        </div>
+    </div>
+</div>

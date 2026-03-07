@@ -1,0 +1,49 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@using WDACC.Models.Entities
+
+@{
+    ViewBag.Title = "講師授課花絮";
+    IList<TeacherShow> grid1 = Model.MemberTeachShowGrid.Where(x => x.@class == ((short?)1)).ToList();
+    IList<TeacherShow> grid2 = Model.MemberTeachShowGrid.Where(x => x.@class == ((short?)2)).ToList();
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div class="news-content">
+    <h4> @Model.TeacherDetail.MemDetail.realname &nbsp;講師授課花絮 </h4>
+    <div style="margin:0.5em;">
+        @if (grid1 != null)
+        {
+            int i_val = 0;
+            foreach (var item in grid1)
+            {
+                i_val += 1;
+                string s_title_info = (item.title ?? "");
+                string s_alt_info = (item.info ?? "").Length != 0 ? item.info : string.Format("講師授課花絮{0}.{1}.", i_val, s_title_info);
+                <img src="@Url.Action("Download", "File", new { id = ActionName.File.TeachShow, fid = item.id })"
+                     alt="@s_alt_info"
+                     style="max-width:100%" /><hr />
+            }
+        }
+    </div>
+    <div style="margin:0.5em;line-height:1.5em;min-height:6em;background-color:rgba(204,229,255,0.7)">
+        上課影音連結<br />
+        <ol>
+            @if (grid2 != null)
+            {
+                foreach (var item in grid2)
+                {
+                    <li>
+                        <span class="glyphicon glyphicon-facetime-video" aria-hidden="true" style="font-size: 2em"></span> &nbsp;
+                        <a href="@item.content" target="_blank" title="另開新視窗,查看簡要說明" >@item.title</a><br>
+                        簡要說明： @item.info
+                    </li>
+                }
+            }
+        </ol>
+    </div>
+</div>
+

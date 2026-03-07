@@ -1,0 +1,109 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "管理者帳號";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="admin_account">
+    <div class="unit-border">
+        <div class="unit-bg unit-bg-blue">
+            @using (Html.BeginForm("Query", "Admin", new { id = ActionName.Admin.MgrAccount }, FormMethod.Post, new { id = "main_form" }))
+            {
+                <span></span>
+                <span>帳號</span>
+                @Html.TextBoxFor(x => x.MgrModel.Form.email, new { @class = "form-normal", maxlength = 100 })
+                <span>身分證號</span>
+                @Html.TextBoxFor(x => x.MgrModel.Form.pid, new { @class = "form-normal", maxlength = 20 })
+                <span>姓名</span>
+                @Html.TextBoxFor(x => x.MgrModel.Form.realname, new { @class = "form-normal", maxlength = 100 })
+                <button type="submit" id="query" class="btn btn-primary">查詢</button>
+                <a class="btn btn-primary" style="float:right" href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.MgrAccount })">
+                    新增帳號
+                </a>
+            }
+        </div>
+    </div>
+    <div>
+        <table class="table table-index">
+            <thead>
+                <tr>
+                    <th>帳號／電子郵件</th>
+                    <th>姓名</th>
+                    <th>身分證號</th>
+                    <th style="width:150px">功能</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.MgrModel.Grid != null)
+                {
+                    foreach (var item in Model.MgrModel.Grid)
+                    {
+                        <tr>
+                            <td> @item.Get("email").AsText()</td>
+                            <td> @item.Get("realname").AsText() </td>
+                            <td> @item.Get("pid").AsText() </td>
+                            <td>
+                                <a class="btn btn-orange edit" href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.MgrAccount, mid=item.Get("id").AsInt64() })">編輯</a>
+                                <button class="btn btn-danger remove" data-mid="@item.Get("id").AsInt64()">刪除</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('#admin_account');
+        var form = root.find('#main_form');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: form.attr('action'),
+                data: form.serialize(),
+                method: form.attr('method')
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功");
+                } else {
+                    if (resp && resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, item) {
+                            res += item + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+
+        root.on('click', '.remove', function (e) {
+            e.preventDefault();
+            blockConfirm('確定要刪除?', null, function () {
+                var url = '@Url.Action("Remove", "Admin", new { id = ActionName.Admin.MgrAccount })';
+                $.ajax({
+                    url: url,
+                    data: { mid: $(e.currentTarget).attr('data-mid') },
+                    method: 'POST'
+                }).done(function (resp) {
+                    if (resp) {
+                        if (resp.status) {
+                            blockAlert('刪除成功', null, function () {
+                                $(e.currentTarget).closest('tr').remove();
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+    });
+</script>
+

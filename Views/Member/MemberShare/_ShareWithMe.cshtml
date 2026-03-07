@@ -1,0 +1,88 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "教材分享";
+}
+
+<h3 class="news-headtitle">教材分享</h3>
+<div class="clearfix"></div>
+<div class="newsgroup" id="share-with-me">
+    <div id="tabmf2" class="tab_content">
+        <div class="unit-bg">
+            @using (Html.BeginForm("Query", "Member", new { id = ActionName.Member.ShareWithMe }, FormMethod.Post, new { id = "main_form" }))
+            {
+                <div class="form-group">
+                    @{
+                        var years = Enumerable.Range(2014, DateTime.Now.Year - 2013)
+                            .OrderByDescending(x => x)
+                            .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() });
+
+                        var months = Enumerable.Range(1, 12)
+                            .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() });
+                    }
+                    @Html.DropDownListFor(x => x.ShareWithMeParam.year, years, "請選擇", new { id = "form-inline" }) 年&nbsp;
+                    @Html.DropDownListFor(x => x.ShareWithMeParam.month,
+                        months,
+                        "請選擇",
+                        new { @class = "form-inline" }) 月&nbsp;
+                    職能類別
+                    @Html.DropDownListFor(x => x.ShareWithMeParam.classid,
+                        CommonOptions.Fclass(),
+                        "請選擇",
+                        new { @class = "form-inline" }) &nbsp;
+                    <input id="query" type="submit" value="送出查詢" class="btn btn-orange">
+                </div>
+            }
+        </div>
+        <div class="clearfix"></div>
+        <p class="mark-blue">本平台僅作為共通核心職能課程師資交流學習使用，不得從事商業用途，請尊重智慧財產權，避免任何侵權行為。</p>
+        <table class="table-index" style="width: 100%" border="0">
+            <thead>
+                <tr>
+                    <th width="16%">上傳日期</th>
+                    <th width="10%">分享人</th>
+                    <th>檔案標題</th>
+                    <th width="12%">職能類別</th>
+                    <th width="10%">下載</th>
+                </tr>
+            </thead>
+            <tbody id="rows">
+                @Html.Partial("MemberShare/_ShareWithMeGridRows")
+                <!-- $sharefile -->
+            </tbody>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        function query() {
+            $.ajax({
+                url: $('#share-with-me form').attr('action'),
+                data: $('#share-with-me form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp) {
+                    $('#share-with-me tbody#rows').html(resp);
+                }
+            });
+        }
+
+        function showContent(el) {
+            var content = $(el).closest('td').find('script#tmpl-content').html();
+            blockMessage(content, '說明');
+        }
+
+        $('#share-with-me').on('click', '#query', function (e) {
+            e.preventDefault();
+            query();
+        });
+
+        $('#share-with-me').on('click', '.file-content', function (e) {
+            e.preventDefault();
+            showContent(e.currentTarget);
+        });
+    })
+</script>

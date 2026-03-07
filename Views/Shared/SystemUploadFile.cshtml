@@ -1,0 +1,128 @@
+﻿@using Turbo.MVC.Base3.Commons
+@using Turbo.MVC.Base3.Services
+@model Turbo.MVC.Base3.Models.SystemUploadFile
+
+<div id="DivResult">
+
+    @if (Model.ShowFileUpload)
+    {
+        <label class="col-sm-2 control-label label-set">選取檔案來源</label>
+        <div class="col-sm-10 form-inline">
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.POSTED_FILE, new { type = "file", @class = "form-control formbar-bg", id = "FileUpload" })
+                <div class="input-group-btn">
+                    <button class="btn btn-info" type="button" data-toggle="tooltip" id="Upload_File" data-role="Upload_File" title="上傳">上傳<i class="fa fa-upload" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    }
+    <div id="FileRows">
+        <div style="color:red">@(Model.ErrorMsg)</div>
+        <table class="table-result">
+            <thead>
+                <tr>
+                    <th>檔案名稱</th>
+                    <th width="10%">檔案容量</th>
+                    <th width="10%">下載</th>
+                    @if (Model.ShowFileUpload && Model.ShowDelete)
+                    {
+                        <th width="10%">刪除</th>
+                    }
+                </tr>
+            </thead>
+            <tbody style="height:auto !important">
+                @Html.HiddenFor(m => m.ShowFileUpload)
+                @Html.HiddenFor(m => m.OutModelName)
+                @Html.HiddenFor(m => m.ShowDelete)
+                @Html.HiddenFor(m => m.FILEPKEY1)
+                @Html.HiddenFor(m => m.FILEPKEY2)
+                @Html.HiddenFor(m => m.FILEPKEY3)
+
+                @if (Model.fileGrid.ToCount() > 0)
+                {
+                    for (int i = 0; i < Model.fileGrid.Count; i++)
+                    {
+                        var item = Model.fileGrid[i];
+                        var file_name = item.FILENAME != null && item.FILENAME != "" ? item.FILENAME.Remove(0, 13) : "";
+
+                        <tr>
+                            <td>@file_name</td>
+                            <td>@((item.FILECAPACTIY.ToDouble() / (1024.00 * 1024.00)).ToString("#0.00")) MB</td>
+                            <td align="center">
+                                <button type="button" class="btn btn-info"
+                                        onclick="window.open('@(Url.Content(Model.fileGrid[i].FILEPATH+"/"+Model.fileGrid[i].FILENAME))')">
+                                    下載
+                                </button>
+                                @Html.HiddenFor(m => m.fileGrid[i].FILEID)
+                                @Html.HiddenFor(m => m.fileGrid[i].FILENAME)
+                                @Html.HiddenFor(m => m.fileGrid[i].FILEPATH)
+                                @Html.HiddenFor(m => m.fileGrid[i].FILECAPACTIY)
+                                @Html.HiddenFor(m => m.fileGrid[i].FILEPKEY1)
+                                @Html.HiddenFor(m => m.fileGrid[i].FILEPKEY2)
+                                @Html.HiddenFor(m => m.fileGrid[i].FILEPKEY3)
+                                @Html.HiddenFor(m => m.fileGrid[i].MODIP)
+                                @Html.HiddenFor(m => m.fileGrid[i].MODTIME)
+                                @Html.HiddenFor(m => m.fileGrid[i].MODUSERID)
+                                @Html.HiddenFor(m => m.fileGrid[i].MODUSERNAME)
+                            </td>
+                            @if (Model.ShowFileUpload && Model.ShowDelete)
+                            {
+                                <td align="center">
+                                    <button type="button" class="btn btn-danger"
+                                            onclick="DeleteFile('@(i)')">
+                                        刪除
+                                    </button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+    });
+
+    // 按下上傳按鈕觸發
+    $('#Upload_File').on('click', function () {
+        var url = "@Url.Action("UploadFile", "Ajax",new { area = "" })";
+        var files = "#FileUpload";
+        var parms = getFormDataJsonReplce("#FileRows :input", '..');
+
+        ajaxUploadFile(url, files, parms
+         , function (data) {
+             $("#DivResult").html(data);
+             $("#FileRows :input").each(function (i, obj) {
+                 if (obj.id != "ErrorMsg") {
+                     $("#" + obj.id).attr("name", 'Upload.' + obj.name);
+                     $("#" + obj.id).attr("id", 'Upload_' + obj.id);
+                 }
+             })
+         }, function () {
+             blockAlert("上傳失敗");
+         });
+    });
+
+    // 移除目前畫面檔案
+    function DeleteFile(idx) {
+        var url = "@Url.Action("DeleteFile", "Ajax",new { area = "" })";
+        var files = "#FileUpload";
+        var parms = getFormDataJsonReplce("#FileRows :input", '@(Model.OutModelName)');
+        parms["idx"] = idx;
+
+        ajaxUploadFile(url, files, parms
+         , function (data) {
+             $("#DivResult").html(data);
+             $("#FileRows :input").each(function (i, obj) {
+                 $("#" + obj.id).attr("name", 'Upload.' + obj.name);
+                 $("#" + obj.id).attr("id", 'Upload_' + obj.id);
+             })
+         }, function () {
+             blockAlert("刪除檔案失敗");
+         });
+    }
+</script>

@@ -1,0 +1,103 @@
+﻿@model WDACC.Models.ViewModel.LogViewModel
+@using WDACC.Commons
+
+@* 檔案上傳 *@
+@{
+    string guid = Guid.NewGuid().ToString();
+}
+
+<div id="tab-@(guid)">
+    <div id="form">
+        @using (Html.BeginForm("Query", "Admin", new { id = ActionName.Admin.FileLog, formid = Model.FileLogForm.rid }, FormMethod.Post, new { id = "file-form" }))
+        {
+            <div class="table">
+                <table border="0" width="100%" class="table-teacher">
+                    <tbody>
+                        <tr>
+                            <td width="14%">日期區間</td>
+                            <td>
+                                @Html.EditorFor(x => x.FileLogForm.StartDateTw, "TwDate")
+                                ~
+                                @Html.EditorFor(x => x.FileLogForm.EndDateTw, "TwDate")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">類型</td>
+                            <td colspan="3">
+                                @Html.DropDownListFor(x => x.FileLogForm.LogType, CommonOptions.FileLogType(), "請選擇", new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">帳號</td>
+                            <td colspan="3">
+                                @Html.TextBoxFor(x => x.FileLogForm.UserName, new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="submit-bar">
+                <button type="submit" class="btn btn-orange" id="query">查詢</button>
+            </div>
+        }
+    </div>
+    <div id="gird">
+        <div id="paging-container"></div>
+        <div id="grid" class="row">
+            @if (Model != null && Model.FileGrid != null && Model.FileGrid.Count > 0)
+            {
+                foreach (var item in Model.FileGrid)
+                {
+                    @Html.Partial("Log/_FileLogGridRows", item)
+                }
+            }
+            else
+            {
+                <table class="table table-bordered table-condensed">
+                    <tr>
+                        <td class="text-center">查無資料</td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('#tab-@(guid)');
+
+        function setupPaging(totalNumber) {
+            root.find('div#paging-container').pagination({
+                dataSource: '@Html.Raw(Url.Action("Paging", "Admin", new { id = ActionName.Admin.FileLog, formid = Model.FileLogForm.rid }))',
+                locator: 'data',
+                totalNumber: totalNumber, 
+                pageSize: 30,
+                callback: function (data, pagination) {
+                    var res = '';
+                    $.each(data, function (i, item) {
+                        res += item;
+                    });
+                    root.find('#grid.row').html(res);
+                }
+            });
+        }
+
+        root.on('click', '#query', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#file-form').attr('action'),
+                data: root.find('#file-form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                var res = '';
+                $.each(resp.data, function (i, item) {
+                    res += item;
+                });
+                root.find('#grid.row').html(res);
+                setupPaging(resp.totalNumber);
+            });
+        });
+    });
+</script>
+

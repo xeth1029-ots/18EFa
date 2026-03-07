@@ -1,0 +1,194 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "_VideoForm";
+    Model.TeachShow.Kind = "IMAGE";
+    //string s_file_accept = ".xls,.doc,.ppt,.pdf,.jpg,.png,.msg,.odt,.odf";
+    string s_file_accept = Turbo.MVC.Base3.Models.ConfigModel.Get_FileExtAccept;
+}
+
+<div id="image-form">
+    <h3 class="news-headtitle">授課相片</h3>
+    <div class="clearfix"></div>
+    <!-- news group start -->
+    <div class="mark-blue">◎相片標題及檔案均需填寫，前台才會呈現。◎</div>
+    <div class="mark-blue">◎若要刪除資料，請將相片標題清空即可。◎</div>
+
+    @using (Html.BeginForm("Save", "Member", new { id = ActionName.Member.TeachShow }, FormMethod.Post, new { id = "image_form", enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" name="mid" value="557">
+        @*<input type="hidden" value="1" name="tsclass">*@
+        @Html.HiddenFor(x => x.TeachShow.Kind)
+        <div class="table-responsive">
+            <table class="table-index" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>
+                        <th width="35%">相片標題</th>
+                        <th width="65%">相片檔案</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.ImageGrid[0].title, new { @class = "form-control" })
+                            @Html.HiddenFor(x => x.TeachShow.ImageGrid[0].id)
+                        </td>
+                        <td>
+                            @*<input type="file" name="tsfile[]" class="form-control" />*@
+                            <input type="file" name="ImageFiles" class="form-control" accept="@s_file_accept" />
+                            <div class="image-container">
+                                @GetImgElement(Model.TeachShow.ImageGrid[0])
+                                <button class="btn btn-default">刪除</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.ImageGrid[1].title, new { @class = "form-control" })
+                            @Html.HiddenFor(x => x.TeachShow.ImageGrid[1].id)
+                        </td>
+                        <td>
+                            @*<input type="file" name="tsfile[]" class="form-control">*@
+                            <input type="file" name="ImageFiles" class="form-control" accept="@s_file_accept" />
+                            <div class="image-container">
+                                @GetImgElement(Model.TeachShow.ImageGrid[1])
+                                <button class="btn btn-default">刪除</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.ImageGrid[2].title, new { @class = "form-control" })
+                            @Html.HiddenFor(x => x.TeachShow.ImageGrid[2].id)
+                        </td>
+                        <td>
+                            @*<input type="file" name="tsfile[]" class="form-control">*@
+                            <input type="file" name="ImageFiles" class="form-control" accept="@s_file_accept" />
+                            <div class="image-container">
+                                @GetImgElement(Model.TeachShow.ImageGrid[2])
+                                <button class="btn btn-default">刪除</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.ImageGrid[3].title, new { @class = "form-control" })
+                            @Html.HiddenFor(x => x.TeachShow.ImageGrid[3].id)
+                        </td>
+                        <td>
+                            @*<input type="file" name="tsfile[]" class="form-control">*@
+                            <input type="file" name="ImageFiles" class="form-control" accept="@s_file_accept" />
+                            <div class="image-container">
+                                @GetImgElement(Model.TeachShow.ImageGrid[3])
+                                <button class="btn btn-default">刪除</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.ImageGrid[4].title, new { @class = "form-control" })
+                            @Html.HiddenFor(x => x.TeachShow.ImageGrid[4].id)
+                        </td>
+                        <td>
+                            @*<input type="file" name="tsfile[]" class="form-control">*@
+                            <input type="file" name="ImageFiles" class="form-control" accept="@s_file_accept" />
+                            <div class="image-container">
+                                @GetImgElement(Model.TeachShow.ImageGrid[4])
+                                <button class="btn btn-default">刪除</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="submit-bar">
+            <button type="submit" id="save" class="btn btn-orange">資料送出</button>
+            <button type="reset" class="btn btn-refill">資料清除</button>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        root = $('div#image-form');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#image_form').attr('action'),
+                data: new FormData(root.find('#image_form')[0]),
+                method: 'POST',
+                processData: false,
+                contentType: false
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功");
+                } else {
+                    if (resp && resp.message) {
+                        blockWarning(resp.message);
+                    }
+                }
+            });
+        });
+
+        root.on('change', 'input[type="file"]', function (e) {
+            var file = e.target.files[0];
+            var form = new FormData();
+            if (file) {
+                form.append('file', file);
+                $.ajax({
+                    url: '@Url.Action("ImageToBase64", "File")',
+                    method: 'POST',
+                    data: form,
+                    processData: false,
+                    contentType: false
+                }).done(function (resp) {
+                    var td = $(e.target).closest('td')
+                    if (resp) {
+                        td.find('img').attr('src', resp);
+                        td.find('.image-container').show();
+                    } else {
+                        td.find('.image-container').hide();
+                    }
+                });
+            }
+        });
+
+        root.on('click', 'button', function (e) {
+            e.preventDefault();
+            var td = $(e.target).closest('td');
+            td.find('.image-container').hide();
+            td.find('input[type=file]').val(null);
+        });
+
+        function initImgVisible() {
+            root.find('img').each(function () {
+                var src = $(this).attr('src');
+                if (src) {
+                    $(this).closest('.image-container').show();
+                } else {
+                    $(this).closest('.image-container').hide();
+                }
+            });
+        };
+
+        initImgVisible();
+    });
+</script>
+
+@helper GetImgElement(WDACC.Models.Entities.TeacherShow ts)
+{
+    var info = ts.info;
+    if (ts != null && ts.id.HasValue)
+    {
+        <img src="@Url.Action("Download", "File", new { id = ActionName.File.TeachShow, fid = ts.id })" alt="@ts.info" width="50%" height="50%" />
+    }
+    else
+    {
+        <img src="" alt="" width="50%" height="50%" />
+    }
+}

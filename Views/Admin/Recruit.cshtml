@@ -1,0 +1,117 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt;
+@using WDACC.Commons;
+
+@{
+    ViewBag.Title = "師資招募";
+
+    IList<Store> waitList = Model.RecruitModel.Grid.Where(x => x.Get("confirm").AsText() == "1").ToList();
+    IList<Store> passList = Model.RecruitModel.Grid.Where(x => x.Get("confirm").AsText() == "2").ToList(); ;
+    IList<Store> rejectList = Model.RecruitModel.Grid.Where(x => x.Get("confirm").AsText() == "3").ToList(); ;
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="recruit">
+    <div class="clearfix"></div>
+
+    <h4 class="content-title">課程師資招募(待審查)</h4>
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <thead>
+                <tr>
+                    <th width="20%">發布日期</th>
+                    <th width="60%">開課單位</th>
+                    <th width="20%">課程類別</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (waitList != null)
+                {
+                    foreach (var item in waitList)
+                    {
+                        @RenderRow(item)
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">課程師資招募(已通過)</h4>
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <thead>
+                <tr>
+                    <th>發布日期</th>
+                    <th>開課單位</th>
+                    <th>課程類別</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (passList != null)
+                {
+                    foreach (var item in passList)
+                    {
+                        @RenderRow(item, true)
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">課程師資招募(未通過)</h4>
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <thead>
+                <tr>
+                    <th>發布日期</th>
+                    <th>開課單位</th>
+                    <th>課程類別</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (rejectList != null)
+                {
+                    foreach (var item in rejectList)
+                    {
+                        @RenderRow(item)
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@helper RenderRow(Store item, bool isShowCount = false)
+{
+    <tr>
+        <td> @item.Get("aodate").AsDateTimeText("yyyy-MM-dd") </td>
+        <td>
+            <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.Recruit, tsid=item.Get("id").AsInt64() })"> @item.Get("indname").AsText() </a>
+            @if (isShowCount)
+            {
+                <span style="font-size: 0.8em">(點擊: @item.Get("clicks").AsInt64()) </span>
+            }
+        </td>
+        <td> @item.Get("couclass").AsText().Replace(",", " ") </td>
+    </tr>
+}
+
+<script>
+    $(function () {
+        var root = $('div#recruit');
+        root.on('click', '#query', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: root.find('#main_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp) {
+                    $('tbody#rows').html(resp);
+                }
+            });
+        });
+    });
+</script>

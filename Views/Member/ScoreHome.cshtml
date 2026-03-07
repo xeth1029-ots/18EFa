@@ -1,0 +1,24 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "師資積分課程登錄說明事項";
+    Store store = new Store();
+    store.Collection(Model.ScoreHome);
+    string str = store.Get("content").AsHtmlDecodedText();
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div class="unit-border">
+    <div class="unit-bg unit-bg-blue">
+        @Html.Raw(str)
+        <div class="submit-bar">
+            <a class="btn btn-orange" href="@Url.Action("Index", "Member", new { id = ActionName.Member.ScoreRegister })">
+                課程登錄
+            </a>
+        </div>
+    </div>
+</div>

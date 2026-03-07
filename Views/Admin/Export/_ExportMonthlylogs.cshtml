@@ -1,0 +1,33 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    Layout = null;
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>帳號 </th>
+            <th>姓名 </th>
+            <th>紀錄時間 </th>
+            <th>ADDIP </th>
+            <th>使用瀏覽器 </th>
+            <th>訊息 </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.MonthlylogsExportModel.Result)
+        {
+            <tr>
+                <td> @row.Get("username").AsText() </td>
+                <td> @row.Get("realname").AsText() </td>
+                <td> @row.Get("createtime").AsDateTimeText("yyyy-MM-dd HH:mm:ss") </td>
+                <td> @row.Get("ip").AsText() </td>
+                <td> @row.Get("useragent").AsText() </td>
+                <td> @row.Get("message").AsText() </td>
+            </tr>
+        }
+    </tbody>
+</table>

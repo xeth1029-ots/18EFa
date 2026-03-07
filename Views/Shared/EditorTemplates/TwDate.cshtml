@@ -1,0 +1,46 @@
+﻿@model WDACC.Models.TwDate
+
+@{
+    if(string.IsNullOrEmpty(Model.Label))
+    {
+        Model.Label = "民國";
+    }
+}
+
+@if (ViewBag.IsInline != null && !ViewBag.IsInline)
+{
+    <div class="form-inline">
+        <div class="row" style="position: relative; margin-left:0">
+            @Model.Label
+            <div class="form-group datepicker-outline input-append date" id="date">
+                @Html.TextBoxFor(m => m.DATE_TW, htmlAttributes: new { data_bind = "value: DATE_TW", maxlength = "9", placeholder = "日期", title = "請輸入日期", @class="form-normal" })
+                @Html.HiddenFor(m => m.DATE_AD,
+                htmlAttributes: new Dictionary<string, object> {
+                { "class", "datepickerinput"}, {"data-bind", "value: DATE_AD"}})
+                <a class="btn btn-info open-datepicker" role="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span class="sr-only">calendar</span>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <span class="form-inline">
+        <span style="position: relative; margin-left:0">
+            @Model.Label
+            <span class="form-group datepicker-outline input-append date" id="date">
+                @Html.TextBoxFor(m => m.DATE_TW, htmlAttributes: new { maxlength = "9", @class = "text-center form-normal", placeholder = "日期", title = "請輸入日期" })
+                @Html.HiddenFor(m => m.DATE_AD,
+                htmlAttributes: new Dictionary<string, object> {
+                { "class", "datepickerinput"} })
+                <a class="btn btn-info open-datepicker" role="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span class="sr-only">calendar</span>
+                </a>
+            </span>
+        </span>
+    </span>
+}
+

@@ -1,0 +1,162 @@
+﻿@model WDACC.Models.ViewModel.LogViewModel
+@using WDACC.Commons
+
+@* 登入登出log *@
+@{
+    string guid = Guid.NewGuid().ToString();
+}
+
+<div id="tab-@(guid)">
+    <div id="form">
+        @using (Html.BeginForm("Query", "Admin", new { id = ActionName.Admin.LoginLog, formid = Model.LoginLogForm.rid }, FormMethod.Post, new { id = "login-form" }))
+        {
+            <div class="table">
+                <table border="0" width="100%" class="table-teacher">
+                    <tbody>
+                        <tr>
+                            <td width="14%">日期區間</td>
+                            <td>
+                                @Html.EditorFor(x => x.LoginLogForm.StartDateTw, "TwDate")
+                                ~
+                                @Html.EditorFor(x => x.LoginLogForm.EndDateTw, "TwDate")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">類型</td>
+                            <td colspan="3">
+                                @Html.DropDownListFor(x => x.LoginLogForm.LogType, CommonOptions.LoginLogType(), "請選擇", new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">帳號</td>
+                            <td colspan="3">
+                                @Html.TextBoxFor(x => x.LoginLogForm.UserName, new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">匯出年月</td>
+                            <td colspan="3">
+                                @Html.DropDownListFor(x => x.LoginLogForm.ExpYear1, CommonOptions.LoginLogYearslist(), "請選擇", new { @class = "form-normal" })年
+                                @Html.DropDownListFor(x => x.LoginLogForm.ExpMonth1, CommonOptions.LoginLogMonthlist(), "請選擇", new { @class = "form-normal" })月
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="submit-bar">
+                <button type="submit" class="btn btn-orange" id="query">查詢</button>
+                <button type="button" class="btn btn-orange" id="export" onclick="doExport()">匯出每月登入異常日誌</button>
+            </div>
+        }
+    </div>
+    <div id="grid">
+        @*@Html.Partial("_PagingLink", Model.LoginLogForm)*@
+        <div id="paging-container"></div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>項次</th>
+                    <th>帳號</th>
+                    <th>姓名</th>
+                    <th>類型</th>
+                    <th>紀錄時間</th>
+                    <th>IP</th>
+                    <th>訊息</th>
+                    <th style="width: 30%">使用瀏覽器</th>
+                <tr>
+            </thead>
+            <tbody id="rows">
+                @if (Model != null && Model.LoginGrid != null && Model.LoginGrid.Count > 0)
+                {
+                    var typeList = CommonOptions.LoginLogType();
+                    foreach (var item in Model.LoginGrid)
+                    {
+                        @Html.Partial("Log/_LoginlogGridRows", item)
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center"> 查無資料 </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    @using (Html.BeginForm("Export", "Admin", new { id = ActionName.Admin.Exportlogs }, FormMethod.Post,
+                new { id = "export_form", @class = "form-inline" }))
+    {
+        @Html.HiddenFor(x => x.LoginLogForm.ExpYear1, new { id = "export_year" })
+        @Html.HiddenFor(x => x.LoginLogForm.ExpMonth1, new { id = "export_month" })
+    }
+</div>
+
+<script>
+    $(function () {
+        var root = $('#tab-@(guid)');
+
+        function setupPaging(totalNumber) {
+            root.find('div#paging-container').pagination({
+                dataSource: '@Html.Raw(Url.Action("Paging", "Admin", new { id = ActionName.Admin.LoginLog, formid = Model.LoginLogForm.rid }))',
+                locator: 'data',
+                // pageNumber: 1,
+                totalNumber: totalNumber,
+                pageSize: 30,
+                //totalNumberLocator: function (resp) {
+                //    console.log(resp.totalNumber)
+                //    return resp.totalNumber;
+                //},
+                callback: function (resp, pagination) {
+                    var res = '';
+                    $.each(resp, function (i, item) {
+                        res += item;
+                    });
+                    root.find('tbody#rows').html(res);
+                }
+            });
+        }
+
+        root.on('click', '#query', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#login-form').attr('action'),
+                data: root.find('#login-form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                var res = '';
+                $.each(resp.data, function (i, item) {
+                    res += item;
+                });
+                root.find('tbody#rows').html(res);
+                setupPaging(resp.totalNumber);
+            });
+        });
+    });
+
+    function LoginAjaxCallback(resp) {
+
+        var root = $('#tab-@(guid)');
+        root.find('div#grid').html(resp);
+
+        paging.computeCurrentTotalPages();
+        paging.refreshCurPageInfo();
+    }
+
+     // 匯出
+    function doExport() {
+        //blockUI();
+        var llf_ExpYear1 = $("#LoginLogForm_ExpYear1").val();
+        var llf_ExpMonth1 = $("#LoginLogForm_ExpMonth1").val();
+        @*form.attr('action', '@Url.Action("IdxExport", "Admin")').submit();*@
+        var root = $('#tab-@(guid)');
+        var form = root.find('form#export_form');
+        form.find('input#export_year').val(llf_ExpYear1);
+        form.find('input#export_month').val(llf_ExpMonth1);
+        //console.log('llf_ExpYear1=' + llf_ExpYear1); console.log('llf_ExpMonth1=' + llf_ExpMonth1);//debugger;        
+        form.submit();
+    }
+
+</script>
+

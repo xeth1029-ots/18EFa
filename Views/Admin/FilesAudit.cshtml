@@ -1,0 +1,104 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "教材審核";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="course_audit" class="news-content">
+    <div>
+        @Model.AuditParam.RealName &nbsp;講師&nbsp;教材審核<span style="float:right;color:#f00;font-weight:bold;">若課程未通過或退回，請務必填寫審查意見</span><br>
+    </div>
+    @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.FileAudit }, FormMethod.Post, new { id = "main_form" }))
+    {
+        <table class="table-index" width="100%">
+            <tbody>
+                <tr>
+                    <th width="8%">&nbsp;</th>
+                    <th>上傳日期</th>
+                    <th>檔案標題</th>
+                    <th>職能類別</th>
+                    <th>下載</th>
+                    <th>審查意見</th>
+                </tr>
+                @for (int i = 0; i < Model.AuditShareDetailList.Count; i++)
+                {
+                    Store store = new Store();
+                    var item = Model.AuditShareDetailList[i];
+                    store.Collection(item);
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(x => x.AuditShareDetailList[i].id)
+                            @Html.DropDownListFor(x => x.AuditShareDetailList[i].@checked, CommonOptions.AuditStatus(item.@checked + ""), null, new { @class = "form-normal" })
+                        </td>
+                        <td> @store.Get("date").AsDateTimeText("yyyy-MM-dd") </td>
+                        <td> @item.title </td>
+                        <td> @store.Get("classid").AsCodeText(CommonOptions.Fclass()) </td>
+                        <td>
+                            <div>
+                                <a href="@Url.Action("Download", "File", new { id = ActionName.File.ShareSFile, fid = item.id })" rel="noopener"> 教材下載 </a>
+                            </div>
+                            <div>
+                                <a href="@Url.Action("Download", "File", new { id = ActionName.File.ShareIFile, fid = item.id })" rel="noopener"> 說明書下載 </a>
+                            </div>
+                            <div>
+                                <a href="@Url.Action("Download", "File", new { id = ActionName.File.ShareAFile, fid = item.id })" rel="noopener"> 授權書下載 </a>
+                            </div>
+
+                            @* 補上傳檔案 *@
+                            @if (store.Get("date").AsDateTime() > new DateTime(2020, 10, 13))
+                            {
+                                <div>
+                                    <a href="@Url.Action("FixUpload", "Admin", new { fid = item.id, name = Model.AuditParam.RealName, title = item.title })" rel="noopener">
+                                        [補上傳檔案]
+                                    </a>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(x => x.AuditShareDetailList[i].reason, new { @class = "form-normal" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="submit-bar">
+            <button type="submit" id="save" class="btn btn-orange" name="submitcs">送出</button>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#course_audit');
+
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: root.find('#main_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.ClassReview })' + '#tab2';
+                    });
+                } else {
+                    if (resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, item) {
+                            res += item + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+

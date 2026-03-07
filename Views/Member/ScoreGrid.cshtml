@@ -1,0 +1,137 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons 
+
+@{
+    string title = "";
+    string ckeckText = null;
+    var param = Model.ScoreGridParam;
+    int rowspan = 4;
+    switch (param.ckeckd)
+    {
+        case "1":
+            ckeckText = "審核中";
+            break;
+        case "2":
+            ckeckText = "通過";
+            break;
+        case "3":
+            ckeckText = "未通過";
+            rowspan = 5;
+            break;
+        case "4":
+            ckeckText = "退回";
+            rowspan = 5;
+            break;
+    }
+
+    title = string.Format("{0}{1}之開授課程", (param.year != null ? param.year + "年" : null), ckeckText);
+
+    // 績分課程清單
+    ViewBag.Title = title;
+
+    bool isShowEdit = ((param.ckeckd == "1" || param.ckeckd == "4") && DateTime.Now.Year == param.year);
+}
+
+@Html.Partial("_TitleBar")
+
+<div class="news-content">
+    @if (Model != null && Model.ScoreGrid != null)
+            {
+                foreach(var item in Model.ScoreGrid)
+                {
+                    Store store = new Store();
+                    store.Collection(item);
+                    var row = store.GetFinder();
+
+            <table class="table-teacher intable" style="margin:5px 0 5px 10px;" width="100%">
+                <tbody>
+                    <tr>
+                        <td width="20%">開課單位</td>
+                        <td> @row("tuclass").AsCodeText(CommonOptions.TeachUnitClass()) &nbsp; - &nbsp; @item.tuname </td>
+                        @if (isShowEdit)
+                        {
+                            <td style="width: 150px"> 狀態: @ckeckText </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>課程名稱</td>
+                        <td>
+                            <div>@row("tcclass").AsCodeText(CommonOptions.TeachUnit()) </div>
+                            <div>@item.tcname</div>
+                        </td>
+
+                        @if (isShowEdit)
+                        {
+                            <td rowspan="@(rowspan)">
+                                <a href="@Url.Action("Detail", "Member", new { id = ActionName.Member.Score, lid = item.id })">修改</a>
+                                &nbsp;
+                                <a class="remove_score" data-lid="@item.id" href="javascript:void(0)">刪除</a>
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>開課日期</td>
+                        <td> @row("sdate").AsDateTimeText("yyyy-MM-dd HH:mm") ~ @row("edate").AsDateTimeText("yyyy-MM-dd HH:mm") </td>
+                    </tr>
+                    <tr>
+                        <td>天數／時數</td>
+                        <td>
+                            天數： @item.days &nbsp;&nbsp;&nbsp;&nbsp;時數： @item.hours 小時 <span style="padding-left:60px;">
+                                <a href="@Url.Action("Download", "File", new { id = ActionName.File.Score, fid=item.id })" target="_blank" rel="noopener">佐證資料</a>
+                            </span>
+                            @if (item.showoff == 1) { <span style="padding-left:60px;color:blue;"> 顯示於前台  </span> }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>勞動部補助計畫</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(row("govplan").AsText()))
+                            {
+                                @row("govplan").AsCodeText(CommonOptions.GovPlan())
+                            }
+                            else
+                            {
+                                <span>非補助計畫</span>
+                            }
+                        </td>
+                    </tr>
+                    @if (param.ckeckd == "3" || param.ckeckd == "4")
+                    {
+                        <tr>
+                            <td>審查意見</td>
+                            <td>
+                                @item.comment
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div>
+
+<script>
+    $(function () {
+        $('.remove_score').on('click', function (e) {
+            blockConfirm('確定要刪除?', null, function () {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("Remove", "Member", new { id = ActionName.Member.Score })',
+                    data: { lid: $(e.target).attr('data-lid') },
+                    method: 'POST'
+                }).done(function (resp) {
+                    if (resp && resp.status) {
+                        blockAlert('刪除成功', null, function () {
+                            $(e.target).closest('.table-teacher').remove();
+                        });
+                    } else {
+                        if (resp && resp.message) {
+                            blockAlert(resp.message, null);
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>

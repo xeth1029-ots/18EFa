@@ -1,0 +1,127 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "_GridRow";
+    //Model.ScoreModel.Year
+}
+
+@if (Model.ScoreModel.Year >= 2021)
+{
+    @Grid2021()
+}
+else if (Model.ScoreModel.Year >= 2015)
+{
+    @Grid2015()
+}
+else
+{
+    @Grid2014()
+}
+
+@helper Grid2021()
+{
+if (Model != null && Model.ScoreModel.Grid != null && Model.ScoreModel.Grid.Count > 0)
+{
+    foreach (var item in Model.ScoreModel.Grid)
+    {
+        var sum11 = item.Get("sum11").AsInt64() * 100;
+        var sum12 = item.Get("sum12").AsInt64() > 900 ? 900 : item.Get("sum12").AsInt64();
+        var sum13 = item.Get("sum13").AsInt64();
+        var total10 = sum11 + sum12 + sum13;
+
+        var sum02 = item.Get("sum02").AsInt64();
+        var sum03 = item.Get("sum03").AsInt64() * 300;
+        var sum04 = item.Get("sum04").AsInt64();
+        Int64 total = (sum11.Value + sum12.Value + sum13.Value + sum02.Value + sum03.Value);
+        //bool isPass = true;// 不計算授課推廣積分
+        bool isNewTeacher = DateTime.Now.Year - item.Get("regyear").AsInt64() - 1 <= 2;  // 近2年加入講師
+        //if (!isNewTeacher) { if (total10 < 4800) { isPass = false; } }
+        //if (sum02 < 100 || sum03 < 300) { isPass = false; }
+        //string s_color = isPass ? "blue" : "red";
+        //string s_passTxt = isPass ? "已達門檻" : "未達門檻";
+
+            <tr>
+                <td>@item.Get("realname").AsText()</td>
+                <td>@sum11</td>
+                <td>@sum12</td>
+                <td>@sum13</td>
+                <td>@sum02</td>
+                <td>@sum03</td>
+                <td>@sum04</td>
+                <td>@total</td>
+                <td>@item.Get("regyear").AsInt64()</td>  @* 加入年份 *@
+                @*<td><span style="color:@s_color;font-weight:bold;">@s_passTxt</span></td>*@
+            </tr>
+    }
+}
+}
+
+@helper Grid2015()
+{
+if (Model != null && Model.ScoreModel.Grid != null && Model.ScoreModel.Grid.Count > 0)
+{
+    foreach (var item in Model.ScoreModel.Grid)
+    {
+        var sum11 = item.Get("sum11").AsInt64() * 100;
+        var sum12 = item.Get("sum12").AsInt64() > 900 ? 900 : item.Get("sum12").AsInt64();
+        var sum13 = item.Get("sum13").AsInt64();
+        var total10 = sum11 + sum12 + sum13;
+
+        var sum02 = item.Get("sum02").AsInt64();
+        var sum03 = item.Get("sum03").AsInt64() * 300;
+        var sum04 = item.Get("sum04").AsInt64();
+        Int64 total = (sum11.Value + sum12.Value + sum13.Value + sum02.Value + sum03.Value);
+        bool isPass = true;// 不計算授課推廣積分
+        bool isNewTeacher = DateTime.Now.Year - item.Get("regyear").AsInt64() - 1 <= 2;  // 近2年加入講師
+
+        if (!isNewTeacher) { if (total10 < 4800) { isPass = false; } }
+        if (sum02 < 100 || sum03 < 300) { isPass = false; }
+        string s_color = isPass ? "blue" : "red";
+        string s_passTxt = isPass ? "已達門檻" : "未達門檻";
+
+            <tr>
+                <td>@item.Get("realname").AsText()</td>
+                <td>@sum11</td>
+                <td>@sum12</td>
+                <td>@sum13</td>
+                <td>@sum02</td>
+                <td>@sum03</td>
+                <td>@sum04</td>
+                <td>@total</td>
+                <td>@item.Get("regyear").AsInt64()</td>  @* 加入年份 *@
+                <td><span style="color:@s_color;font-weight:bold;">@s_passTxt</span></td>
+            </tr>
+    }
+}
+}
+
+@helper Grid2014()
+{
+if (Model != null && Model.ScoreModel.Grid != null && Model.ScoreModel.Grid.Count > 0)
+{
+    foreach (var item in Model.ScoreModel.Grid)
+    {
+        var sum01 = item.Get("sum01").AsInt64() * 100;
+        var sum02 = item.Get("sum02").AsInt64();
+        var sum03 = item.Get("sum03").AsInt64();
+        var sum04 = item.Get("sum04").AsInt64();
+        var sum05 = item.Get("sum05").AsInt64() * 300;
+        var sum06 = item.Get("sum06").AsInt64() * 50;
+        var total = sum01 + sum02 + sum03 + sum04 + sum05 + sum06;
+
+            <tr>
+                <td> @item.Get("realname").AsText() </td>
+                <td> @sum01 </td>
+                <td> @sum02 </td>
+                <td> @sum03 </td>
+                <td> @sum04 </td>
+                <td> @sum05 </td>
+                <td> @sum06 </td>
+                <td> @total </td>
+                <td> @item.Get("regyear").AsInt64() </td>
+            </tr>
+    }
+}
+}

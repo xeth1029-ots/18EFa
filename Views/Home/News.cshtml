@@ -1,0 +1,53 @@
+﻿@using Turbo.MVC.Base3.Models
+@model HomeViewModel
+@{
+    Layout = "~/Views/Shared/_MainLayout_NoHeader_NoBg.cshtml";
+}
+<div style="background-color:white;height:800px;">
+    <div class="wrap">
+        <div class="col-sm-12">
+            <div class="btn-group btn-group-right btn-group-sm clearfix">
+                <button type="button" class="btn btn-info" onclick="parent.closeWindow();">關閉</button>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="theme-news">
+                <div class="form-border">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label label-set">公告時間</label>
+                            <div class="col-sm-4 form-inline">
+                            </div>
+                            <label class="col-sm-1 control-label label-set">公告者</label>
+                            <div class="col-sm-4 form-inline">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label label-set">公告類型</label>
+                            <div class="col-sm-4 form-inline">
+                            </div>
+                            <label class="col-sm-1 control-label label-set">公告單位</label>
+                            <div class="col-sm-4 form-inline">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label label-set">標題</label>
+                            <div class="col-sm-10 form-inline">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label label-set">內容</label>
+                            <div class="col-sm-10 form-inline">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label label-set">相關附件</label>
+                        </div>
+                        <div class="form-group">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

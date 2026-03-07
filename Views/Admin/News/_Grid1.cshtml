@@ -1,0 +1,47 @@
+﻿@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@model WDACC.Models.ViewModel.AdminViewModel
+
+<div id="tab1" class="table-responsive">
+    <table id="table2" border="0" width="100%" class="table-index">
+        <thead>
+            <tr>
+                <th width="5%" class="tdt">項次</th>
+                <th width="18%" class="tdt">發佈日期</th>
+                <th class="tdt">公告內容</th>
+                <th width="18%" class="tdt">截止日期</th>
+                <th class="tdt" width="15%">動作</th>
+            </tr>
+        </thead>
+        <tbody id="rows">
+            @if (Model != null && Model.NewsModel.Grid1.Count > 0)
+            {
+                foreach (var item in Model.NewsModel.Grid1)
+                {
+                    @Html.Partial("News/_GridRows", item)
+                }
+            }
+        </tbody>
+    </table>
+    <div id="pagination-container"></div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#tab1');
+        root.find('div#pagination-container').pagination({
+            dataSource: '@Html.Raw(Url.Action("Paging", "Admin", new { id = ActionName.Admin.News, rid = Model.NewsModel.TabPaging1.rid, tab=1 }))',
+            locator: 'data',
+            pageNumber: 1,
+            totalNumber: @(Model.NewsModel.TabPaging1.PagingInfo.Total),
+            pageSize: 30,
+            callback: function (data, pagination) {
+                var res = '';
+                $.each(data, function (i, item) {
+                    res += item;
+                });
+                root.find('tbody#rows').html(res);
+            }
+        });
+    });
+</script>

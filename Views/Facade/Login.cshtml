@@ -1,0 +1,94 @@
+﻿@using WDACC.Models.ViewModel
+@using WDACC.Models.ViewModel.Facade
+@using WDACC.Commons
+@model LoginViewModel
+
+@{
+    ViewBag.Title = "登入專區";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "form-horizontal", autocomplete = "off" }))
+{
+    <div class="login-border">
+        <div class="form-group">
+            <label for="UserName" class="control-label col-sm-3">請輸入電子郵件(必要的)</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = "請輸入電子郵件", maxlength = "100" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Password" class="control-label  col-sm-3">請輸入密碼(必要的)</label>
+            <div class="col-sm-9">
+                @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "請輸入密碼", maxlength = "66" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*<label for="ValidateCode" class="control-label col-sm-2">請輸入驗證碼</label>*@
+            @Html.LabelFor(x => x.ValidateCode, "請輸入驗證碼(必要的)", new { @class = "control-label col-sm-3 mark-red" })
+            <div class="col-sm-2">
+                @Html.TextBoxFor(x => x.ValidateCode, new { @class = "form-control", title = "請輸入驗證碼", placeholder = "請輸入驗證碼", maxlength = "10" })
+            </div>
+            <div class="col-sm-7">
+                <img src="@Url.Action("GetValidateCode", "Login")" id="imgChkNum" alt="產生新驗證碼" title="驗證碼" />&nbsp;
+                @*<span style="color:red">點擊圖片可更換驗證碼</span>*@
+                @*<iframe name="frmPlayer" style="display:none;" src="" id="frmPlayerValidateCode" title="驗證碼語音撥放介面"></iframe>*@
+                <br />
+                <a href="javascript:void(0);" title="點擊刷新驗證碼" id="reflashNum"><span style="color:#CC0000">刷新驗證碼</span></a>
+                <a href="@Url.Action("GetValidateAudio", "Login")" target="frmPlayer" title="語音撥放驗證碼"><img id="playCode" alt="撥放" src="~/images/speaker.png" height="30" /></a>
+                <br />
+                <iframe name="frmPlayer" src="" title="驗證碼語音播放" scrolling="no" tabindex="-1" style="border: 0; width: 330px; height: 60px; display:inline-block;"></iframe>
+                <noscript> 不支援javascript時，請按鍵盤上的F5鍵以重新產生驗證碼。 </noscript>
+            </div>
+        </div>
+        <div class="form-group">
+            @*div class="col-sm-offset-2 col-sm-10">
+                    <p class="mark-red">※帳號最少8碼，且為英數組合，第一字不可為數字。<br>
+                    ※密碼最少12碼，且有大小寫英文及數字之組合，不可有特殊符號。</p>
+                </div*@
+            <div class="submit-bar">
+                <button type="submit" class="btn-orange" name="submit" id="submit">確定</button>
+                @*<button type="button" class="btn-blue2" name="button" id="btnforget">忘記密碼</button>*@
+                <a class="btn btn-refill2" name="button" id="btnforget" role="button"
+                   href="@Url.Action("Index", "Facade", new { id = FacadeViewModel.ActionName.ForgetPassword })">忘記密碼</a>
+            </div>
+            <br />
+            @if (TempData.ContainsKey("ErrorMessage"))
+                {
+                <div class="alert alert-danger error-message" id="alert_danger_error_message">@(TempData["ErrorMessage"])</div>
+            }
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $("input").each(function (i, obj) {
+    //        var InputOBJ = $("#" + obj.id);
+    //        InputOBJ.attr("autocomplete", "off");
+    //    })
+    //})
+    $(document).ready(function () {
+        var err_msg = $('#alert_danger_error_message').html();
+        //console.log('err_msg:' + err_msg);
+        if (err_msg!="" && err_msg.length > 0) {
+            if (err_msg.indexOf('驗證碼輸入有誤') > -1 && $('#ValidateCode').length > 0) { $('#ValidateCode')[0].focus(); }
+            else if (err_msg.indexOf('請輸入正確的電子郵件及密碼') > -1 && $('#UserName').length > 0) { $('#UserName')[0].focus(); }
+        }
+    })
+
+    function reloadValidCode() {
+        blockUI();
+        $('#imgChkNum').attr("src", '@Url.Action("GetValidateCode", "Login")' + "?rand=" + new Date().getMilliseconds());
+    }
+    $(function () {
+        $('#reflashNum').on("click", function (e) { reloadValidCode(); });
+        $('#imgChkNum').on("click", function (e) { reloadValidCode(); });
+        $('#imgChkNum').on("load", function () { unblockUI(); });
+        //$('[data-toggle="tooltip"]').tooltip()
+    });
+
+</script>

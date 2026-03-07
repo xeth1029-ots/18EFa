@@ -1,0 +1,76 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "意見回饋";
+    var notAnswerGrid = Model.FeedbackModel.Grid.Where(x => x.Get("answer").AsText() == "1").ToList();
+    var answerGrid = Model.FeedbackModel.Grid.Where(x => x.Get("answer").AsText() == "2").ToList();
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="feedback">
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <thead>
+                <tr>
+                    <th>填寫日期</th>
+                    <th>講師</th>
+                    <th>問題類別</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && notAnswerGrid != null && notAnswerGrid.Count > 0)
+                {
+                    foreach (var item in notAnswerGrid)
+                    {
+                        <tr>
+                            <td> @item.Get("date").AsDateTimeText("yyyy-MM-dd") </td>
+                            <td> @item.Get("realname").AsText()</td>
+                            <td>
+                                <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.Feedback, opid = item.Get("id").AsInt64() })">
+                                    @item.Get("class").AsCodeText(CommonOptions.FeedbackClass())
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">已回覆意見</h4>
+
+    <a href="@Url.Action("Export", "Admin", new { id = ActionName.Admin.Feedback })" class="btn btn-green">講師回饋意見匯出</a>
+
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <tbody>
+                <tr>
+                    <th>填寫日期</th>
+                    <th>講師</th>
+                    <th>問題類別</th>
+                    <th>回覆日期</th>
+                </tr>
+            </tbody>
+            <tbody>
+                @if (Model != null && answerGrid != null && answerGrid.Count > 0)
+                {
+                    foreach (var item in answerGrid)
+                    {
+                        <tr>
+                            <td> @item.Get("date").AsDateTimeText("yyyy-MM-dd") </td>
+                            <td> @item.Get("realname").AsText()</td>
+                            <td> @item.Get("class").AsCodeText(CommonOptions.FeedbackClass()) </td>
+                            <td> @item.Get("rdate").AsDateTimeText("yyyy-MM-dd")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</div>

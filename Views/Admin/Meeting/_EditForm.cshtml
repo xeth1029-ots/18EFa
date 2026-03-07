@@ -1,0 +1,269 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+@using WDACC.Models.ViewModel.Admin
+
+@{
+    ViewBag.Title = "_MeetingForm";
+}
+
+<div id="meeting_form">
+    <h2></h2>
+    @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.Meeting },
+        FormMethod.Post, new { id = "main_form", @class = "form-horizontal" }))
+    {
+        @Html.HiddenFor(x => x.MeetingModel.Meet.id)
+        <div class="form-group">
+            <label for="text" class="control-label col-sm-2">日期</label>
+            <div class="col-sm-10">
+                @Html.DropDownListFor(x => x.MeetingModel.MeetYear, CommonOptions.RangeYears(DateTime.Now.Year - 1, DateTime.Now.Year + 1, DateTime.Now.Year), "請選擇", new { @class = "form-normal" }) 年
+
+                @Html.DropDownListFor(x => x.MeetingModel.MeetMonth, CommonOptions.Months(), "請選擇", new { @class = "form-normal" }) 月
+
+                @Html.DropDownListFor(x => x.MeetingModel.MeetDay, CommonOptions.Days(), "請選擇", new { @class = "form-normal" }) 日
+            </div>
+        </div><div class="form-group">
+            <label for="text" class="control-label col-sm-2">時間</label>
+            <div class="col-sm-10">
+                @Html.EditorFor(x => x.MeetingModel.StartTime, "TimeField")
+                ~
+                @Html.EditorFor(x => x.MeetingModel.EndTime, "TimeField")
+            </div>
+        </div><div class="form-group">
+            <label for="text" class="control-label col-sm-2">會議名稱</label>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.MeetingModel.Meet.metname, new { @class = "form-normal" })
+            </div>
+            <label for="text" class="control-label col-sm-2">會議類型</label>
+            <div class="col-sm-4">
+                @Html.DropDownListFor(x => x.MeetingModel.Meet.mclass, CommonOptions.MeetingClass(), "請選擇", new { @class = "form-normal" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="text" class="control-label col-sm-2">地點</label>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.MeetingModel.Meet.metloc, new { @class = "form-normal" })
+            </div>
+            <label for="text" class="control-label col-sm-2">參與積分</label>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.MeetingModel.MeetScore, new { @class = "form-normal decimal-only" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="text" class="control-label col-sm-2">參與人員</label>
+            <div class="col-sm-10">
+                <div id="5ef47069cb429">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">查詢參與人員</div>
+                        <div class="panel-body">
+                            <div class="form-inline">
+                                <label>姓名: </label>
+                                <input type="text" class="form-control" name="__query_member__">
+                                <button type="button" id="query" class="btn btn-primary">查詢</button>
+                                <span id="message" style="color: red"></span>
+                            </div>
+                        </div>
+                        <div id="result-container" class="panel-body"> </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">已選取參與人員</div>
+                        <div id="member-container" class="panel-body row">
+                            @Html.Partial("Meeting/_MemberList")
+                        </div>
+                    </div>
+                    <script type="text/template" id="item_tmpl">
+                        <div class="col-sm-2 outline">
+                            <span class="label label-default" style="background-color:lightgray">
+                                <label>
+                                    <input type="checkbox"
+                                           name="SaveDetailList"
+                                           value="{0}"
+                                           checked
+                                           style="display:none">
+                                    <span style="color:black">
+                                        <font style="font-size:1.25em">{1}</font>
+                                    </span>
+                                    <a id="remove-link" href="javascript:void(0)">X</a>
+                                </label>
+                            </span>
+                        </div>
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="text" class="control-label col-sm-2">分享人員</label>
+            <div class="col-sm-10">
+                <div id="5ef47069cb430">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">查詢分享人員</div>
+                        <div class="panel-body">
+                            <div class="form-inline">
+                                <label>姓名: </label>
+                                <input type="text" class="form-control" name="__query_member__">
+                                <button type="button" id="query" class="btn btn-primary">查詢</button>
+                                <span id="message" style="color: red"></span>
+                            </div>
+                        </div>
+                        <div id="result-container" class="panel-body"> </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">已選取分享人員</div>
+                        <div id="member-container" class="panel-body row">
+                            @Html.Partial("Meeting/_ShareList")
+                        </div>
+                    </div>
+                    <script type="text/template" id="item_tmpl">
+                        <div class="col-sm-2 outline">
+                            <span class="label label-default" style="background-color:lightgreen">
+                                <label>
+                                    <input type="checkbox"
+                                           name="SaveShareList"
+                                           value="{0}"
+                                           checked
+                                           style="display:none">
+                                    <span style="color:black">
+                                        <font style="font-size:1.25em">{1}</font>
+                                    </span>
+                                    <a id="remove-link" href="javascript:void(0)">X</a>
+                                </label>
+                            </span>
+                        </div>
+                    </script>
+                </div>
+            </div>
+            <label class="control-label col-sm-2">
+                分享積分：
+            </label>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.MeetingModel.SharedScore, new { @class = "form-normal decimal-only" })
+            </div>
+        </div><table border="1" width="100%"></table>
+        <div class="submit-bar">
+            <input type="hidden" value="1" name="cass">
+            <button type="submit" id="save" class="btn btn-orange">送出</button>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    (function () {
+        function MeetMemberViewModel(rootid) {
+            var self = this;
+            self.root = $(rootid);
+
+            self.queryMember = function (name) {
+                $.ajax({
+                    url: '@Url.Action("Query", "Admin", new { id = ActionName.Admin.MeetingMember })',
+                    data: $.param({ member: name }),
+                    method: 'POST'
+                }).done(function (res) {
+                    if (res) {
+                        if (res != "0") {
+                            $('#message').html('');
+                            self.root.find('div#result-container').html(res);
+                        } else {
+                            $('#message').html('查無資料');
+                        }
+                    }
+                });
+            };
+
+            self.removeMember = function (el) {
+                $(el).closest('div.outline').remove();
+            };
+
+            self.addMember = function (value, text) {
+                var tmpl = self.root.find('script#item_tmpl').html();
+                var item = tmpl
+                    .replace('{0}', value)
+                    .replace('{1}', text);
+                self.root.find('div#member-container').append(item);
+            };
+
+            self.checkExist = function (value) {
+                isExist = false;
+                var container = self.root.find('#member-container');
+                container.find('input[type="checkbox"]').each(function () {
+                    isExist |= (value == $(this).val());
+                });
+
+                return isExist;
+            };
+
+            self.setupEvent = function () {
+                self.root.on('click', 'button#query', function (event) {
+                    var name = self.root.find('input[name="__query_member__"]').val();
+                    self.queryMember(name);
+                });
+
+                self.root.on('click', 'a#remove-link ', function (event) {
+                    var el = $(event.target);
+                    self.removeMember(el);
+                });
+
+                self.root.on('click', '.item-result', function (event) {
+                    var id = $(event.currentTarget).attr('data-id');
+                    var text = $(event.currentTarget).attr('data-text');
+
+                    if (!self.checkExist(id)) {
+                        self.addMember(id, text)
+                        $(event.currentTarget).closest('div.outline').remove();
+                    } else {
+                        blockAlert('該人員已選取!', '', function () { });
+                    }
+                });
+
+                self.root.on('keydown', 'input[name="__query_member__"]', function (event) {
+                    if (event.keyCode == 13) {
+                        var name = $(event.target).val();
+                        self.queryMember(name);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+            };
+
+            self.init = function () {
+                self.setupEvent();
+            };
+        }
+
+        var vm = new MeetMemberViewModel('div#5ef47069cb429');
+        vm.init();
+
+        var vmShare = new MeetMemberViewModel('div#5ef47069cb430');
+        vmShare.init();
+    })();
+</script>
+
+<script>
+    $(function () {
+        var root = $('div#meeting_form');
+        var form = root.find("#main_form");
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: form.attr('action'),
+                data: form.serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.Meeting })';
+                    });
+                } else {
+                    if (resp && resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, item) {
+                            res += item + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+        $('.decimal-only').decimalOnly();
+    });
+</script>

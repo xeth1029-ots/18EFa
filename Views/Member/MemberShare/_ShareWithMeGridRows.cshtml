@@ -1,0 +1,32 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+@using WDACC.Models
+@using WDACC.Models.StoreExt
+
+@{ 
+    SessionModel sess = SessionModel.Get();
+    long? mid = sess.UserInfo.User.user_id;
+}
+
+@if (Model != null && Model.ShareWithMeList != null && Model.ShareWithMeList.Count > 0)
+{
+    foreach (var item in Model.ShareWithMeList)
+    {
+        var row = item.GetFinder();
+        <tr>
+            <td> @row("date").AsDateTimeText("yyyy-MM-dd") </td>
+            <td> @row("realname").AsText() </td>
+            <td>
+                <a href="javascript:void(0)" class="file-content">
+                    @row("title").AsText()
+                </a>
+                <script type="text/template" id="tmpl-content">@row("content").AsText()</script>
+            </td>
+            <td class="text-center"> @row("classid").AsCodeText(CommonOptions.Fclass()) </td>
+            <td class="text-center">
+                <a href="@Url.Action("Download", "File", new { id = ActionName.File.ShareSFile, fid = row("id").AsInt64() })" target="_black" rel="noopener">下載</a>
+            </td>
+        </tr>
+    }
+}
+

@@ -1,0 +1,166 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    Layout = null;
+}
+
+<table>
+    <thead>
+        @if (Model.ScoreViewExportModel.Year <= 2014)
+        {
+            @Header2014()
+        }
+        else
+        {
+            @Header2015()
+        }
+    </thead>
+    <tbody>
+        @if (Model.ScoreViewExportModel.Year <= 2014)
+        {
+            @Grid2014()
+        }
+        else
+        {
+            @Grid2015()
+        }
+    </tbody>
+</table>
+
+@helper Header2015()
+{
+    <thead>
+        <tr>
+            <th rowspan="2">講師姓名 </th>
+            <th rowspan="2">電話 </th>
+            <th rowspan="2">手機 </th>
+            <th rowspan="2">e-mail </th>
+            <th rowspan="2">工作e-mail </th>
+            <th colspan="3">授課推廣</th>
+            <th rowspan="2">發展署會議</th>
+            <th rowspan="2">社群會議參與 </th>
+            <th rowspan="2">教材分享 </th>
+            <th rowspan="2">教材下載 </th>
+            <th rowspan="2">總積分 </th>
+            <th rowspan="2">加入年份 </th>
+            <th rowspan="2">觀察名單 </th>
+        </tr>
+        <tr>
+            @*<th>講師姓名 </th>
+                <th>電話 </th>
+                <th>手機 </th>
+                <th>e-mail </th>
+                <th>工作e-mail </th>*@
+            <th>非政府補助 </th>
+            <th>政府補助 </th>
+            <th>社群分享 </th>
+            @*<th>發展署會議</th>
+                <th>社群會議參與 </th>
+                <th>教材分享 </th>
+                <th>教材下載 </th>
+                <th>總積分 </th>
+                <th>加入年份 </th>
+                <th>觀察名單 </th>*@
+        </tr>
+    </thead>
+}
+
+@helper Header2014()
+{
+    <thead>
+        <tr>
+            <th>講師姓名 </th>
+            <th>授課推廣</th>
+            <th>社群互動</th>
+            <th>教材編輯 </th>
+            <th>會議參與 </th>
+            <th>教材分享 </th>
+            <th>總積分 </th>
+            <th>加入年份 </th>
+        </tr>
+    </thead>
+}
+
+@helper Grid2014()
+{
+if (Model != null && Model.ScoreViewExportModel.Grid.Result != null && Model.ScoreViewExportModel.Grid.Result.Count > 0)
+{
+    foreach (var item in Model.ScoreViewExportModel.Grid.Result)
+    {
+        var sum01 = item.Get("sum01").AsInt64() * 100;
+        var sum02 = item.Get("sum02").AsInt64();
+        var sum03 = item.Get("sum03").AsInt64();
+        var sum04 = item.Get("sum04").AsInt64();
+        var sum05 = item.Get("sum05").AsInt64() * 300;
+        var sum06 = item.Get("sum06").AsInt64() * 50;
+        var total = sum01 + sum02 + sum03 + sum04 + sum05 + sum06;
+
+            <tr>
+                <td> @item.Get("realname").AsText() </td>
+                <td> @sum01 </td>
+                <td> @sum02 </td>
+                <td> @sum03 </td>
+                <td> @sum04 </td>
+                <td> @sum05 </td>
+                <td> @sum06 </td>
+                <td> @total </td>
+                <td> @item.Get("regyear").AsInt64() </td>
+            </tr>
+    }
+}
+}
+
+
+@helper Grid2015()
+{
+if (Model != null && Model.ScoreViewExportModel.Grid.Result != null && Model.ScoreViewExportModel.Grid.Result.Count > 0)
+{
+    foreach (var item in Model.ScoreViewExportModel.Grid.Result)
+    {
+        var sum11a = item.Get("sum11a").AsInt64() * 100;
+        var sum11b = item.Get("sum11b").AsInt64() * 100;
+
+        var sum12 = item.Get("sum12").AsInt64() > 900 ? 900 : item.Get("sum12").AsInt64();
+        var sum13 = item.Get("sum13").AsInt64();
+        var total10 = sum11a + sum11b + sum12 + sum13;
+
+        var sum02 = item.Get("sum02").AsInt64();
+        var sum03 = item.Get("sum03").AsInt64() * 300;
+
+        var sum04 = item.Get("sum04").AsInt64();
+
+        Int64 total = (sum11a.Value + sum11b.Value + sum12.Value + sum13.Value + sum02.Value + sum03.Value);
+        bool isPass = true;
+        if (total10 < 4800) { isPass = false; }
+        if (sum02 < 100 || sum03 < 300) { isPass = false; }
+        <tr>
+            <td>@item.Get("realname").AsText()</td>
+            <td>@item.Get("phone").AsText()</td>
+            <td>@item.Get("mobile").AsText()</td>
+            <td>@item.Get("email").AsText()</td>
+            <td>@item.Get("jemail").AsText()</td>
+            <td>@sum11a</td>
+            <td>@sum11b</td>
+            <td>@sum12</td>
+            <td>@sum13</td>
+            <td>@sum02</td>
+            <td>@sum03</td>
+            <td>@sum04</td>
+            <td>@total</td>
+            <td>@item.Get("regyear").AsInt64()</td>  @* 加入年份 *@
+            <td style="color: @(isPass ? "" : "red")">@PassText(isPass)</td>
+        </tr>
+    }
+}
+}
+
+@functions {
+    string PassText(bool isPass)
+    {
+        return isPass ? "已達門檻" : "未達門檻";
+    }
+}
+
+

@@ -1,0 +1,11 @@
+﻿@using Turbo.MVC.Base3.Commons
+@model Turbo.MVC.Base3.Models.FaxNumberModel
+
+<div class="col-sm-10 form-inline">
+    @Html.LabelFor(x => x.AreaCode, "區碼", new { @class = "sr-only" })
+    @Html.TextBoxFor(m => m.AreaCode, new { size = "4", @class = "form-control", placeholder = "區碼", maxLength = "3" })
+    －
+    @Html.LabelFor(x => x.Number, "號碼", new { @class = "sr-only" })
+    @Html.TextBoxFor(m => m.Number, new { size = "10", @class = "form-control", placeholder = "號碼", maxLength = "20" })
+    ※區碼-號碼
+</div>

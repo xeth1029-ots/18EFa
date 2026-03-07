@@ -1,0 +1,104 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "";
+
+    IList<Store> notAnswerGrid = null;
+    if (Model.FeedbackModel != null && Model.FeedbackModel.Grid.Count > 0)
+    {
+        notAnswerGrid = Model.FeedbackModel.Grid
+            .Where(x => x.Get("answer").AsText() == "1")
+            .ToList();
+    }
+
+    var sharedList = Model.HomeFileAuditList;
+}
+
+<div id="admin_home">
+    <h4 class="content-title">講師最新 5筆意見回饋(共 @(notAnswerGrid != null ? notAnswerGrid.Count : 0) 筆未回覆)</h4>
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>講師</th>
+                    <th>問題類別</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && notAnswerGrid != null && notAnswerGrid.Count > 0)
+                {
+                    foreach (var item in notAnswerGrid.Take(5).ToList())
+                    {
+                        <tr>
+                            <td> @item.Get("date").AsDateTimeText("yyyy-MM-dd") </td>
+                            <td> @item.Get("realname").AsText()</td>
+                            <td>
+                                <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.Feedback, opid = item.Get("id").AsInt64() })">
+                                    @item.Get("class").AsCodeText(CommonOptions.FeedbackClass())
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">課程最新 5筆師資招募(共 @(Model.RecruitModel.Grid != null ? Model.RecruitModel.Grid.Count() : 0) 筆未回覆)</h4>
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <thead>
+                <tr>
+                    <th>發布日期</th>
+                    <th>開課單位</th>
+                    <th>課程類別</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.RecruitModel.Grid != null && Model.RecruitModel.Grid.Count() > 0)
+                {
+                    foreach (var item in Model.RecruitModel.Grid.Take(5).ToList())
+                    {
+                        <tr>
+                            <td>@item.Get("aodate").AsDateTimeText("yyyy-MM-dd")</td>
+                            <td>
+                                <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.Recruit, tsid = item.Get("id").AsInt64() })">
+                                    @item.Get("indname").AsText()
+                                </a>
+                            </td>
+                            <td>@item.Get("couclass").AsText()</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">最新上傳教材分享</h4>
+    <div class="table">
+        <div class="row">
+            @if (sharedList != null && sharedList.Count > 0)
+            {
+                foreach (var item in sharedList)
+                {
+                    <div class="col-sm-2" style="text-align:center">
+                        <a href="@Url.Action("Detail", "Admin",
+                                new {
+                                    id = ActionName.Admin.FileAudit,
+                                    Mid = item.Get("mid").AsInt64(),
+                                    Ckeckd = 1,
+                                    AuditYear = DateTime.Now.Year
+                                })">
+                            @item.Get("realname").AsText()
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+</div>
+

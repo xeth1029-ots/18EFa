@@ -1,0 +1,91 @@
+﻿@using Turbo.MVC.Base3.Areas.A6.Models;
+@model C101MFormModel
+@{
+    ViewBag.Tag = "帳號管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm("Index", "C101M", FormMethod.Post, htmlAttributes: new { id = "main_form", @class = "form-horizontal" }))
+{
+    var button = new Dictionary<string, string>();
+    button.Add("Search", "doSearch()");
+    button.Add("New", "doNew()");
+    @Html.ButtonForTurbo(button)
+
+    <div class="col-sm-12">
+        <div class="theme-news">
+            <div class="form-border">
+                @Html.ControlForTurbo(Model)
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        @if (Model.Grid != null)
+        {
+            @Html.Partial("_PagingLink", Model)
+            <div class="table-responsive">
+                <table style="width:100%" border="0" cellspacing="0" cellpadding="0" class="table-result">
+                    <thead>
+                        <tr>
+                            <th width="" align="center"></th>
+                            <th width="" align="center">系統功能</th>
+                            <th width="" align="center">單位</th>
+                            <th width="" align="center">姓名</th>
+                            <th width="" align="center">帳號</th>
+                            <th width="" align="center">建立日期</th>
+                            <th width="" align="center">是否啟用</th>
+                            <th width="" align="center"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows">
+                        @Html.Partial("_GridRows")
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}
+
+<script type="text/javascript">
+
+    /// 查詢
+    function doSearch() {
+        var form = $("form[id=main_form]");
+        form.attr('action', '@Url.Action("Index")').submit();
+    }
+
+    /// 新增
+    function doNew() {
+        var url = '@(Url.Action("New", "C101M", new { area = "A6" }))';
+        var title = '新增畫面-@(ViewBag.Tag)';
+        popupWindow({ 'width': -1 }, url, title, null, function (retData, doc) {
+            if (retData != null) { if (retData.redirectUrl != "") { RedirectAfterPopup(retData.redirectUrl) } }
+        })
+    }
+
+    /// 修改
+    function doModify(user_name, user_username) {
+        var data = {
+            "user_name": user_name,
+            "user_username": user_username,
+        }
+        var url = '@Url.Action("Modify", "C101M")?' + $.param(data);
+        var title = '修改畫面-@(ViewBag.Tag)';
+        popupWindow({ 'width': -1 }, url, title, null, function (retData, doc) {
+            if (retData != null) { if (retData.redirectUrl != "") { RedirectAfterPopup(retData.redirectUrl) } }
+        })
+    }
+
+    /// 設定群組
+    function doSetPower(user_name, user_username) {
+        var data = {
+            "user_name": user_name,
+            "user_username": user_username,
+        }
+        var url = '@Url.Action("SetPower", "C101M")?' + $.param(data);
+        var title = '設定群組-@(ViewBag.Tag)';
+        popupWindow({ 'width': -1 }, url, title, null, function (retData, doc) {
+            if (retData != null) { if (retData.redirectUrl != "") { RedirectAfterPopup(retData.redirectUrl) } }
+        })
+    }
+</script>

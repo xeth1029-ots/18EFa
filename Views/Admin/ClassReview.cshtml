@@ -1,0 +1,64 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "資料審核";
+    string guid = Guid.NewGuid().ToString();
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="a-@(guid)">
+    <div id="submenu" class="submenu">
+        <ul class="nav nav-tabs">
+            <li data-idx="0" class="active">
+                <a data-toggle="tab" id="btnmd1" name="btnmd1" href="#tabmd1" aria-expanded="true">積分課程審核</a>
+            </li>
+            <li data-idx="1" class="">
+                <a data-toggle="tab" id="btnmd2" name="btnmd2" href="#tabmd2" aria-expanded="false">上傳教材審核</a>
+            </li>
+        </ul>
+    </div>
+    <div class="news-content">
+        <div class="tab-content">
+            <div id="tabmd1" class="tab-pane fade active in">
+                @Html.Partial("ClassReview/_CourseAudit")
+            </div>
+            <div id="tabmd2" class="tab-pane fade">
+                @Html.Partial("ClassReview/_FileAudit")
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var root = $('div#a-@(guid)');
+        var hash = window.location.hash;
+
+        function switchTab(index) {
+            root.find('.nav-tabs li.active').removeClass('active');
+            root.find('.nav-tabs li:eq(' + index + ')').addClass('active');
+            root.find('.tab-pane.active.in').removeClass('active in')
+            root.find('.tab-pane:eq(' + index + ')').addClass('active in');
+        }
+
+        function setTab() {
+            switch (hash) {
+                case '#tab1':
+                    switchTab(0);
+                    break;
+                case '#tab2':
+                    switchTab(1);
+                    break;
+                default:
+                    switchTab(0);
+                    break;
+            }
+        }
+
+        $(window).on('hashchange', function (e) { setTab(); });
+        setTab();
+    })();
+</script>
+

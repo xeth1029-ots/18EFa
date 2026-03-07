@@ -1,0 +1,46 @@
+﻿@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@model Store
+
+@{
+    ViewBag.Title = "_Grid";
+}
+
+@{
+    var item = Model;
+    var showff = item.Get("showoff").AsInt64();
+}
+
+<tr>
+    <td> @item.Get("sno").AsInt64() </td>
+    <td> @item.Get("sdate").AsDateTimeText("yyyy-MM-dd") </td>
+    <td> @item.Get("title").AsText() </td>
+    <td> @item.Get("edate").AsDateTimeText("yyyy-MM-dd") </td>
+
+    @if (showff == 0)  // 未上架顯示
+    {
+        <td> @item.Get("class").AsCodeText(CommonOptions.NewsClass()) </td>
+    }
+
+    <td>
+        @{ long? nid = item.Get("id").AsInt64(); }
+        <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.NewsEdit, nid = nid })">修改</a>
+        &nbsp;
+        @GetOpenLink(item)
+    </td>
+</tr>
+
+@helper GetOpenLink(Store item)
+{
+    long? showoff = item.Get("showoff").AsInt64();
+    long? id = item.Get("id").AsInt64();
+    if (showoff == 1)
+    {
+        <a class="news toggle" href="@Url.Action("Save", "Admin", new { id = ActionName.Admin.NewsClose, nid = id })">下架</a>
+    }
+    else
+    {
+        <a class="news toggle" href="@Url.Action("Save", "Admin", new { id = ActionName.Admin.NewsOpen, nid = id })">上架</a>
+    }
+}
+

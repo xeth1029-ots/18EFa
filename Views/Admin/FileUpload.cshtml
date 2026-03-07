@@ -1,0 +1,191 @@
+﻿@using WDACC.Commons
+@model WDACC.Models.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "教材上傳";
+    //string s_file_accept = ".xls,.doc,.ppt,.pdf,.jpg,.png,.msg,.odt,.odf";
+    string s_file_accept = Turbo.MVC.Base3.Models.ConfigModel.Get_FileExtAccept;
+    string s_file_accept_upper = s_file_accept.ToUpper().Replace(",", "、");
+    string s_TxtbokUploadFormat =  string.Concat("◎教材上傳檔案格式限定", s_file_accept_upper, "，檔案大小以 18MB為限。◎");
+
+}
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+
+<div id="share-register">
+    @*<h3 class="news-headtitle">教材上傳</h3>*@
+    @Html.Partial("_Breadcrumb")
+    @Html.Partial("_TitleBar")
+    <div class="clearfix"></div>
+    <!-- news group start -->
+    <div class="newsgroup">
+        <div class="mark-red" style="margin-left:10px">
+            <div> 請務必填寫所有資料 </div>
+            <div>@(s_TxtbokUploadFormat)</div>
+        </div>
+        <div class="unit-bg unit-bg-blue">
+            @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.FileUpload }, FormMethod.Post,
+                new { id = "main_form", @class = "form-horizontal inputSet", enctype = "multipart/form-data" }))
+            {
+                <div class="form-group">
+                    <label for="" class="control-label col-sm-2">講師查詢</label>
+                    <div class="col-sm-10">
+                        <input type="text" v-model="keyword" class="form-normal" placeholder="講師姓名" />
+                        <button type="button" v-on:click="query()" class="btn btn-primary">查詢</button>
+                    </div>
+                    <label for="" class="control-label col-sm-2"></label>
+                    <div class="col-sm-10">
+                        <div v-for="item in resultList"
+                             v-text="trim(item.Text)"
+                             v-on:click="setName(item)"
+                             class="label label-primary"
+                             style="margin-right:5px; font-size:1em; cursor:pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="control-label col-sm-2">講師姓名</label>
+                    <div class="col-sm-10">
+                        <input type="text" v-model="teacherName" class="form-normal" readonly />
+                        <input type="hidden" name="FileUpload.Detail.mid" v-model="mid" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="control-label col-sm-2">上傳日期</label>
+                    <div class="col-sm-10">
+                        @*<input type="text" name="FileUpload.Detail.date" value="2020/12/31" class="form-normal" />*@
+                        &nbsp;&nbsp;
+                        @Html.EditorFor(x => x.FileUpload.UploadDate, "TwDate")
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="text" class="control-label col-sm-2">職能類別</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(x => x.FileUpload.Detail.classid, CommonOptions.Fclass(), "請選擇", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="">教材名稱</label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(x => x.FileUpload.Detail.title, new { @class = "form-control", placeholder = "請輸入檔案標題" })
+                        <span class="help-block">最多30個中英文字</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="control-label col-sm-2">檔案簡要說明</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(x => x.FileUpload.Detail.content, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="control-label col-sm-2">選擇教材檔案</label>
+                    <div class="col-sm-10">
+                        @Html.HiddenFor(x => x.FileUpload.Detail.filename)
+                        <input type="file" name="FileUpload.SFile" class="form-control" accept="@s_file_accept" />
+                        <div id="file1" class="panel" style="background-color: lightgray; padding-left: 1em;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="control-label col-sm-2">選擇說明書檔案</label>
+                    <div class="col-sm-10">
+                        @Html.HiddenFor(x => x.FileUpload.Detail.ifilename)
+                        <input type="file" name="FileUpload.IFile" class="form-control" accept="@s_file_accept" />
+                        <div id="file2" class="panel" style="background-color: lightgray; padding-left: 1em;"></div>
+                        <span class="help-block"><a href="@Url.Content("~/Uploads/News/ifile.docx")">課程教材製作說明書(範本)</a></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="control-label col-sm-2">選擇授權書檔案</label>
+                    <div class="col-sm-10">
+                        @Html.HiddenFor(x => x.FileUpload.Detail.filename)
+                        <input type="file" name="FileUpload.AFile" class="form-control" accept="@s_file_accept" />
+                        <div id="file3" class="panel" style="background-color: lightgray; padding-left: 1em;"></div>
+                        <span class="help-block"><a href="@Url.Content("~/Uploads/News/afile.docx")">課程教材使用授權書(範本)</a></span>
+                    </div>
+                </div>
+
+                <div class="submit-bar">
+                    <button type="button" v-on:click="save()" class="btn btn-orange">資料送出</button>
+                    <button type="button" class="btn btn-refill2">資料清除</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    var vm = new Vue({
+        el: 'div#share-register',
+        name: 'FileUpload',
+        data: function () {
+            return {
+                keyword: '',
+                teacherName: '',
+                mid: '',
+                resultList: []
+            };
+        },
+        methods: {
+            query: function () {
+                var self = this;
+                if (this.keyword) {
+                    $.ajax({
+                        url: '@Url.Action("Ajax", "Admin", new { id = ActionName.Admin.QueryMemberName })',
+                        data: { 'keyword': this.keyword },
+                        method: 'POST'
+                    }).done(function (resp) {
+                        if (resp && resp.data) {
+                            self.resultList = resp.data;
+                        }
+                    });
+                }
+            },
+            setName: function (item) {
+                if (item) {
+                    this.teacherName = item.Text;
+                    this.mid = item.Code;
+                }
+
+                // 清空查詢輸入值
+                this.resultList = [];
+                this.keyword = '';
+            },
+            trim: function (value) {
+                var res = value || '';
+                return res.trim();
+            },
+            save: function () {
+                this.$nextTick(function () {
+                    var root = $(this.$el);
+                    $.ajax({
+                        url: root.find('#main_form').attr('action'),
+                        data: new FormData(root.find('#main_form')[0]),
+                        method: 'POST',
+                        processData: false,  // tell jQuery not to process the data
+                        contentType: false   // tell jQuery not to set contentType
+                    }).done(function (resp) {
+                        if (resp && resp.status) {
+                            blockAlert('儲存成功', null, function () {
+                                window.location = '@Url.Action("Index", "Admin", new { id = "Home" })';
+                            });
+                        } else {
+                            if (resp && resp.message) {
+                                var res = '';
+                                $.each(resp.message, function (i, item) {
+                                    res += item + '\n';
+                                });
+                                blockWarning(res);
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    });
+</script>

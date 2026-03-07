@@ -1,0 +1,111 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "師資招募明細";
+    var item = Model.RecruitModel.Teasurvey;
+    Store store = new Store();
+    store.Collection(item);
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="recruit_detail">
+    <div class="news-content">
+        @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.Recruit }, FormMethod.Post, new { id = "main_form" }))
+        {
+            @Html.HiddenFor(x => x.RecruitModel.Teasurvey.id)
+            <div class="table-responsive">
+                <table border="0" width="100%" class="table-teacher">
+                    <tbody>
+                        <tr></tr>
+                        <tr>
+                            <td width="25%">開課單位</td>
+                            <td> @item.indname </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">聯絡方式</td>
+                            <td> 聯絡人： @item.indcontact <br>聯絡電話： @item.indphone <br>電子郵件： @item.indemail </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">授課日期</td>
+                            <td>
+                                @(item.stime.HasValue ? item.stime.Value.ToString("yyyy-MM-dd") : "") &nbsp;~&nbsp;
+                                @(item.etime.HasValue ? item.etime.Value.ToString("yyyy-MM-dd") : "")
+                                <br>授課總時數： @item.couhours
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">課程地點</td>
+                            <td> @item.couplace </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">講師需求人數</td>
+                            <td> @item.teano </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">學員人數</td>
+                            <td> @item.stuno </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">課程類別</td>
+                            <td> @item.couclass</td>
+                        </tr>
+                        <tr>
+                            <td width="25%">課程產業屬性</td>
+                            <td> @store.Get("indclass1").AsCodeText(CommonOptions.IndsClass()) </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">講師待遇</td>
+                            <td> @item.salary </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">其他需求</td>
+                            <td> @item.indinfo </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">公告截止日期</td>
+                            <td> @store.Get("fdate").AsDateTimeText("yyyy-MM-dd") </td>
+                        </tr>
+                        <tr>
+                            <td width="25%">發布日期</td>
+                            <td> @store.Get("aodate").AsDateTimeText("yyyy-MM-dd") </td>
+                        </tr>
+                        <tr>
+                            <td>審核狀況</td>
+                            <td>
+                                @Html.DropDownListFor(x => x.RecruitModel.Teasurvey.confirm, CommonOptions.Confirm(), null, new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="submit-bar">
+                <button type="submit" id="save" class="btn btn-orange">送出</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#recruit_detail');
+        var form = root.find("#main_form");
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: form.attr('action'),
+                data: form.serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.Recruit })';
+                    });
+                }
+            });
+        });
+    });
+</script>

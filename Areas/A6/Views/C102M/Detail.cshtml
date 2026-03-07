@@ -1,0 +1,39 @@
+﻿@using Turbo.MVC.Base3.Areas.A6.Models;
+@model C102MDetailModel
+@{
+    Layout = "~/Views/Shared/_MainLayout_NoHeader_NoBg.cshtml";
+}
+@using (Html.BeginForm("Save", "C102M", FormMethod.Post, htmlAttributes: new { id = "main_form", @class = "form-horizontal" }))
+{
+    var button = new Dictionary<string, string>();
+   
+    button.Add("Close", "doClose()");
+    @Html.ButtonForTurbo(button)
+
+    <div class="col-sm-12">
+        <div class="theme-news">
+            <div class="form-border">
+                @Html.ControlForTurbo(Model)
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    //儲存
+    function doSave() {
+        var form = $("form[id=main_form]");
+        form.attr('action', '@Url.Action("Save")').submit();
+    }
+
+    //刪除
+    function doDelete() {
+        var form = $("form[id=main_form]");
+        form.attr('action', '@Url.Action("Delete")').submit();
+    }
+
+    //關閉
+    function doClose() {
+        parent.closeWindow();
+    }
+</script>

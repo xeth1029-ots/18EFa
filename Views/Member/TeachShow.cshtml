@@ -1,0 +1,26 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+
+@{
+    ViewBag.Title = "授課花絮";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div class="submenu">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#btnmf4" aria-expanded="true">授課影片</a></li>
+        <li><a data-toggle="tab" href="#btnmf5" aria-expanded="false">授課相片</a></li>
+    </ul>
+</div>
+<div class="news-content">
+    <div class="tab-content">
+        <div id="btnmf4" class="tab-pane fade active in">
+            @Html.Partial("TeachShow/_VideoForm")    
+        </div>
+        <div id="btnmf5" class="tab-pane fade">
+            @Html.Partial("TeachShow/_ImageForm")    
+        </div>
+    </div>
+</div>
+

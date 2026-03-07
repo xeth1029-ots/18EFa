@@ -1,0 +1,299 @@
+﻿@using Turbo.MVC.Base3.Models
+@using Turbo.MVC.Base3.DataLayers
+@using Turbo.MVC.Base3.Services
+@using Turbo.MVC.Base3.Commons
+@using Turbo.ReportTK
+@using Newtonsoft.Json
+@using WDACC
+@using WDACC.Commons
+
+@{
+
+    // 判斷是否由 ReportTK.Controller 查詢檢核失敗導過來, 抓取錯誤訊息
+    Report report = (Report)Session[Turbo.Controllers.ReportController.REPORT_SESSION_KEY];
+    var reportErrMessage = string.Empty;
+    var reportParms = new System.Collections.Hashtable();
+    if (report != null)
+    {
+        if (!string.IsNullOrEmpty(report.ResultMessage))
+        {
+            reportErrMessage = report.ResultMessage;
+            //讀取後清空 report.ResultMessage
+            report.ResultMessage = "";
+        }
+        if (report.QueryParms != null && report.QueryParms.Count > 0)
+        {
+            foreach (string key in report.QueryParms.Keys)
+            {
+                reportParms[key] = report.QueryParms[key];
+            }
+            //讀取後清空 report.QueryParms
+            report.QueryParms.Clear();
+        }
+        // 回存 Report Session
+        Session[Turbo.Controllers.ReportController.REPORT_SESSION_KEY] = report;
+    }
+
+    //嚐試取得 HTTP 請求導向來源功能編號
+    var redirectFromPRGID2 = RedirectToResult.GetRedirectFromLabel(this.Request);
+
+    //取得目前程式功能模組路徑及名稱顯示資訊
+    SessionModel sm = SessionModel.Get();
+
+    var Header = ApplicationModel.GetHeader();
+    ResultMessage msg = MvcApplication.GetContainer().GetInstance<ResultMessage>();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="EXPIRES" CONTENT="0">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>職訓整合管理系統｜職訓整合管理系統</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="職訓整合管理系統｜職訓整合管理系統">
+    <meta name="keywords" content="職訓整合管理系統">
+    <meta name="author" content="東柏資訊">
+    <meta name="copyright" content="本網頁著作權屬職訓整合管理系統所有">
+
+    @Styles.Render("~/Content/jquery")
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/css/base")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/jquery-ui.js")
+    @Scripts.Render("~/bundles/bootstrap")
+    @*Scripts.Render("~/bundles/jqueryval")*@
+    <!--20180827 加入解決 IE 10 以下不支援 CSS3 pointer-events:none 設定問題（https://github.com/kmewhort/pointer_events_polyfill）-->
+    @Scripts.Render("~/Scripts/polyfill/pointer_events_polyfill.js")
+    @Scripts.Render("~/bundles/globaljs")
+    @Scripts.Render("~/Scripts/ckeditor/ckeditor.js")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input").each(function (i, obj) {
+                var InputOBJ = $("#" + obj.id);
+                InputOBJ.attr("autocomplete", "off");
+            })
+        })
+
+        @* 前一個頁面最後錯誤或結果訊息 *@
+        var lastErrorMessage = '@Html.Raw(sm.LastErrorMessage)';
+        var lastResultMessage = '@Html.Raw(sm.LastResultMessage)';
+        var redirectUrl = '@Html.Raw(sm.RedirectUrlAfterBlock)';
+        var reportErrMessage = '@Html.Raw(reportErrMessage)';
+
+        function RedirectAfterPopup(redirectUrlPost) {
+            if ((redirectUrlPost != undefined) && (redirectUrlPost != "")) { redirectUrl = redirectUrlPost; }
+            if (redirectUrl.length > 0) {
+                @*有指定 RedirectUrlAfterBlock, 進行重導動作 *@
+                var form = $("form[name=RedirAfterBlockResult]");
+                var p = redirectUrl.indexOf("?");
+                if (p > 0) {
+                    var parms = redirectUrl.substring(p + 1).split("&");
+                    redirectUrl = redirectUrl.substring(0, p);
+                    for (var i = 0; i < parms.length; i++) {
+                        var ptoken = parms[i].split("=");
+                        if (ptoken.length == 2) {
+                            var input = document.createElement("input");
+                            $(input).attr("type", "hidden");
+                            $(input).attr("name", ptoken[0]);
+                            $(input).attr("value", ptoken[1]);
+
+                            form.append(input);
+                        }
+                        else {
+                            debugTrace("RedirectUrlAfterBlock: parameter syntax error '" + parms[i] + "'");
+                        }
+                    }
+                }
+                form.attr("action", redirectUrl);
+                form.submit();
+            }
+            else {
+                //20180530 加入使用 HTTP Get 方式導向指定網址
+                redirectUrl = "@Html.Raw(sm.RedirectUrlAfterBlockViaGet)";
+                if (redirectUrl.length > 0) location.href = redirectUrl;
+            }
+        }
+
+        $(document).ready(function () {
+
+            @* blockUI 引用的 loading image *@
+            globalSetting.processingImg = "@Url.Content("~/images/processing.gif")";
+
+            @*Report 查詢導回來時的各個查詢條件 binding*@
+            var reportParms = $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(reportParms))');
+            $.each(reportParms, function (key, value) {
+                $("input[name$='" + key + "']")
+                    .each(function (idx) {
+                        var name = $(this).attr("name");
+                        if (name == key || name.lastIndexOf("." + key) > -1) {
+                            debugTrace(this);
+                            $(this).val(value);
+                        }
+                    })
+                    .trigger('blur');
+                $("select[name$='" + key + "']")
+                    .each(function (idx) {
+                        var name = $(this).attr("name");
+                        if (name = key || name.lastIndexOf("." + key) > -1) {
+                            debugTrace(this);
+                            $(this).val(value);
+                        }
+                    })
+                    .trigger('change');
+            });
+
+            @* 前一個頁面最後錯誤或結果訊息 popup 處理*@
+            if (lastErrorMessage) {
+                blockAlert(lastErrorMessage, "系統提醒", function () {
+                    RedirectAfterPopup()
+                });
+            }
+            else if (lastResultMessage) {
+                blockMessage(lastResultMessage, null, function () {
+                    RedirectAfterPopup()
+                });
+            }
+            else if (reportErrMessage) { @*報表核檢或結果訊息*@
+                blockAlert(reportErrMessage, "系統提醒", function () {
+                    RedirectAfterPopup()
+                });
+            }
+            else {
+                @* 前一個表單 Post 後的 Validation Summary 訊息顯示 *@
+                var IsValid = '@(ViewData.ModelState.IsValid)';
+                var validationMsg = $("#ValidationSummary").html();
+                if (IsValid == 'False' && validationMsg) {
+                    blockAlert(validationMsg, "表單檢核訊息");
+                }
+            }
+
+            @* 設定  div[class='wrap'] 的 min-height *@
+            $("div.wrap").css("min-height",
+                $("div.container-fluid").innerHeight()
+                - $("div.header").outerHeight()
+                - $("div.type-bar").outerHeight()
+                );
+
+        });
+    </script>
+
+
+</head>
+<body>
+    <div style="background:#D2EDFF ;width:100%;">
+        <div class="container-fluid" style="padding-left:0px;">
+
+            @Html.Partial("_MainHeader")
+            <!-- content start -->
+            <div class="content ">
+                <div class="col-xs-2">
+                    @Html.Partial("_LeftMenu")
+                </div>
+
+                <div class="col-xs-10">
+                    <div class="type-bar clearfix">
+                        <div style="height:50px;">
+                            <h3 class="type-title" style="">
+                                <!-- 麵包屑 -->
+                                <img src="~/images/icon-document.svg"><span id="__topBreadcrumb">@(Header)</span>
+                                <!-- 登出 -->
+                                <button type="button" class="btn btn-default btn-group-right" onclick="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</button>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="wrap">
+                        <!-- page body start -->
+                        @RenderBody()
+                        <!-- page body end -->
+                        <!-- DatePicker start -->
+                        @Html.Partial("_DatePickerTW")
+                        <!-- DatePicker end -->
+                    </div>
+                </div>
+            </div>
+            <!-- content end -->
+
+            @Html.Partial("_CommonDialog")
+
+            @* Validation Summary *@
+            <div class="hide" id="ValidationSummary">@Html.ValidationSummary()</div>
+
+            <form name="RedirAfterBlockResult" action="" method="POST"></form>
+
+        </div>
+    </div>
+
+    @*Loading Mask*@
+    <div id="loadingMask" style="display:none;text-align:center;padding-top:10px;">
+        <img src="~/images/processing.gif" width="90" alt="資料載入中" /><br />
+        <div style="text-align:center;height:42px;color:burlywood">處理中...</div>
+    </div>
+    <script>
+        $(window).resize(function () {
+            // 凍結窗格
+            var view_height = $(window).height();
+            var mainMenu_height = view_height - 230;
+            var mainMenu_obj = $(".mainMenu").attr("style", "height:" + mainMenu_height + "px;");
+        });
+
+        // 更改enter為tab
+        $(document).ready(function () {
+            // 凍結窗格
+            var view_height = $(window).height();
+            var mainMenu_height = view_height - 230;
+            var mainMenu_obj = $(".mainMenu").attr("style", "height:" + mainMenu_height + "px;");
+
+            //20180827 加入解決 IE 10 以下不支援 CSS3 pointer-events:none 設定問題
+            PointerEventsPolyfill.initialize({});
+
+            //20180902 加入可拖放對話盒設定
+            $(".modal-dialog").draggable({ handle: ".modal-header", "cursor": "move" });
+
+            $("input").not($(":button")).keypress(function (evt) {
+                if (evt.keyCode == 13) {
+                    if ($(this).attr("type") !== 'submit') {
+                        var fields = $(this).parents('form:eq(0),body').find('button, input, textarea, select');
+                        var index = fields.index(this);
+                        if (index > -1 && (index + 1) < fields.length) {
+                            fields.eq(index + 1).focus();
+                        }
+                        $(this).blur();
+                        return false;
+                    }
+                }
+            });
+
+            if ($(".nodeClicked").text() != "") {
+                //有scrollBar
+                if ($(".mainMenu").get(0).scrollHeight > mainMenu_height) {
+                    //功能選項位置超過mainMenu
+                    if ($(".nodeClicked").offset().top > mainMenu_height) {
+                        $(".mainMenu").scrollTop($(".nodeClicked").offset().top - mainMenu_height / 2);
+                    }
+                }
+            }
+        });
+    </script>
+
+    @ShowMesg(msg)
+    <script src="~/Scripts/App/Shared/DateField.js"></script>
+</body>
+</html>
+
+@helper ShowMesg(ResultMessage msg)
+{
+    if (msg.IsShowMsg)
+    {
+        <script type="application/json">
+            @Html.Raw(Json.Encode(msg))
+        </script>
+        <script>
+
+        </script>
+    }
+}

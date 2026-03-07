@@ -1,0 +1,80 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+
+@{
+    ViewBag.Title = "教材分享區";
+    string guid = Guid.NewGuid().ToString();
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="@guid">
+    <div class="submenu">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#btnn1" aria-expanded="true"> 教材上傳 </a></li>
+            <li class=""><a data-toggle="tab" href="#btnn2" aria-expanded="false"> 教材分享 </a></li>
+            <li class=""><a data-toggle="tab" href="#btnn3" aria-expanded="false"> 我的教材 </a></li>
+        </ul>
+    </div>
+    <div class="news-content">
+        <div class="tab-content">
+            <div id="btnn1" class="tab-pane fade active in">
+                @Html.Partial("MemberShare/_ShareRegister")
+            </div>
+            <div id="btnn2" class="tab-pane fade">
+                @Html.Partial("MemberShare/_ShareWithMe")
+            </div>
+            <div id="btnn3" class="tab-pane fade">
+                @Html.Partial("MemberShare/_MyShareList")
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        var root = $('div#@guid');
+        var hash = window.location.hash;
+
+        function switchTab(index) {
+            root.find('.nav-tabs li.active').removeClass('active');
+            root.find('.nav-tabs li:eq(' + index + ')').addClass('active');
+            root.find('.tab-pane.active.in').removeClass('active in')
+            root.find('.tab-pane:eq(' + index + ')').addClass('active in');
+        }
+
+        function setTab() {
+            switch (hash) {
+                case '#tab1':
+                    switchTab(0);
+                    break;
+                case '#tab2':
+                    switchTab(1);
+                    break;
+                case '#tab3':
+                    switchTab(2);
+                    break;
+            }
+        }
+
+        function setupFileEvent() {
+            $('input[type=file]').on('change', function (e) {
+                if (this.files[0].size > 18000000) {
+                    blockAlert('檔案大小不可超過18MB!', null, function () {
+                        $(e.target).val(null);
+                    });
+                }
+            });
+        }
+
+        $(window).on('hashchange', function (e) {
+            setTab();
+        });
+
+        setTab();
+        setupFileEvent();
+
+    });
+</script>
+
+

@@ -1,0 +1,46 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.ViewModel.Facade
+
+@{
+    ViewBag.Title = "課程需求刊登";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@helper RenderHidehtml()
+{
+    <div class="unit-border">
+        <div class="unit-bg unit-bg-blue">
+            <p>※使用須知：</p>
+            <ol>
+                <li>本平台係提供有辦理共通核心職能課程需求之單位，徵求師資使用。</li>
+                <li>刊登內容以共通核心職能課程需求訊息為限，有刊登其他訊息需要，請洽管理人員。</li>
+                <li>刊登共通核心職能課程需求，刊登資訊將於授課日起自動下架。 </li>
+                <li>若師資需進一步瞭解課程需求詳細資訊，請主動聯繫需求單位。</li>
+            </ol>
+            @using (Html.BeginForm("Detail", "Facade", new { id = FacadeViewModel.ActionName.TeaSurveyForm }, FormMethod.Post, new { autocomplete = "off" }))
+            {
+                <div class="checkbox-set">
+                    <label for="tsagree">
+                        <span class="sr-only">我已閱讀過完整的須知，並同意所有規定事項</span>
+                        @Html.CheckBox("tsagree", new { id = "tsagree", value = "1" }) 我已閱讀過完整的須知，並同意所有規定事項
+                    </label>
+                </div>
+                <div class="submit-bar">
+                    <button type="submit" class="btn btn-orange" title="同意後開啟表單">下一步(開啟表單)</button>
+                </div>
+
+                if (Model.Message != null)
+                {
+                    <div class="alert alert-danger text-center"> @Model.Message </div>
+                }
+            }
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+}
+
+@*@Scripts.Render("~/Scripts/App/Facade/TeaSurvey.js")*@
+

@@ -1,0 +1,61 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@using System.Web
+
+@{
+    // 課程簡介修改
+    ViewBag.Title = "_CourseIntro";
+}
+
+<div class="table-responsive">
+    <table border="0" width="100%" class="table-teacher">
+        <tbody>
+            <tr>
+                <td width="15%">計畫簡介</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 1).FirstOrDefault().content)))
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "1" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+            <tr>
+                <td>計畫目標</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 2).FirstOrDefault().content)))
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid="2" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+            <tr>
+                <td>學員補助<br>規則</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 3).FirstOrDefault().content)))
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "3" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+            <tr>
+                <td>訓練單位<br>資格條件</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 4).FirstOrDefault().content)))
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "4" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+            <tr>
+                <td>課程查詢</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 5).FirstOrDefault().content)))
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "5" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

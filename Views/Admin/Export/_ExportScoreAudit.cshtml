@@ -1,0 +1,117 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    Layout = null;
+}
+
+
+@if (Model.AuditExportModel.QueryKind == "STATISTIC")
+{
+    @RenderStatistic()
+}
+else if (Model.AuditExportModel.QueryKind == "LIST")
+{
+    @RenderList()
+}
+
+@helper RenderStatistic()
+{
+    <table>
+        <thead>
+            <tr><th colspan="10">積分課程統計</th></tr>
+            <tr>
+                <th>姓名</th>
+                <th>電話</th>
+                <th>手機</th>
+                <th>e-mail</th>
+                <th>工作e-mail</th>
+                <th>未審核</th>
+                <th>已審核</th>
+                <th>未通過</th>
+                <th>退回</th>
+                <th>註冊年</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.AuditExportModel.ScoreAuditGrid.Result)
+            {
+                <tr>
+                    <td> @row.Get("realname").AsText() </td>
+                    <td> @row.Get("phone").AsText() </td>
+                    <td> @row.Get("mobile").AsText() </td>
+                    <td> @row.Get("email").AsText() </td>
+                    <td> @row.Get("jemail").AsText() </td>
+                    <td> @row.Get("sum1").AsText() </td>
+                    <td> @row.Get("sum2").AsText() </td>
+                    <td> @row.Get("sum3").AsText() </td>
+                    <td> @row.Get("sum4").AsText() </td>
+                    <td> @row.Get("regyear").AsText() </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@helper RenderList()
+{
+    <table>
+        <thead>
+            <tr><th colspan="15">積分課程列表</th></tr>
+            <tr>
+                <th>姓名</th>
+                <th>電話</th>
+                <th>手機</th>
+                <th>e-mail</th>
+                <th>工作e-mail</th>
+                <th>可授課單元</th>
+                <th>訓練單位</th>
+                <th>單位名稱</th>
+                <th>課程類別</th>
+                <th>課程名稱</th>
+                <th>授課日期</th>
+                <th>授課天數</th>
+                <th>授課時數</th>
+                <th>審核狀況</th>
+                <th>審查意見</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ 
+                var ckeckd = CommonOptions.Confirm();
+                var tuclass = CommonOptions.TeachUnitClass();
+                var teachunit = CommonOptions.TeachUnit();
+            }
+            @foreach (var row in Model.AuditExportModel.ScoreAuditGrid.Result)
+            {
+                string tu = row.Get("teachunit").AsText();
+                string[] tus = new string[] { "", "", "" };
+                if (!string.IsNullOrEmpty(tu))
+                {
+                    if (tu[0] == '1') { tus[0] = "DC"; };
+                    if (tu[1] == '1') { tus[1] = "BC"; };
+                    if (tu[2] == '1') { tus[2] = "KC"; };
+                }
+                <tr>
+                    <td> @row.Get("realname").AsText() </td>
+                    <td> @row.Get("phone").AsText() </td>
+                    <td> @row.Get("mobile").AsText() </td>
+                    <td> @row.Get("email").AsText() </td>
+                    <td> @row.Get("jemail").AsText() </td>
+                    <td> @string.Join(" ", tus) </td>
+                    <td> @row.Get("tuclass").AsCodeText(tuclass) </td>
+                    <td> @row.Get("tuname").AsText() </td>
+                    <td> @row.Get("tcclass").AsCodeText(teachunit) </td>
+                    <td> @row.Get("tcname").AsText() </td>
+                    <td> @row.Get("sdate").AsDateTimeText("yyyy-MM-dd HH:mm") - @row.Get("edate").AsDateTimeText("yyyy-MM-dd HH:mm") </td>
+                    <td> @row.Get("days").AsText() </td>
+                    <td> @row.Get("hours").AsText() </td>
+                    <td> @row.Get("ckeckd").AsCodeText(ckeckd) </td>
+                    <td> @row.Get("comment").AsText() </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

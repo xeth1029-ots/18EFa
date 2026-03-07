@@ -1,0 +1,41 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    Layout = null;
+    var mclass = CommonOptions.MeetingClass();
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>填寫日期 </th>
+            <th>講師姓名 </th>
+            <th>電子郵件 </th>
+            <th>聯絡電話 </th>
+            <th>問題類別 </th>
+            <th>回饋意見 </th>
+            <th>回覆日期 </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var classid = CommonOptions.FeedbackClass();
+        }
+
+        @foreach (var row in Model.FeedbackExportModel.Result)
+        {
+            <tr>
+                <td> @row.Get("date").AsDateTimeText("yyyy-MM-dd") </td>
+                <td> @row.Get("realname").AsText() </td>
+                <td> @row.Get("email").AsText() </td>
+                <td> @row.Get("mobile").AsText() </td>
+                <td> @row.Get("class").AsCodeText(classid) </td>
+                <td> @row.Get("content").AsText() </td>
+                <td> @row.Get("rdate").AsDateTimeText("yyyy-MM-dd") </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

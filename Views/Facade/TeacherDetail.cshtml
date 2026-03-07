@@ -1,0 +1,14 @@
+﻿@using WDACC.Models.ViewModel.Facade
+@using WDACC.Models.StoreExt
+@using WDACC.Models
+@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+
+@{
+    ViewBag.Title = "教師詳細資料";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@Html.DisplayFor(x => x.TeacherDetail, "TeacherDetail")
+

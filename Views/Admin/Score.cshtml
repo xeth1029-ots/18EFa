@@ -1,0 +1,107 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "講師積分資料";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="member_score">
+    <p class="form-title">
+        <span class="year">@Model.ScoreModel.Year</span> 年度講師積分資料表
+    </p>
+
+    <div class="col-sm-6">
+        @using (Html.BeginForm("Export", "Admin", new { id = ActionName.Admin.Score }, FormMethod.Post,
+            new { id = "export_form", style = "display:inline" }))
+        {
+        @Html.HiddenFor(x => x.ScoreViewExportModel.Year, new { id = "export_year" })
+        }
+        <a data-tsy="2020" id="export" href="#" class="btn btn-green">資料匯出</a>
+    </div>
+
+    <div class="col-sm-6">
+        @using (Html.BeginForm("Query", "Admin", new { id = ActionName.Admin.Score }, FormMethod.Post,
+            new { id = "main_form", style = "display:inline" }))
+        {
+        @Html.DropDownListFor(x => x.ScoreModel.Year, CommonOptions.BeforeYears(10, DateTime.Now.Year), new { @class = "form-normal scoremodel_year" })
+        <input type="submit" id="query" value="確定" class="btn btn-orange">
+        }
+    </div>
+
+    <div class="clearfix"></div>
+    <p></p>
+    <div class="table-responsive">
+        <table border="0" class="table-index" width="100%">
+            <thead>
+                @GetHeader(Model.ScoreModel.Year)
+            </thead>
+            <tbody id="rows" class="text-center">
+                @Html.Partial("Score/_GridRows")
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@helper GetHeader(int? year)
+{
+
+if (year >= 2021)
+{
+        <tr>
+            <th width="10%">講師姓名</th>
+            <th width="10%">授課推廣</th>
+            <th width="10%">社群分享</th>
+            <th width="10%">發展署會議</th>
+            <th width="12%">社群會議參與</th>
+            <th width="10%">教材分享</th>
+            <th width="10%">教材下載</th>
+            <th width="9%">總積分</th>
+            <th width="11%">加入年份</th>
+        </tr>
+}
+else if (year >= 2015)
+{
+        <tr>
+            <th width="10%">講師姓名</th>
+            <th width="10%">授課推廣</th>
+            <th width="10%">社群分享</th>
+            <th width="10%">發展署會議</th>
+            <th width="12%">社群會議參與</th>
+            <th width="10%">教材分享</th>
+            <th width="10%">教材下載</th>
+            <th width="8%">總積分</th>
+            <th width="9%">加入年份</th>
+            <th width="11%">觀察名單</th>
+        </tr>
+}
+else
+{
+        <tr>
+            <th width="10%">講師姓名</th>
+            <th width="10%">授課推廣</th>
+            <th width="10%">社群互動</th>
+            <th width="10%">發展署會議</th>
+            <th width="12%">教材編輯</th>
+            <th width="10%">會議參與</th>
+            <th width="10%">教材分享</th>
+            <th width="8%">總積分</th>
+            <th width="9%">加入年份</th>
+        </tr>
+}
+}
+
+<script>
+    $(function () {
+        var root = $('div#member_score');
+        root.on('click', '#export', function (e) {
+            e.preventDefault();
+            var year = root.find('select.scoremodel_year').val();
+            root.find('input#export_year').val(year);
+            root.find('form#export_form').submit();
+        });
+    });
+</script>
+

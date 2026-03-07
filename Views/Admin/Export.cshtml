@@ -1,0 +1,77 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "資料匯出";
+}
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="export">
+    <div class="table-responsive">
+        @using (Html.BeginForm("Export", "Admin", new { id = ActionName.Admin.TeacherInfo }, FormMethod.Post, new { id = "main_form" }))
+        {
+            int i_listCnt = 12;
+            if (Model.ExportModel.ItemList != null && Model.ExportModel.ItemList.Count > 0) { i_listCnt = (Model.ExportModel.ItemList.Count / 2) + (Model.ExportModel.ItemList.Count % 2); }
+            <table class="table-teacher" width="100%" border="0">
+                <tbody>
+                    <tr>
+                        <td width="20%">分類</td>
+                        <td colspan="2">
+                            <label class="checkbox-inline">
+                                @Html.RadioButtonFor(x => x.ExportModel.Active, "", new { })
+                                所有講師
+                            </label>
+                            <label class="checkbox-inline">
+                                @Html.RadioButtonFor(x => x.ExportModel.Active, "1", new { })
+                                在線講師
+                            </label>
+                            <label class="checkbox-inline">
+                                @Html.RadioButtonFor(x => x.ExportModel.Active, "0", new { })
+                                下線講師
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>項目</td>
+                        <td width="40%">
+                            @for (int i = 0; i < i_listCnt; i++)
+                            {
+                                var item = Model.ExportModel.ItemList[i];
+                                <div class="checkbox">
+                                    <label class="checkbox-inline">
+                                        @*<input type="checkbox" name="scsel[]" value="pid">身分證字號*@
+                                        @Html.CheckBoxFor(x => x.ExportModel.ExportList[i], new { }) @item[1]
+                                    </label>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @for (int i = i_listCnt; i < Model.ExportModel.ItemList.Count; i++)
+                            {
+                                var item = Model.ExportModel.ItemList[i];
+                                <div class="checkbox text-left">
+                                    <label class="checkbox-inline">
+                                        @*<input type="checkbox" name="scsel[]" value="pid">身分證字號*@
+                                        @Html.CheckBoxFor(x => x.ExportModel.ExportList[i], new { }) @item[1]
+                                    </label>
+                                </div>
+                            }
+
+                            @* 佔位，使左右兩邊可對齊 *@
+                            <div class="checkbox text-left">
+                                <label class="checkbox-inline">
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="submit-bar">
+                <input type="submit" value="送出" class="btn btn-orange">
+            </div>
+
+        }
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.ViewModel.Facade
+@using WDACC.Models.StoreExt
+@using Turbo.MVC.Base3.Commons
+
+@{
+    ViewBag.Title = "課程師資介紹";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div class="news-content">
+    <div class="clearfix"></div>
+    <div class="newsgroup">
+        <p class="form-title">講師資料依姓名筆畫排序</p>
+        <ul class="teacher-list">
+            @if (Model != null && Model.Grid != null)
+            {
+                foreach (var item in Model.Grid)
+                {
+                    var row = item.GetFinder();
+                    //row("mid").AsInt64().ToString()
+                    var mid = row("mid").AsInt64();
+                    var midymd = string.Concat(row("mid").AsInt64(), DateTime.Now.ToString("yyyyMMddHH"));
+                    var emid = MyCommonUtil.EncodeString(midymd);
+                    string s_realname = row("realname").AsText();
+                    string s_realname_title = string.Format("按下後，查看{0}", s_realname);
+                    <li>
+                        <a href="@Url.Action("Detail", "Facade", new { id = FacadeViewModel.ActionName.TeacherDetail, EMid = emid , Mid = mid })" title="@s_realname_title">
+                            @s_realname
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <!-- news page start -->
+    <div class="clearfix"></div>
+</div>

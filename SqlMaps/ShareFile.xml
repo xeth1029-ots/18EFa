@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="ShareFile"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <resultMaps>
+  </resultMaps>
+
+  <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+  </cacheModel>
+
+  <statements>
+    <select id="GetShareFileList"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.*, b.realname,
+        (select count(*) from fileshare where mfid=a.id) as downloadcount
+        from memshare a join memdetail b on a.mid=b.mid
+        where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and a.id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="mid">
+          <![CDATA[ and a.mid = #mid# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="year">
+          <![CDATA[ and year(a.date) = #year# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="month">
+          <![CDATA[ and month(a.date) = #month# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="classid">
+          <![CDATA[ and a.classid = #classid# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="checked">
+          <![CDATA[ and a.checked = #checked# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by date desc ]]>
+    </select>
+
+
+  </statements>
+</sqlMap>

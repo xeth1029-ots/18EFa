@@ -1,0 +1,27 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@using System.Web
+
+@{
+    // 教材分享說明
+    ViewBag.Title = "_ScoreIntro";
+}
+
+
+<div class="table-responsive">
+    <table border="0" width="100%" class="table-teacher">
+        <tbody>
+            <tr>
+                <td width="15%">教材分享說明</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 12).FirstOrDefault().content)))
+                    @*<p style="font-size: 18.66px;"><b><font size="5">教材審查辦理方式說明：</font></b></p><p style="font-size: 18.66px;"><b style="font-size: large;">(一) &nbsp;&nbsp;審查目的：</b><br></p><p style="font-size: 18.66px;"><font size="4">為全面提升及充實本課程教材，特辦理自撰教材暨積分審查會議，經審查通過之教材，即上傳至共通核心職能課程師資教材分享平台，供其它師資參考，以提升共通核心職能課程師資整體授課品質。</font></p><p style="font-size: 18.66px;"><b style="font-size: large;">(二) &nbsp;&nbsp;收件方式：</b><br></p><p style="font-size: 18.66px;"><font size="4">師資自行上傳自撰教材至「共通核心職能課程」教材分享專區。</font></p><p style="font-size: 18.66px;"><b style="font-size: large;">(三) &nbsp; 審查方法：</b><br></p><p style="font-size: 18.66px;"><font size="4">(1)本年度預計召開6場次教材審查會議，</font><span style="font-size: large;">審查為未通過者，可修改後於下一次審查會議重新審查。</span></p><p style="font-size: 18.66px;"><font size="4">(2)<font color="#ff0066"><b><u>本年度教材繳交最終期限擬訂於108年10月31日(三)。</u></b></font></font></p><p style="font-size: 18.66px;"><font size="4">(3)未於公告最終期限內繳交教材者，或最終審核會議未通過者，隔年(109年度)將列入觀察名單。</font></p><p style="font-size: 18.66px;"><font size="4"><b>(四) &nbsp; 審查原則：&nbsp;</b></font></p><p><b style="color: rgb(0, 0, 102); font-size: large;">(1)<span class="Apple-tab-span" style="white-space: pre;">	</span>檢附資料完整性：除檢附自撰教材資料外，另須包括「教材製作說明書」、「教材使用授權書」，且教材製作說明書須符合教材內容。</b></p><p><b style="font-size: large; background-color: rgb(255, 51, 102);"><font color="#ffffff">(特別注意!!!，若教材範圍為DC3之2.自動自發與獨立創新精神之促進，則請於教材製作說明書的核心職類欄位勾選DC，課程單元勾選3，課程大綱勾選2，請特別留意，欄位填答務必與教材實際內容相符，審查委員將依據製作說明書內容進行審查。)</font></b></p><p><b><font color="#ffffff" style="background-color: rgb(255, 51, 102);"><font size="4">※「教材製作說明書」及「教材使用授權書」請自行下載(可於師資最新消息專區"</font></font></b><font style="background-color: rgb(255, 51, 102);"><font color="#ffffff" size="4">共通核心職能課程自撰教材辦理規範"下載)</font><font color="#ffffff" style="font-size: large;"><b>，並隨教材一併檢附。</b></font></font></p><p><b style="color: rgb(0, 0, 102); font-size: large;">(2)<span class="Apple-tab-span" style="white-space: pre;">	</span>與共通核心職能課程相關：教材範圍需在共通核心職能課程大綱範圍之中(至少滿足一個子綱)</b><b style="color: rgb(0, 0, 102); font-size: large;">，教材務必切合師資所勾選之共通核心職能課程大綱該單元內涵。</b></p><p><b style="color: rgb(0, 0, 102); font-size: large;">(3)<span class="Apple-tab-span" style="white-space: pre;">	</span>教材須為自撰教材：教材不得轉載自他人資料。資料若有引用，必須符合著作權及智慧財產權規範。</b></p><p><b style="color: rgb(0, 0, 102); font-size: large;">(4)<span class="Apple-tab-span" style="white-space: pre;">	</span>教材豐富度：課程教學案例及補充教材製作內容，豐富度需至少可供講授或操作達30分鐘以上。</b></p><p><b style="color: rgb(0, 0, 102); font-size: large;">其他注意事項:</b></p><p><font color="#ff0066" size="4"><b>本平台僅作為共通核心職能課程師資交流學習使用，不得從事商業用途，請尊重智慧財產權，避免任何侵權行為。</b></font></p>*@
+                </td>
+                <td>
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = 12 })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

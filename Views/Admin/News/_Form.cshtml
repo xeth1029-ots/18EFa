@@ -1,0 +1,180 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using Turbo.Helpers
+
+@{
+    ViewBag.Title = "_Grid";
+    //string s_file_accept = ".xls,.doc,.ppt,.pdf,.jpg,.png,.msg,.odt,.odf";
+    string s_file_accept = Turbo.MVC.Base3.Models.ConfigModel.Get_FileExtAccept;
+}
+
+<div id="news_form">
+    @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.News }, FormMethod.Post, new { id = "main_form", enctype = "multipart/form-data" }))
+    {
+        <div class="table">
+            <table border="0" width="100%" class="table-teacher">
+                <tbody>
+                    <tr>
+                        <td width="14%">公告日期</td>
+                        <td>
+                            @*@Html.EditorFor(x => x.NewsModel.Sdate, "TwDate") (例：2018-01-01)*@
+                            @Html.DatePickerTWFor(x => x.NewsModel.Sdate, new { style = "width: 50%" })
+                        </td>
+                        <td width="14%">截止日期</td>
+                        <td>
+                            @*@Html.EditorFor(x => x.NewsModel.Sdate, "TwDate") (例：2018-01-01)*@
+                            @Html.DatePickerTWFor(x => x.NewsModel.Edate, new { style = "width: 50%" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="14%">標題</td>
+                        <td colspan="3">
+                            @*<input type="text" name="title" size="60" class="form-normal">*@
+                            @Html.TextBoxFor(x => x.NewsModel.NewsForm.title, new { @class = "form-control", size = 60 })
+                            <div style="margin-top:10px">
+                                公告類別: @Html.DropDownListFor(x => x.NewsModel.NewsForm.@class, CommonOptions.NewsClass(), null, new { @class = "form-normal" })
+                                是否提供下載:
+                                @Html.DropDownListFor(x => x.NewsModel.NewsForm.fordownload, CommonOptions.YesNo(), null, new { @class = "form-normal" })
+                                是否維持置頂:
+                                @Html.DropDownListFor(x => x.NewsModel.NewsForm.ishot, CommonOptions.YesNoYN(), null, new { @class = "form-normal" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="14%">公告內容</td>
+                        <td colspan="3">
+                            @Html.TextAreaFor(x => x.NewsModel.NewsForm.content, new { id = "news_form_content" })
+                            @*<div style="width: 852px;" unselectable="on">
+                                <div class=" nicEdit-panelContain" unselectable="on" style="overflow: hidden; width: 100%; border: 1px solid rgb(204, 204, 204); background-color: rgb(239, 239, 239);">
+                                    <div class=" nicEdit-panel" unselectable="on" style="margin: 0px 2px 2px; zoom: 1; overflow: hidden;"><div style="float: left; margin-top: 2px; display: none;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -414px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -36px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -108px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -324px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -144px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -54px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -216px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -126px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -162px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -306px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div class=" nicEdit-selectContain" unselectable="on" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; zoom: 1; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div class=" nicEdit-selectControl" unselectable="on" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -432px 0px;"></div><div class=" nicEdit-selectTxt" unselectable="on" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Size...</div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div class=" nicEdit-selectContain" unselectable="on" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; zoom: 1; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div class=" nicEdit-selectControl" unselectable="on" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -432px 0px;"></div><div class=" nicEdit-selectTxt" unselectable="on" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Family...</div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div class=" nicEdit-selectContain" unselectable="on" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; zoom: 1; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div class=" nicEdit-selectControl" unselectable="on" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -432px 0px;"></div><div class=" nicEdit-selectTxt" unselectable="on" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Format...</div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -90px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -180px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -342px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -360px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -378px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: -18px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;images/nicEditorIcons.gif&quot;); background-position: 0px 0px;"></div></div></div></div></div>
+                                </div>
+                            </div>
+                            <div style="width: 852px; border-width: 0px 1px 1px; border-top-style: initial; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: initial; border-right-color: rgb(204, 204, 204); border-bottom-color: rgb(204, 204, 204); border-left-color: rgb(204, 204, 204); border-image: initial; overflow: hidden auto;"><div class=" nicEdit-main" contenteditable="true" style="width: 844px; margin: 4px; min-height: 300px; overflow: hidden;"><br></div></div><textarea name="content1" id="content1" style="width: 90%; height: 300px; visibility: hidden; display: none;"></textarea>*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="14%">已上傳附件</td>
+                        <td colspan="3">
+                                @if (Model.NewsModel.NewsFiles != null)
+                                {
+                                    int i = 0;
+                                    foreach (var file in Model.NewsModel.NewsFiles)
+                                    {
+                                        <div>
+                                            @Html.HiddenFor(x => x.NewsModel.NewsFiles[i].id)
+                                            <label>@Html.CheckBoxFor(x => x.NewsModel.FileRemoveList[i]) 刪除</label>
+                                            <a href="@Url.Action("Download", "File", new { id = ActionName.File.News, fid = file.id })" rel="noopener">@file.filename</a>
+                                            (<span>@file.comment</span>)
+                                        </div>
+                                        i++;
+                                    }
+                                }
+                                @*@if (Model.NewsModel.NewsFiles != null)
+                                {
+                                    for (int i = 0; i<Model.NewsModel.NewsFiles[] var file in Model.NewsModel.NewsFiles)
+                                    {
+                                        @Html.HiddenFor(x => x.NewsModel.NewsFiles[i])
+                                        @Html.HiddenFor(x => x.NewsModel.NewsFiles.id)
+                                    }
+                                }*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="14%">附件</td>
+                        <td colspan="3" id="row-container">
+                            <div class="row" style="width:98%">
+                                <div class="col-sm-5">
+                                    <input type="file" name="Files" class="form-control" accept="@s_file_accept" />
+                                </div>
+                                <div class="col-sm-5">
+                                     <input type="text" size="30" name="Comments" class="form-control" placeholder="檔案說明" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="button" id="fabtn" value="增加檔案" class="btn btn-info">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="submit-bar">
+            @Html.HiddenFor(x => x.NewsModel.NewsForm.showoff)
+            @Html.HiddenFor(x => x.NewsModel.NewsForm.id)
+
+            @{ 
+                string label = string.Empty;
+                if (Model.Action == ActionName.Admin.News)
+                {
+                    label = "新增公告";
+                }
+                else
+                {
+                    label = "修改公告";
+                }
+            }
+            <button type="submit" id="save" class="btn btn-orange">@label</button>
+        </div>
+    }
+</div>
+
+<script type="text/template" id="tmpl-file-row">
+    <div class="row" style="width:98%">
+        <div class="col-sm-5">
+            <input type="file" name="Files" class="form-control" accept="@s_file_accept" />
+        </div>
+        <div class="col-sm-5">
+             <input type="text" size="30" name="Comments" class="form-control" placeholder="檔案說明" />
+        </div>
+        <div class="col-sm-1">
+        </div>
+    </div>
+</script>
+
+<script>
+    $(function () {
+        var root = $('div#news_form');
+
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+
+            var content = CKEDITOR.instances['news_form_content'].getData();
+            var newcontent = $('<div/>').text(content).html();
+            root.find('#news_form_content').val(newcontent);
+
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: new FormData(root.find('#main_form')[0]),
+                method: 'POST',
+                contentType: false,
+                processData: false
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.News })';
+                    });
+                }
+            });
+        });
+
+        root.on('click', '#fabtn', function (e) {
+            e.preventDefault();
+            var html = $('#tmpl-file-row').html();
+            $("#row-container").append(html);
+        });
+
+        root.on('change', 'input[type=file]', function (e) {
+            e.preventDefault();
+            var file = e.target.files[0];
+            var ext = file.name.split('.').pop().toUpperCase() || '';
+            if (ext && ext != 'ODT' && ext != 'ODP' && ext != 'ODS' && ext != 'PDF') {
+                var msg = '網站全面以ODF類型檔案(如：ODT、ODP、ODS、PDF)為優先文件格式!';
+                blockAlert(msg, null, null);
+            }
+        });
+
+        CKEDITOR.replace('news_form_content', {
+            htmlEncodeOutput: false 
+        });
+    });
+</script>

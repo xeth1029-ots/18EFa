@@ -1,0 +1,17 @@
+﻿@model WDACC.Models.CouClassField
+
+<span class="radio-inline">
+    <span class="radio-inline">
+        @Html.LabelFor(x => x.IsDc, "類別DC", new { @class = "sr-only" })
+        @Html.CheckBoxFor(x => x.IsDc) DC
+    </span>
+    <span class="radio-inline">
+        @Html.LabelFor(x => x.IsBc, "類別BC", new { @class = "sr-only" })
+        @Html.CheckBoxFor(x => x.IsBc) BC
+    </span>
+    <span class="radio-inline">
+        @Html.LabelFor(x => x.IsKc, "類別KC", new { @class = "sr-only" })
+        @Html.CheckBoxFor(x => x.IsKc) KC
+    </span>
+</span>
+

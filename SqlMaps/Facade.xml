@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Facade"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <resultMaps>
+  </resultMaps>
+
+  <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+  </cacheModel>
+
+  <statements>
+
+    <!-- 取得最新消息清單 -->
+    <select id="GetNewsList"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="Turbo.MVC.Base3-cache">
+      <![CDATA[
+          select * from news  
+        ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ a.id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="username">
+          <![CDATA[ a.username like '%' + #username# + '%' ]]>
+        </isNotEmpty>
+        <isNotEmpty property="email">
+          <![CDATA[ a.email = #email# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="pid">
+          <![CDATA[ a.pid = #pid# ]]>
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+    <select id="GetTeacherList"
+            parameterClass="Hashtable"
+            resultClass="Hashtable">
+      <![CDATA[ select COUNT(1) cnt from memdetail where active <> 0 ]]>
+    </select>
+
+    <select id="GetLoginUser"
+            parameterClass="Hashtable"
+            resultClass="Hashtable">
+      <![CDATA[
+        select * from member where 1=1 
+        and username = #username#
+        and password = #password#
+      ]]>
+      <!--<dynamic>
+        <isNotEmpty property="username">
+          <![CDATA[ and username = #username# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="password">
+          <![CDATA[ and password = #password# ]]>
+        </isNotEmpty>
+      </dynamic>-->
+    </select>
+
+    <select id="GetLastTeachShow"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable">
+      <![CDATA[
+select a.*, b.realname
+from teachershow a join memdetail b on a.mid=b.mid and b.active='1'
+where a.id = (
+  select max(id) as id from teachershow
+  where class=1 and content not like '%.pptx'
+  and id not in ('21','40','39','38','163','198','162','161','160','159','219') and mid=a.mid)
+      ]]>
+    </select>
+
+    <!-- 取得網站項目說明設定 -->
+    <select id="GetTbContent"
+   resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="Turbo.MVC.Base3-cache">
+      <![CDATA[ SELECT SEQNO,CONTENT1 FROM TbContent WHERE 1=1 AND SEQNO=#SEQNO# ]]>
+    </select>
+
+  </statements>
+</sqlMap>

@@ -1,0 +1,12 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "共通核心職能課程最新公告";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@Html.DisplayFor(x => x.NewsDetail, "NewsDetail")
+

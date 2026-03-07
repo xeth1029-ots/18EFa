@@ -1,0 +1,65 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "最新消息";
+    string action = ViewContext.RouteData.Values["action"].ToString();
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@switch (action)
+{
+    case "Index": @Grid(); break;
+    case "Detail": @Detail(); break;
+}
+
+@helper Grid()
+{
+    <div id="news" class="table-responsive">
+        <table class="table-index" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <thead>
+                <tr>
+                    <th width="6%" nowrap="">序號</th>
+                    <th width="12%" nowrap="">發布日期</th>
+                    <th width="70%">公告標題 </th>
+                    <th width="12%" nowrap="">截止日期 </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.News.HotGrid)
+                {
+                    <tr>
+                        <td>
+                            <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+                        </td>
+                        <td> @item.Get("sdate").AsDateTimeText("yyyy-MM-dd") </td>
+                        <td> <a href="@Url.Action("Detail", "Member", new { id = ActionName.Member.News, newsid=item.Get("id").AsInt64() })"> @item.Get("title").AsText() </a></td>
+                        <td> @item.Get("edate").AsDateTimeText("yyyy-MM-dd") </td>
+                    </tr>
+                }
+            </tbody>
+            <tbody>
+                @{ int i = 0; }
+                @foreach (var item in Model.News.Grid)
+                {
+                    <tr>
+                        <td> @(++i) </td>
+                        <td> @item.Get("sdate").AsDateTimeText("yyyy-MM-dd") </td>
+                        <td> <a href="@Url.Action("Detail", "Member", new { id = ActionName.Member.News, newsid=item.Get("id").AsInt64() })"> @item.Get("title").AsText() </a></td>
+                        <td> @item.Get("edate").AsDateTimeText("yyyy-MM-dd") </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="table-page" style="text-align: center"> 共 @(Model.News.HotGrid.Count + Model.News.Grid.Count)  筆資料 </div>
+    </div>
+}
+
+
+@helper Detail()
+{
+    @Html.DisplayFor(x => x.News, "NewsDetail")
+}

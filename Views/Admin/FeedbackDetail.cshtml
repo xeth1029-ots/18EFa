@@ -1,0 +1,93 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "講師意見回饋詳細資料";
+    var item = Model.FeedbackModel.OpinionItem;
+    var realname = Model.FeedbackModel.RealName;
+    var store = new Store();
+    store.Collection(item);
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="feedback_detail">
+    <div class="news-content">
+        @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.Feedback }, FormMethod.Post, new { id = "main_form" }))
+        {
+            @*<input type="hidden" name="qid1" value="36">*@
+            <table class="table-teacher" width="100%">
+                <tbody>
+                    <tr>
+                        <td>日期</td>
+                        <td> @item.date.Value.ToString("yyyy-MM-dd") </td>
+                    </tr>
+                    <tr>
+                        <td>講師</td>
+                        <td> @realname </td>
+                    </tr>
+                    <tr>
+                        <td>問題類型</td>
+                        <td> @store.Get("class").AsCodeText(CommonOptions.FeedbackClass()) </td>
+                    </tr>
+                    <tr>
+                        <td>聯絡電話</td>
+                        <td> @item.mobile </td>
+                    </tr>
+                    <tr>
+                        <td>電子郵件</td>
+                        <td> @item.email </td>
+                    </tr>
+                    <tr>
+                        <td>問題內容</td>
+                        <td> @item.content </td>
+                    </tr>
+                    <tr>
+                        <td>回覆狀況</td>
+                        <td>
+                            @Html.HiddenFor(x => x.FeedbackModel.OpinionItem.id)
+                            @Html.DropDownListFor(x => x.FeedbackModel.OpinionItem.answer, CommonOptions.FeedbackStatus(), null, new { @class = "form-normal" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>回覆說明</td>
+                        <td>
+                            @Html.TextAreaFor(x => x.FeedbackModel.OpinionItem.response, new { @class = "form-control", cols = "50", rows = "5" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="submit-bar">
+                <button type="submit" class="btn btn-orange" name="sumitm" id="save">送出</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#feedback_detail');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: root.find('#main_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp) {
+                    if (resp.status) {
+                        blockAlert('儲存成功!', null, function () {
+                            window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.Feedback })';
+                        });
+                    } else {
+                        blockAlert(resp.message);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+

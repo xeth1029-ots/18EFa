@@ -1,0 +1,34 @@
+﻿@using WDACC.Commons
+@model WDACC.Models.ViewModel.MemberViewModel
+
+@{
+    ViewBag.Title = "基本資料維護";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="memdeup">
+    <div class="submenu">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tabm1" aria-expanded="true">修改密碼</a></li>
+            <li class=""><a data-toggle="tab" href="#tabm2" aria-expanded="false">修改個人基本資料</a></li>
+            @*<li class=""><a data-toggle="tab" href="#tabm3" aria-expanded="false">曾開授課程</a></li>*@
+            <li class=""><a data-toggle="tab" href="#tabm4" aria-expanded="false">可授課產業別</a></li>
+        </ul>
+    </div>
+    <div class="news-content">
+        <div class="tab-content">
+            <div id="tabm1" class="tab-pane fade  unit-bg-blue active in">
+                @Html.Partial("Memdeup/_PasswordChange")
+            </div>
+            <div id="tabm2" class="tab-pane fade">
+                @Html.Partial("Memdeup/_TeacherInfo")
+            </div>
+            <div id="tabm4" class="tab-pane fade">
+                @Html.Partial("Memdeup/_TeachIndsc")
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Log紀錄";
+    string guid = Guid.NewGuid().ToString();
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div class="submenu">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#btnn1" aria-expanded="true">登入記錄查詢 </a></li>
+        <li class=""><a data-toggle="tab" href="#btnn2" aria-expanded="false"> 檔案上傳查詢 </a></li>
+        <li class=""><a data-toggle="tab" href="#btnn3" aria-expanded="false"> 使用歷程查詢 </a></li>
+    </ul>
+</div>
+<div class="news-content">
+    <div class="tab-content">
+        <div id="btnn1" class="tab-pane fade active in">
+            @Html.Partial("Log/_LoginLog")
+        </div>
+        <div id="btnn2" class="tab-pane fade">
+            @Html.Partial("Log/_FileLog")
+        </div>
+        <div id="btnn3" class="tab-pane fade">
+            @Html.Partial("Log/_FuncLog")
+        </div>
+    </div>
+</div>
+

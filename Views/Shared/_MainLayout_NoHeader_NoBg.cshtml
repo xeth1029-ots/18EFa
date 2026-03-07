@@ -1,0 +1,149 @@
+﻿@using Turbo.MVC.Base3.Models
+@{
+    SessionModel sm = SessionModel.Get();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="EXPIRES" CONTENT="0">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>職訓整合管理系統｜職訓整合管理系統</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="職訓整合管理系統｜職訓整合管理系統">
+    <meta name="keywords" content="職訓整合管理系統">
+    <meta name="author" content="東柏資訊">
+    <meta name="copyright" content="本網頁著作權屬職訓整合管理系統所有">
+
+    @Styles.Render("~/Content/jquery")
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/css/base")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/jquery-ui.js")
+    @Scripts.Render("~/bundles/bootstrap")
+    @*Scripts.Render("~/bundles/jqueryval")*@
+
+    <!--20180827 加入解決 IE 10 以下不支援 CSS3 pointer-events:none 設定問題（https://github.com/kmewhort/pointer_events_polyfill）-->
+    @Scripts.Render("~/Scripts/polyfill/pointer_events_polyfill.js")
+    @Scripts.Render("~/bundles/globaljs")
+    @Scripts.Render("~/Scripts/ckeditor/ckeditor.js")
+
+    <!-- 警告：Respond.js 無法在 file:// 協定下運作 -->
+    <!--[if lt IE 9]>
+        <script src="~/Assets/js/html5shiv.js" type="text/javascript"></script>
+        <script src="~/Assets/js/respond.min.js" type="text/javascript"></script>
+       <![endif]-->
+    <!--[if IE]><![endif]-->
+    <!--[if gte IE 9]
+    <style type="text/css">
+        .gradient {
+        filter: none;
+    }
+    </style>
+    <![endif]-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /*$("input").each(function (i, obj) {
+                var _input_Type = $(obj).attr("type")
+                if (_input_Type == 'checkbox') {
+                    var InputOBJ = $("#" + obj.id);
+                    InputOBJ.attr("autocomplete", "off");
+                }
+            })*/
+        })
+        @* 前一個頁面最後錯誤或結果訊息 *@
+        var lastErrorMessage = '@Html.Raw(sm.LastErrorMessage)';
+        var lastResultMessage = '@Html.Raw(sm.LastResultMessage)';
+        var redirectUrl = '@Html.Raw(sm.RedirectUrlAfterBlock)';
+
+        ///
+        function RedirectAfterPopup(reload_redirectUrl) {
+            if (redirectUrl) {
+                data = { "redirectUrl": redirectUrl };
+                parent.closeWindow(data);
+            }
+
+            if (reload_redirectUrl) {
+                //使用 HTTP Get 方式導向指定網址
+                location.href = reload_redirectUrl;
+            }
+        }
+
+        $(document).ready(function () {
+            //20180827 加入解決 IE 10 以下不支援 CSS3 pointer-events:none 設定問題
+            PointerEventsPolyfill.initialize({});
+
+            //20180902 加入可拖放對話盒設定
+            $(".modal-dialog").draggable({ handle: ".modal-header", "cursor": "move" });
+
+            @* blockUI 引用的 loading image *@
+            globalSetting.processingImg = "@Url.Content("~/images/processing.gif")";
+
+            @* 前一個頁面最後錯誤或結果訊息 popup 處理*@
+            if (lastErrorMessage) {
+                blockAlert(lastErrorMessage, "系統提醒", function () {
+                    RedirectAfterPopup()
+                });
+            }
+            else if (lastResultMessage) {
+                blockMessage(lastResultMessage, null, function () {
+                    RedirectAfterPopup()
+                });
+            }
+            else {
+                    @* 前一個表單 Post 後的 Validation Summary 訊息顯示 *@
+                    var IsValid = '@(ViewData.ModelState.IsValid)';
+                var validationMsg = $("#ValidationSummary").html();
+                if (IsValid == 'False' && validationMsg) {
+                    blockAlert(validationMsg, "表單檢核訊息");
+                }
+            }
+
+
+            @*binding OnlineHelp button's click*@
+            $("input[type=button][data-role=OnlineHelp]").click(function () {
+                popupHelp();
+            });
+        });
+    </script>
+    @Html.Partial("_PagingLink_js")
+</head>
+<body>
+    <div class="" style="background-color:#fff">
+        <div class="container-fluid">
+            <!-- page body start -->
+            @RenderBody()
+            <!-- page body end -->
+        </div>
+    </div>
+    @Html.Partial("_CommonDialog")
+
+    @Html.Partial("_DatePickerTW")
+
+    @*Loading Mask*@
+    <div id="loadingMask" style="display:none;text-align:center;padding-top:10px;">
+        <img src="~/images/processing.gif" width="90" /><br />
+        <div style="text-align:center;height:42px;color:burlywood">處理中...</div>
+    </div>
+
+    @* Validation Summary *@
+    <div class="hide" id="ValidationSummary">@Html.ValidationSummary()</div>
+
+
+    @* 線上說明 *@
+    <div class="help-container hide"></div>
+    <form name="OnlineHelpForm" action="~/OnlineHelp/Index" method="post" style="display: none;"></form>
+    @* /線上說明 *@
+
+    <form name="RedirAfterBlockResult" action="" method="POST"></form>
+
+    @*Loading Mask*@
+    <div id="loadingMask" style="display:none;text-align:center;padding-top:10px;">
+        <img src="~/images/processing.gif" width="90" /><br />
+        <div style="text-align:center;height:42px;color:burlywood">處理中...</div>
+    </div>
+</body>
+</html>

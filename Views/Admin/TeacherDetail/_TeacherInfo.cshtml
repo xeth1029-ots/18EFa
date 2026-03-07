@@ -1,0 +1,496 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using Turbo.MVC.Base3.Commons
+
+@{
+    ViewBag.Title = "_TeacherInfo";
+    //string s_offdate_TW = MyCommonUtil.TransToTwYYYMMDD(Model.TeacherModel.Detail.offdate);
+}
+
+@*<style>
+        th {
+            background-color: lightblue !important;
+            border-bottom: 1px solid #88d9ff !important;
+            color: black;
+        }
+    </style>*@
+
+<div id="teacher-info">
+    <h3 class="news-headtitle">修改個人基本資料</h3>
+    <div class="clearfix"></div>
+    <!-- news group start -->
+    @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.TeacherInfo }, FormMethod.Post, new { id = "main_form", @class = "form-horizontal inputSet" }))
+    {
+        <div class="table">
+            <table class="table table-index" width="100%">
+                <tbody>
+                    <tr>
+                        <td width="15%">是否顯示<br>於前台</td>
+                        <td width="85%" colspan="2">
+                            <table class="table table-index" width="100%">
+                                <tr><td colspan="2">基本資料</td></tr>
+                                <tr>
+                                    <td width="24%">身分證字號</td>
+                                    <td>@Model.TeacherModel.pid_mk</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">姓名</td>
+                                    <td>
+                                        @*<input type="text" name="realname" readonly="" class="form-control" size="20" value="5A583F92DD80FF99419F3E1D3EFDE941">*@
+                                        @Html.TextBoxFor(x => x.TeacherModel.Detail.realname, new { @class = "form-control", maxlength = 100 })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">別名</td>
+                                    <td>
+                                        @*<input type="text" name="nickname" class="form-control" size="20" value="Samson Lu">*@
+                                        @Html.TextBoxFor(x => x.TeacherModel.Detail.nickname, new { @class = "form-control", maxlength = 100 })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">加入年度</td>
+                                    <td> @RegyearDDL() </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff8" value="1">是<input type="radio" name="showoff8" value="0" checked="">否*@
+                            @ShowoffRadio(8)
+                        </td>
+                        <td class="text-left">聯絡地址</td>
+                        <td>
+                            @*<select name="cityid" class="form-normal" onchange="javascript:location.href='member.php?do=memdeup&amp;cityid='+this.value;" id="cityid"><option value="1">臺北市</option><option value="2">基隆市</option><option value="3">新北市</option><option value="4">宜蘭縣</option><option value="5">新竹市</option><option value="6">新竹縣</option><option value="7">桃園市</option><option value="8">苗栗縣</option><option value="9">臺中市</option><option value="10" selected="">彰化縣</option><option value="11">南投縣</option><option value="12">嘉義市</option><option value="13">嘉義縣</option><option value="14">雲林縣</option><option value="15">臺南市</option><option value="16">高雄市</option><option value="17">南海諸島</option><option value="18">澎湖縣</option><option value="19">屏東縣</option><option value="20">臺東縣</option><option value="21">花蓮縣</option><option value="22">金門縣</option><option value="23">連江縣</option></select>&nbsp;<select name="regid" id="regid" class="form-normal"><option value="500" selected="">彰化市</option><option value="502">芬園鄉</option><option value="503">花壇鄉</option><option value="504">秀水鄉</option><option value="505">鹿港鎮</option><option value="506">福興鄉</option><option value="507">線西鄉</option><option value="508">和美鎮</option><option value="509">伸港鄉</option><option value="510">員林鎮</option><option value="511">社頭鄉</option><option value="512">永靖鄉</option><option value="513">埔心鄉</option><option value="514">溪湖鎮</option><option value="515">大村鄉</option><option value="516">埔鹽鄉</option><option value="520">田中鎮</option><option value="521">北斗鎮</option><option value="522">田尾鄉</option><option value="523">埤頭鄉</option><option value="524">溪州鄉</option><option value="525">竹塘鄉</option><option value="526">二林鎮</option><option value="527">大城鄉</option><option value="528">芳苑鄉</option><option value="530">二水鄉</option></select>&nbsp;<input type="text" name="address" class="form-control" size="36" value="三福街222巷21號">*@
+                            @Address()
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff1" value="1" checked="">是<input type="radio" name="showoff1" value="0">否*@
+                            @ShowoffRadio(1)
+                        </td>
+                        <td>性別</td>
+                        <td>
+                            <label class="radio-inline">
+                                @Html.RadioButtonFor(x => x.TeacherModel.Detail.gender, "1")男
+                            </label>
+                            <label class="radio-inline">
+                                @Html.RadioButtonFor(x => x.TeacherModel.Detail.gender, "2")女
+                            </label>
+                            @*<input type="radio" name="gender" value="1" checked="">男<input type="radio" name="gender" value="0">女*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff2" value="1">是<input type="radio" name="showoff2" value="0" checked="">否*@
+                            @ShowoffRadio(2)
+                        </td>
+                        <td>生日</td>
+                        <td>
+                            @BirthDdl()
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff3" value="1">是<input type="radio" name="showoff3" value="0" checked="">否*@
+                            @ShowoffRadio(3)
+                        </td>
+                        <td>電話</td>
+                        <td>
+                            @*<input type="text" name="phone" class="form-control" size="20" value="047-225-201">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.phone, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff4" value="1" checked="">是<input type="radio" name="showoff4" value="0">否*@
+                            @ShowoffRadio(4)
+                        </td>
+                        <td>手機</td>
+                        <td>
+                            @*<input type="text" name="mobile" class="form-control" size="20" value="0921-047-196">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.mobile, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff5" value="1">是<input type="radio" name="showoff5" value="0" checked="">否*@
+                            @ShowoffRadio(5)
+                        </td>
+                        <td>傳真</td>
+                        <td>
+                            @*<input type="text" name="fax" class="form-control" size="20" value="">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.fax, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff6" value="1" checked="">是<input type="radio" name="showoff6" value="0">否*@
+                            @ShowoffRadio(6)
+                        </td>
+                        <td>EMail</td>
+                        <td>
+                            @*<input type="text" name="email" class="form-control" size="20" value="bigsaltyegg@gmail.com">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.email, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff7" value="1">是<input type="radio" name="showoff7" value="0" checked="">否*@
+                            @ShowoffRadio(7)
+                        </td>
+                        <td>EMail(工作)</td>
+                        <td>
+                            @*<input type="text" name="jemail" class="form-control" size="20" value="">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.jemail, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff9" value="1">是<input type="radio" name="showoff9" value="0" checked="">否*@
+                            @ShowoffRadio(9)
+                        </td>
+                        <td>個人網站</td>
+                        <td>
+                            @*<input type="text" name="website" class="form-control" size="36" value="">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.website, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="radio" name="showoff10" value="1">是<input type="radio" name="showoff10" value="0" checked="">否*@
+                            @ShowoffRadio(10)
+                        </td>
+                        <td>FaceBook</td>
+                        <td>
+                            @*<input type="text" name="facebook" class="form-control" size="36" value="">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.facebook, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        @*<td rowspan="14">必填</td>*@
+                        <td>必填</td>
+                        <td width="18%">最高學歷</td>
+                        <td>
+                            @*<select disabled="" name="degree" class="form-control"><option value="1">國中小</option><option value="2">高中職</option><option value="3">大專院校</option><option value="4" selected="">碩士</option><option value="5">博士</option></select>*@
+                            @Html.DropDownListFor(x => x.TeacherModel.Detail.degree, CommonOptions.Degree(), "請選擇", new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>畢業學校</td>
+                        <td>
+                            @*<input type="text" name="school" readonly="" class="form-control" size="36" value="國立東華大學">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.school, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>主修科目</td>
+                        <td>
+                            @*<input type="text" name="major" class="form-control" size="36" value="生物科技研究所">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.major, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>專長/領域</td>
+                        <td>
+                            @Html.TextAreaFor(x => x.TeacherModel.Detail.skill, new { @class = "form-control", rows = 20, cols = 40 })
+                            @*
+                    <textarea name="skill" class="form-control" rows="20" cols="40">
+                    化學化工材料測試
+                    生物感測器
+                    產品設計開發
+                    3D列印與數位製造相關
+                    技術訓練與人才發展
+                    </textarea>
+                            *@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>服務單位</td>
+                        <td>
+                            @*<input type="text" name="jobcomp" class="form-control" size="36" value="艾瑩科技有限公司">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.jobcomp, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>職稱</td>
+                        <td>
+                            @*<input type="text" name="jobtitle" class="form-control" size="36" value="產品經理">*@
+                            @Html.TextBoxFor(x => x.TeacherModel.Detail.jobtitle, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <!--<tr><td>授課單元</td><td>&nbsp;<input type="checkbox" name="dc" id="dc" value="1" checked><label for="dc">DC</label>&nbsp;&nbsp;<input type="checkbox" name="bc" id="bc" value="1" checked><label for="bc">BC</label>&nbsp;&nbsp;<input type="checkbox" name="kc" id="kc" value="1" checked><label for="kc">KC</label><br /><span style="color:red;">(請依已取得之授課單元點選)</span></td></tr>-->
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td> 授課單元 </td>
+                        <td>
+                            @TeachUnit()
+                            <span style="color:red;">(請依已取得之授課單元點選)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>授課區域</td>
+                        <td>
+                            @Region()
+                            @*&nbsp;*@
+                            @*<input type="checkbox" name="trg[]" id="trg_1" value="1" checked=""><label for="trg_1">臺北市</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_2" value="2"><label for="trg_2">基隆市</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_3" value="3" checked=""><label for="trg_3">新北市</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_4" value="4"><label for="trg_4">宜蘭縣</label><br>&nbsp;<input type="checkbox" name="trg[]" id="trg_5" value="5"><label for="trg_5">新竹市</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_6" value="6"><label for="trg_6">新竹縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_7" value="7"><label for="trg_7">桃園市</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_8" value="8"><label for="trg_8">苗栗縣</label><br>&nbsp;<input type="checkbox" name="trg[]" id="trg_9" value="9" checked=""><label for="trg_9">臺中市</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_10" value="10" checked=""><label for="trg_10">彰化縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_11" value="11" checked=""><label for="trg_11">南投縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_12" value="12"><label for="trg_12">嘉義市</label><br>&nbsp;<input type="checkbox" name="trg[]" id="trg_13" value="13"><label for="trg_13">嘉義縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_14" value="14"><label for="trg_14">雲林縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_15" value="15"><label for="trg_15">臺南市</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_16" value="16"><label for="trg_16">高雄市</label><br>&nbsp;<input type="checkbox" name="trg[]" id="trg_17" value="17"><label for="trg_17">南海諸島</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_18" value="18"><label for="trg_18">澎湖縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_19" value="19"><label for="trg_19">屏東縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_20" value="20"><label for="trg_20">臺東縣</label><br>&nbsp;<input type="checkbox" name="trg[]" id="trg_21" value="21"><label for="trg_21">花蓮縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_22" value="22"><label for="trg_22">金門縣</label>&nbsp;<input type="checkbox" name="trg[]" id="trg_23" value="23"><label for="trg_23">連江縣</label>*@
+                        </td>
+                    </tr>
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>可授課產業別(@(i + 1))</td>
+                            <td>
+                                @*<select name="indsclass1" class="form-control"><option value="0">&nbsp;</option><option value="11" selected="">化學材料製造業</option><option value="1">食品製造業</option><option value="2">飲料製造業</option><option value="3">菸草製造業</option><option value="4">紡織業</option><option value="5">成衣及服飾品製造業</option><option value="6">皮革、毛皮及其製品製造業</option><option value="7">木竹製品製造業</option><option value="8">紙漿、紙及紙製品製造業</option><option value="9">印刷及資料儲存媒體複製業</option><option value="10">石油及煤製品製造業</option><option value="12">化學製品製造業</option><option value="13">藥品及醫用化學製品製造業</option><option value="14">橡膠製品製造業</option><option value="15">塑膠製品製造業</option><option value="16">非金屬礦物製品製造業</option><option value="17">基本金屬製造業</option><option value="18">金屬製品製造業</option><option value="19">電子零組件製造業</option><option value="20">電腦、電子產品及光學製品製造業</option><option value="21">電力設備製造業</option><option value="22">機械設備製造業</option><option value="23">汽車及其零件製造業</option><option value="24">其他運輸工具及其零件製造業</option><option value="25">家具製造業</option><option value="26">其他製造業</option><option value="27">產業用機械設備維修及安裝業</option><option value="28">批發及零售業</option><option value="29">運輸及倉儲業</option><option value="30">住宿及餐飲業</option><option value="31">資訊及通訊傳播業</option><option value="32">金融及保險業</option><option value="33">不動產業</option><option value="34">專業、科學及技術服務業</option><option value="35">支援服務業</option><option value="36">公共行政及國防；強制性社會安全</option><option value="37">教育服務業</option><option value="38">醫療保健及社會工作服務業</option><option value="39">藝術、娛樂及休閒服務業</option><option value="40">其他服務業</option><option value="41">農、林、漁、牧業</option><option value="42">礦業及土石採取業</option><option value="43">電力及燃氣供應業</option><option value="44">用水供應及污染整治業</option><option value="45">營造業</option></select>*@
+
+                                @Html.HiddenFor(x => x.TeacherModel.IndusList[i].id)
+                                @Html.HiddenFor(x => x.TeacherModel.IndusList[i].mid)
+                                @Html.HiddenFor(x => x.TeacherModel.IndusList[i].order)
+
+                                @if (Model.TeacherModel.IndusList != null)
+                                {
+                                    @Html.DropDownListFor(x => x.TeacherModel.IndusList[i].indscid,
+                                        CommonOptions.IndsClass(Model.TeacherModel.IndusList[i].indscid),
+                                    "請選擇", new { @class = "form-control" })
+                                }
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>所屬社群</td>
+                        <td>
+                            @*<select name="group" class="form-control"><option value="1" selected="">北區</option><option value="2">桃園區</option><option value="3">中區</option><option value="4">台南區</option><option value="5">南區</option><option value="6">個人師資</option></select>*@
+                            @Html.DropDownListFor(x => x.TeacherModel.Detail.group, CommonOptions.Group(), "請選擇", new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>產學類別</td>
+                        <td>
+                            @*<select name="acadetype" class="form-control"><option value="1" selected="">產業界</option><option value="2">學術界-講師</option><option value="3">學術界-助理教授</option><option value="4">學術界-副教授</option><option value="5">學術界-教授</option></select>*@
+                            @Html.DropDownListFor(x => x.TeacherModel.Detail.acadetype, CommonOptions.AcadeType(), "請選擇", new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>簡歷</td>
+                        <td>
+                            &nbsp;
+                            @Html.TextAreaFor(x => x.TeacherModel.Detail.history, new { @class = "form-control", rows = 20, cols = 40 })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>服務單位屬性</td>
+                        <td> @OrgAttrib() </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td> 在線or下線 </td>
+                        <td>
+                            &nbsp;
+                            <label class="form-inline">
+                                @Html.RadioButtonFor(x => x.TeacherModel.Detail.active, "1", new { @class = "form-radio" }) 在線
+                            </label>
+                            <label class="form-radio">
+                                @Html.RadioButtonFor(x => x.TeacherModel.Detail.active, "0", new { @class = "form-radio" }) 下線
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>下線日期(民國)</td>
+                        <td>@Html.DatePickerTWFor(x => x.TeacherModel.offdate_AD, new { style = "width: 40%" }) </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>下線原因(100字)</td>
+                        <td>@Html.TextAreaFor(x => x.TeacherModel.Detail.offreason , new { @class = "form-control", rows = 5, cols = 40 })</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            @Html.HiddenFor(x => x.TeacherModel.Detail.mid)
+                            <input type="submit" value="確定" name="submitm" id="save" class="btn btn-orange">
+                        </td>
+                    </tr>              
+
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        var root = $('#teacher-info');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: root.find('#main_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        @* window.location = '@Url.Action("Index", "Member", new { id = ActionName.Member.Home })'; *@
+                    });
+                } else {
+                    if (resp && resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, item) {
+                            res += item + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+@helper ShowoffRadio(int i)
+{
+    <label class="radio-inline">
+        @*<input type="radio" name="showoff1" value="1" checked="">是*@
+        @Html.RadioButtonFor(x => x.TeacherModel.Showoff[i - 1], "1") 是
+    </label>
+    <label class="radio-inline">
+        @*<input type="radio" name="showoff1" value="0"> 否*@
+        @Html.RadioButtonFor(x => x.TeacherModel.Showoff[i - 1], "0") 否
+    </label>
+}
+
+@helper BirthDdl()
+{
+var years = Enumerable
+    .Range(1950, DateTime.Now.Year - 18 - 1950)
+    .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() })
+    .ToList();
+
+var months = Enumerable
+    .Range(1, 12)
+    .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() })
+    .ToList();
+
+var days = Enumerable
+    .Range(1, 31)
+    .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() })
+    .ToList();
+
+    @Html.DropDownListFor(x => x.TeacherModel.BirthYear, years, "請選擇", new { @class = "form-normal" }) <span> 年 &nbsp;</span>
+    @Html.DropDownListFor(x => x.TeacherModel.BirthMonth, months, "請選擇", new { @class = "form-normal" }) <span> 月 &nbsp; </span>
+    @Html.DropDownListFor(x => x.TeacherModel.BirthDay, days, "請選擇", new { @class = "form-normal" }) <span> 日 </span>
+}
+
+@helper RegyearDDL()
+{
+int ilastY = 17;
+var years = Enumerable
+    .Range(DateTime.Now.Year - ilastY, (ilastY + 1))
+    .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() })
+    .ToList();
+
+    @Html.DropDownListFor(x => x.TeacherModel.Detail.regyear, years, "請選擇", new { @class = "form-normal" }) <span> 年 &nbsp;</span>
+}
+
+@helper Region()
+{
+//授課區域
+var list = CommonOptions.Region().Select(x => new CheckBoxListItem(x.Value, x.Text, false)).ToList();
+    <div class="form-inline" style="margin-left:20px">
+        @Html.CheckBoxListFor(x => x.TeacherModel.TechRegList, list)
+    </div>
+}
+
+@helper OrgAttrib()
+{
+//服務單位屬性
+var list = CommonOptions.OrgAttrib().Select(x => new CheckBoxListItem(x.Value, x.Text, false)).ToList();
+    <div class="form-inline" style="margin-left:20px">
+        @Html.CheckBoxListFor(x => x.TeacherModel.OrgAttribList, list)
+    </div>
+}
+
+@helper TeachUnit()
+{
+    //授課單元
+    <div class="form-inline" style="margin-left:20px">
+        <label>@Html.CheckBoxFor(x => x.TeacherModel.TechUnitList[0]) DC </label> &nbsp;
+        <label>@Html.CheckBoxFor(x => x.TeacherModel.TechUnitList[1]) BC </label> &nbsp;
+        <label>@Html.CheckBoxFor(x => x.TeacherModel.TechUnitList[2]) KC </label> &nbsp;
+    </div>
+}
+
+@helper Address()
+{
+    <div id="address">
+        @Html.DropDownListFor(x => x.TeacherModel.City, CommonOptions.Region(), null, new { id = "city", @class = "form-normal" })
+        @Html.DropDownListFor(x => x.TeacherModel.Detail.zipcode, CommonOptions.Zip(Model.TeacherModel.Detail.zipcode), null, new { id = "region", @class = "form-normal" })
+        @Html.TextBoxFor(x => x.TeacherModel.Detail.address, new { @class = "form-normal" })
+    </div>
+
+    <script>
+        $(function () {
+            var cityList = [];
+            var root = $('#address');
+
+            root.on('change', '#city', function (e) {
+                city = e.target.value;
+                syncZipList(city);
+            });
+
+            function refreshRegion(regionList) {
+                var html = '';
+                $.each(regionList, function (i, item) {
+                    html += '<option value="' + item.zipcode + '">' + item.zipname + '</option>';
+                });
+                root.find('#region').html(html);
+            }
+
+            function syncZipList(city) {
+                if (city) {
+                    var newList = $.grep(cityList, function (item) {
+                        return item.city === city;
+                    });
+                    refreshRegion(newList);
+                }
+            }
+
+            function syncCityList(zipcode) {
+                var filterList = $.grep(cityList, function (item) {
+                    return item.zipcode === zipcode;
+                });
+                if (filterList && filterList.length > 0) {
+                    var city = filterList[0].city;
+                    root.find('#city').val(city);
+                }
+            }
+
+            function getCityList() {
+                $.ajax({
+                    url: '@Url.Action("Ajax", "Admin", new { id = ActionName.Admin.CityZipCode })',
+                    data: null,
+                    method: 'POST'
+                }).done(function (resp) {
+                    if (resp && resp.data) {
+                        cityList = resp.data;
+
+                        var zipcode = root.find('#region').val();
+                        syncCityList(zipcode);
+                    }
+                });
+            }
+            getCityList();
+        });
+    </script>
+}
+

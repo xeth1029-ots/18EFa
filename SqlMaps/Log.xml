@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Log"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+    <resultMaps>
+    </resultMaps>
+
+    <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+    </cacheModel>
+
+  <statements>
+    <!-- Log相關作業 -->
+    <!-- 取得登入者帳號資料 -->
+    <select id="QueryLoginLog"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+select distinct a.id ,a.username,a.logtype,a.createtime,a.ip,a.message,a.useragent,c.realname 
+from loginlog a
+join member b on a.username=b.email
+join memdetail c on b.id=c.mid
+where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="StartDate">
+          <![CDATA[ and convert(DATE, a.createtime) >= convert(DATE, #StartDate#) ]]>
+        </isNotEmpty>
+        <isNotEmpty property="EndDate">
+          <![CDATA[ and convert(DATE, a.createtime) <= convert(DATE, #EndDate#) ]]>
+        </isNotEmpty>
+        <isNotEmpty property="UserName">
+          <![CDATA[ and a.username = #UserName#  ]]>
+        </isNotEmpty>
+        <isNotEmpty property="LogType">
+          <![CDATA[ and a.logtype = #LogType# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by a.createtime desc ]]>
+    </select>
+
+    <select id="QueryFileLog"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select distinct
+          a.*,
+          c.realname 
+        from filelog a
+          join member b on a.username=b.email
+          join memdetail c on b.id=c.mid
+        where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="StartDate">
+          <![CDATA[ and convert(DATE, a.createtime) >= convert(DATE, #StartDate#) ]]>
+        </isNotEmpty>
+        <isNotEmpty property="EndDate">
+          <![CDATA[ and convert(DATe, a.createtime) <= convert(DATE, #EndDate#) ]]>
+        </isNotEmpty>
+        <isNotEmpty property="UserName">
+          <![CDATA[ and a.username=#UserName# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="LogType">
+          <![CDATA[ and a.logtype = #LogType# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by a.createtime desc ]]>
+    </select>
+
+    <select id="QueryFuncLog"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select distinct
+          a.*,
+          c.realname 
+        from funclog a
+          join member b on a.username=b.email
+          join memdetail c on b.id=c.mid
+        where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="StartDate">
+          <![CDATA[ and convert(DATE, a.createtime) >= convert(DATE, #StartDate#) ]]>
+        </isNotEmpty>
+        <isNotEmpty property="EndDate">
+          <![CDATA[ and convert(DATE, a.createtime) <= convert(DATE, #EndDate#) ]]>
+        </isNotEmpty>
+        <isNotEmpty property="UserName">
+          <![CDATA[ and a.username = #UserName#  ]]>
+        </isNotEmpty>
+        <isNotEmpty property="LogType">
+          <![CDATA[ and a.logtype = #LogType# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="LogFunc">
+          <![CDATA[ and a.logfunc = #LogFunc# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by a.createtime desc ]]>
+    </select>
+
+
+    <!-- 儲存使用者登入資料 -->
+    <insert id="SaveLoginLog"
+      resultClass="int"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[ 
+      INSERT INTO loginlog
+           (username
+           ,logtype
+           ,createtime
+           ,ip
+           ,message
+           ,useragent)
+     VALUES
+           (#username#,
+           #logtype#,
+           getdate(), 
+           #ip#,
+           #message#,
+           #useragent#)
+      ]]>
+    </insert>
+
+    <insert id="SaveFileLog"
+      resultClass="int"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[ 
+      INSERT INTO filelog
+           (username
+           ,logtype
+           ,createtime
+           ,logfunc
+           ,result
+           ,filename
+           ,message)
+     VALUES
+           (#username#
+           ,#logtype#
+           ,getdate()
+           ,#logfunc#
+           ,#result#
+           ,#filename#
+           ,#message#)
+      ]]>
+    </insert>
+
+    <insert id="SaveFuncLog"
+      resultClass="int"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+    <![CDATA[ 
+     INSERT INTO funclog
+           (username
+           ,logtype
+           ,logfunc
+           ,createtime
+           ,arg
+           ,result)
+     VALUES
+           (#username#
+           ,#logtype#
+           ,#logfunc#
+           ,getdate()
+           ,#arg#
+           ,#result#)
+    ]]>
+    </insert>
+
+  </statements>
+</sqlMap>

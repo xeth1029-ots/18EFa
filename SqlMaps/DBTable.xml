@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="DBTable"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <resultMaps>
+  </resultMaps>
+
+  <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+  </cacheModel>
+
+  <statements>
+    <insert id="MemIndusClass_Insert"
+        resultClass="int"
+        parameterClass="WDACC.Models.Entities.MemIndusClass"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        INSERT INTO memindusclass
+        ([mid]
+          ,[indscid]
+          ,[order])
+        VALUES
+          (#mid#, #indscid#, #order#)
+     ]]>
+    </insert>
+
+
+
+  </statements>
+</sqlMap>

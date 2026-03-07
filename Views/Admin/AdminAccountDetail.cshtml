@@ -1,0 +1,93 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "管理者帳號";
+}
+
+@Html.Partial("_TitleBar")
+
+<div id="admin_account_detail">
+    <div class="unit-border">
+        <div class="unit-bg unit-bg-blue">
+            @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.MgrAccount }, FormMethod.Post,
+                new { id = "main_form", @class = "form-horizontal inputSet" }))
+            {
+                @*<form action="admin.php?do=adminmgr" method="post" class="form-horizontal inputSet">*@
+                <div class="form-group">
+                    <label for="username" class="control-label col-sm-3">帳號</label>
+                    <div class="col-sm-7">
+                        @Html.TextBoxFor(x => x.MgrModel.Mem.email, new { @class = "form-control", maxlength = 100 })
+                        @*<input type="text" name="username" id="username" class="form-control" value="">*@
+                        <div class="text-danger">(請輸入email)</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pw0d" class="control-label col-sm-3">密碼</label>
+                    <div class="col-sm-7">
+                        @Html.PasswordFor(x => x.MgrModel.Mem.password, new { @class = "form-control", maxlength = 30 })
+                        @*<input type="password" name="pw0d" id="pw0d" class="form-control" autocomplete="off">*@
+                        <div class="text-danger">(密碼最少12碼，且要有大小寫英文及數字之組合，不可有特殊符號。)</div>
+                    </div>
+                </div>
+                    <div class="form-group">
+                        <label for="pw0d" class="control-label col-sm-3">密碼確認</label>
+                        <div class="col-sm-7">
+                            @Html.PasswordFor(x => x.MgrModel.PasswordConfirm, new { @class = "form-control", maxlength = 30 })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pid" class="control-label col-sm-3">身分證字號</label>
+                        <div class="col-sm-7">
+                            @*<input type="text" name="pid" id="pid" class="form-control" value="">*@
+                            @Html.TextBoxFor(x => x.MgrModel.Form.pid, new { @class = "form-control", maxlength = 20 })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="realname" class="control-label col-sm-3">姓名</label>
+                        <div class="col-sm-7">
+                            @*<input type="text" name="realname" id="realname" class="form-control" value="">*@
+                            @Html.TextBoxFor(x => x.MgrModel.Form.realname, new { @class = "form-control", maxlength = 100 })
+                        </div>
+                    </div>
+                    <div class="submit-bar">
+                        @Html.HiddenFor(x => x.MgrModel.Form.mid)
+                        @*<input type="hidden" name="action" value="detailSubmit">*@
+                        <button type="submit" id="save" name="submita" class="btn btn-orange">確定</button>
+                    </div>
+                    @*</form>*@
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('#admin_account_detail');
+        var form = root.find('#main_form');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: form.attr('action'),
+                data: form.serialize(),
+                method: form.attr('method')
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.MgrAccount })';
+                    });
+                } else {
+                    if (resp && resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, item) {
+                            res += item + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+    });
+</script>
+

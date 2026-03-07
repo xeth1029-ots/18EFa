@@ -1,0 +1,35 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    Layout = null;
+    var mclass = CommonOptions.MeetingClass();
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>會議類型 </th>
+            <th>會議名稱 </th>
+            <th>辦理日期 </th>
+            <th>辦理時間 </th>
+            <th>分享者 </th>
+            <th>參加名單 </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.MeetExportModel.Grid)
+        {
+            <tr>
+                <td> @row.Get("mclass").AsCodeText(mclass) </td>
+                <td> @row.Get("metname").AsText() </td>
+                <td> @row.Get("date").AsDateTimeText("yyyy-MM-dd") </td>
+                <td> @row.Get("starttime").AsDateTimeText("HH:mm") - @row.Get("endtime").AsDateTimeText("HH:mm") </td>
+                <td> @row.Get("shares").AsText() </td> @* 分享者 *@
+                <td> @row.Get("metdtl").AsText() </td> @* 參與人員 *@
+            </tr>
+        }
+    </tbody>
+</table>
+

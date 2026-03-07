@@ -1,0 +1,110 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.ViewModel.Facade
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+@using Turbo.MVC.Base3.Commons
+@{
+    ViewBag.Title = "課程師資搜尋";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@RenderForm()
+@RenderGrid()
+
+@helper RenderForm()
+{
+    using (Html.BeginForm("Query", "Facade", new { id = FacadeViewModel.ActionName.TeacherSearch }, FormMethod.Post, new { id = "main_form", @class = "form-horizontal inputSet", autocomplete = "off" }))
+    {
+        <div class="unit-border">
+            <div class="unit-bg unit-bg-blue">
+                <div class="form-group">
+                    <label for="TeacherForm_KeyWord" class="control-label col-sm-2">關鍵字檢索</label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(x => x.TeacherForm.KeyWord, new { @class = "form-control", placeholder = "請輸入關鍵字" })
+                        <span class="help-block">請輸入（姓名、別名、專長/領域、曾開授課程）</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="TeacherForm_TeachUnit">授課單元</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(x => x.TeacherForm.TeachUnit, CommonOptions.TeachUnit(), "請選擇", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="TeacherForm_RegOp">授課區域</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(x => x.TeacherForm.RegOp, CommonOptions.Region(), "請選擇", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="TeacherForm_IndsOp">授課產業別</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(x => x.TeacherForm.IndsOp, CommonOptions.IndsClass(), "請選擇", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="TeacherForm_LiveReg">居住地</label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(x => x.TeacherForm.LiveReg, CommonOptions.Region(), "請選擇", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="submit-bar">
+                <button type="submit" class="btn btn-orange" title="按下後啟動搜尋">確定(搜尋)</button>
+                <button type="reset" id="reset" class="btn btn-refill2" title="按下後清除查詢條件">清除(查詢條件)</button>
+            </div>
+        </div>
+    }
+}
+
+
+@helper RenderGrid()
+{
+    <div class="clearfix"></div>
+    <div class="news-content">
+        <div class="newsgroup">
+            @if (Model != null && Model.Grid != null)
+            {
+                if (Model.Grid.Count > 0)
+                {
+                    <ul class="teacher-list">
+                        @foreach (var item in Model.Grid)
+                        {
+                            var row = item.GetFinder();
+                            var mid = row("mid").AsInt64();
+                            var midymd = string.Concat(row("mid").AsInt64(), DateTime.Now.ToString("yyyyMMddHH"));
+                            var emid = MyCommonUtil.EncodeString(midymd);
+                            string s_realname = row("realname").AsText();
+                            string s_realname_title = string.Format("按下後，查看{0}", s_realname);
+                            <li>
+                                <a href="@Url.Action("Detail", "Facade", new { id = FacadeViewModel.ActionName.TeacherDetail, EMid = emid , Mid = mid })" title="@s_realname_title">
+                                    @s_realname
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div style="text-align:center;">
+                        <span class="text-center" style="font-size:large;color:#ff0000;font-weight:900"> 查無資料!! </span>
+                    </div>
+                }
+            }
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('#reset').on('click', function (e) {
+            e.preventDefault();
+            $('form input').val('');
+            $('form select').val('');
+        });
+    });
+</script>

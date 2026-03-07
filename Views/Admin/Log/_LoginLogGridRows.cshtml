@@ -1,0 +1,29 @@
+﻿@using System.Collections
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@*@model WDACC.Models.ViewModel.LogViewModel*@
+@model Store
+
+@{
+    var item = Model;
+}
+
+<tr>
+    @*<td> @item.Get("id").AsText() </td>*@
+    <td> @item.Get("sno").AsText() </td>
+    <td> @item.Get("username").AsText() </td>
+    <td> @item.Get("realname").AsText() </td>
+    <td>
+        @{
+            var typeText = item.Get("logtype").AsText();
+            if (typeText == "LOGIN") { typeText = "登入"; }
+            if (typeText == "LOGOUT") { typeText = "登出"; }
+        }
+        @typeText
+    </td>
+    <td> @item.Get("createtime").AsDateTimeText("yyyy-MM-dd HH:mm:ss") </td>
+    <td> @item.Get("ip").AsText() </td>
+    <td> @item.Get("message").AsText() </td>
+    <td> @item.Get("useragent").AsText() </td>
+</tr>
+

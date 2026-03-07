@@ -1,0 +1,38 @@
+﻿@model string
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "教材檔補上傳";
+    //string s_file_accept = ".xls,.doc,.ppt,.pdf,.jpg,.png,.msg,.odt,.odf";
+    string s_file_accept = Turbo.MVC.Base3.Models.ConfigModel.Get_FileExtAccept;
+}
+
+@Html.Partial("_TitleBar")
+
+<div id="course_audit" class="news-content">
+    <div>講師姓名: @ViewBag.name</div>
+    <div>檔案標題: @ViewBag.filetitle</div>
+    @using (Html.BeginForm("FixUpload", "Admin", new { id = Model }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" name="Id" value="@ViewBag.fid" />
+        <table class="table table-bordered">
+            <tr>
+                <th> 教材 </th>
+                <td> <input type="file" name="SFile" accept="@s_file_accept" /> </td>
+            </tr>
+            <tr>
+                <th> 說明書 </th>
+                <td> <input type="file" name="IFile" accept="@s_file_accept" /> </td>
+            </tr>
+            <tr>
+                <th> 授權書 </th>
+                <td> <input type="file" name="AFile" accept="@s_file_accept" /> </td>
+            </tr>
+        </table>
+        <input type="submit" class="btn btn-primary" value="上傳" disabled="@ViewBag.disabled" /> @ViewBag.message 
+    }
+
+</div>
+
+

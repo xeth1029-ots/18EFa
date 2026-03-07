@@ -1,0 +1,39 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+
+@{
+    Layout = null;
+    var selItemList = Model.ExportModel.ItemList.Where(x => x[2] == "Y").ToList();
+}
+
+<table>
+    <thead>
+        <tr>
+            @foreach (var colname in selItemList)
+            {
+                //int arrCount = colname.Length;
+                if (colname.Length == 4)
+                {
+                    <th style="width: @Html.Raw(colname[3])">@colname[1]</th>
+                }
+                else
+                {
+                    <th>@colname[1]</th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.ExportModel.Grid)
+        {
+            <tr>
+                @foreach (var col in selItemList)
+                {
+                    //var key = col[0];
+                    <td>@Html.Raw(row[col[0]] ?? "")</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+

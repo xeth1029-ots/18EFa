@@ -1,0 +1,96 @@
+﻿@using WDACC.Commons
+@{
+    ViewBag.Title = "_MainMenu";
+    // 首頁下拉選單
+    string ctrlName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@switch (ctrlName)
+{
+    case "Facade":
+        @RenderFacadeMenu()
+        break;
+    case "Member":
+        @RenderTeacherMenu()
+        break;
+    case "Admin":
+        @RenderAdminMenu();
+        break;
+    default:
+        @RenderFacadeMenu()
+        break;
+}
+
+@*@RenderFacadeMenu()*@
+@*@RenderAdminMenu()*@
+@*@RenderTeacherMenu()*@
+
+@* 首頁選單 *@
+@helper RenderFacadeMenu()
+{
+    <!-- nav -->
+    <div class="col-sm-12 nav-bg">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="myNavbar" alt="選單" title="選單" src="#">
+                <ul class="nav navbar-nav">
+                    <li><a href="@Url.Action("Index", "Facade", new { id = "News" })" title="前往,最新消息">最新消息</a></li>
+                    <li><a href="@Url.Action("Index", "Facade", new { id = "CourseIntro" })" title="前往,課程簡介">課程簡介</a> </li>
+                    @*<li><a href="@Url.Action("Index", "Facade", new { id = "TeaSurvey" })" title="前往,課程需求刊登">課程需求刊登</a></li>*@
+                    <li><a href="@Url.Action("Index", "Facade", new { id = "TeacherQuery" })" title="前往,課程師資介紹">課程師資介紹</a></li>
+                    <li><a href="@Url.Action("Index", "Facade", new { id = "TeacherSearch" })" title="前往,課程師資搜尋">課程師資搜尋</a></li>
+                    <li><a href="@Url.Action("Index", "Facade", new { id = "Login" })" title="前往,登入專區">登入專區</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@* 講師登入選單 *@
+@helper RenderTeacherMenu()
+{
+    <!-- nav -->
+    <div class="col-sm-12 nav-bg nav-bg-user">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="myNavbar" alt="選單" title="選單" src="#">
+                <ul class="nav navbar-nav ">
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.News })" title="前往,師資最新消息">師資最新消息</a></li>
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.Tcsv })" title="前往,課程師資招募">課程師資招募</a></li>
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.MemdeupHome })" title="前往,基本資料維護">基本資料維護</a></li>
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.ScoreHome })" title="前往,積分課程登錄">積分課程登錄</a></li>
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.ShareHome })" title="前往,教材分享區">教材分享區</a></li>
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.TeachShow })" title="前往,授課花絮">授課花絮</a></li>
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.ScoreView })" title="前往,積分表">積分表</a></li>
+                    <li><a href="@Url.Action("Index", "Member", new { id = ActionName.Member.Feedback })" title="前往,意見回饋">意見回饋</a></li>
+                    @*<li><a href="@Url.Action("Index", "Member", new { id = "Logout" })" title="前往,登出">登出</a></li>*@
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@* 管理者登入選單 *@
+@helper RenderAdminMenu()
+{
+    <!-- nav -->
+    <div class="col-sm-12 nav-bg nav-bg-admin">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="myNavbar" alt="選單" title="選單" src="#">
+                <ul class="nav navbar-nav ">
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "System" })" title="前往,系統管理">系統管理</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "News" })" title="前往,最新消息">最新消息</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Teacher" })" title="前往,講師資料設定">資料設定</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Account" })" title="前往,新增帳號">新增帳號</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Meeting" })" title="前往,會議活動">會議活動</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "ClassReview" })" title="前往,講師資料審核">資料審核</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Score" })" title="前往,講師積分資料">積分資料</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Feedback" })" title="前往,講師意見回饋">意見回饋</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Recruit" })" title="前往,課程師資招募">師資招募</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Export" })" title="前往,講師資料匯出">資料匯出</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "Log" })" title="前往,log紀錄">LOG紀錄</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "FileUpload" })" title="前往,教材上傳">教材上傳</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { id = "MgrAccount" })" title="前往,管理者帳號設定">管理者帳號設定</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,70 @@
+﻿@using WDACC.Models
+@using WDACC.Models.StoreExt
+@using WDACC.Models.ViewModel
+@using WDACC.Models.ViewModel.Facade
+
+@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@{
+    ViewBag.Title = "最新消息";
+}
+
+@if (!Model.NewsGrid.IsGridRowOnly)
+{
+    @Html.Partial("_Breadcrumb")
+    @Html.Partial("_TitleBar")
+    @Html.Partial("_PagingLink", Model.Paging)
+    @Html.EditorFor(x => x.NewsGrid, "News")
+    @RenderScript();
+}
+else
+{
+    Layout = null;
+    @Html.EditorFor(x => x.NewsGrid, "News")
+}
+
+@helper RenderScript()
+{
+    <script>
+        function ajaxCallback(html) { $('tbody#rows').html(html); }
+    </script>
+}
+
+
+@** @
+    @helper RenderGridRows()
+    {
+        if (Model != null && Model.Grid != null) {
+            foreach (var item in Model.Grid)
+            {
+                <tr>
+                    <td>1</td>
+                    <td class="newsDate"> @item.Get("sdate").AsDateTimeText("yyyy/MM/dd") </td>
+                    <td>
+                        <a href="@Url.Action("Detail", "Facade", new { id = FacadeViewModel.ActionName.News, subid = item.Get("news_id").AsInt32() })">
+                            @Html.Raw(item.Get("content").AsHtmlDecodedText())
+                        </a>
+                    </td>
+                    <td class="newsDate">@item.Get("edate").AsDateTimeText("yyyy/MM/dd") </td>
+                </tr>
+            }
+        }
+    }
+
+    @helper RenderFullView()
+    {
+        <div class="table-responsive">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-index table table-bordered">
+                <tr>
+                    <th width="6%">項次</th>
+                    <th width="12%">發布日期</th>
+                    <th width="70%">公告標題</th>
+                    <th width="12%">截止日期</th>
+                </tr>
+                <tbody id="rows">
+                    @RenderGridRows()
+                </tbody>
+            </table>
+        </div>
+    }
+    @**@
+

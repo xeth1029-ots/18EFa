@@ -1,0 +1,21 @@
+﻿@using Turbo.MVC.Base3.Areas.A6.Models;
+@model C102MFormModel
+
+@if (Model.Grid != null)
+{
+    for (int i = 0; i < Model.Grid.Count; i++)
+    {
+        var item = Model.Grid[i];
+        <tr>
+
+            <td align="center"><button type="button" class="btn btn-info" onclick="doModify('@item.id')">詳細資料</button></td>
+            <td>@item.indate</td>
+            <td>@item.userdepart</td>
+            <td>@item.userdepartname</td>
+            <td>@item.username</td>
+            <td>@item.useraccount</td>
+            <td>@item.functionname</td>
+            <td>@item.methodname</td>
+        </tr>
+    }
+}

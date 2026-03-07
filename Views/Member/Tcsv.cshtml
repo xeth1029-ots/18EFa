@@ -1,0 +1,101 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "師資招募詳細資訊";
+    string action = ViewContext.RouteData.Values["action"].ToString();
+}
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@switch (action)
+{
+    case "Index":
+        @Grid();
+        break;
+    case "Detail":
+        @Detail();
+        break;
+}
+
+@helper Grid()
+{
+    <div id="tcsv" class="table-responsive">
+        <table class="table-index table" cellspacing="0" cellpadding="0" border="0">
+            <thead>
+                <tr>
+                    <th width="15%">發布日期</th>
+                    <th width="70%">開課單位</th>
+                    <th width="15%">課程類別</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.TcsvGrid != null && Model.TcsvGrid.Count > 0)
+                {
+                    foreach (var item in Model.TcsvGrid)
+                    {
+                        <tr>
+                            <td> @item.Get("aodate").AsDateTimeText("yyyy-MM-dd") </td>
+                            <td>
+                                <a href="@Url.Action("Detail", "Member",
+                                    new { id = ActionName.Member.Tcsv, tsid = item.Get("id").AsInt64() })">
+                                    @item.Get("indname").AsText()
+                                </a>
+                            </td>
+                            <td> @item.Get("couclass").AsText() </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3"> 查無資料 </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@helper Detail()
+{
+    var ts = Model.TeaSurvey;
+    <div id="tcsv-detail">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-teacher ">
+            <tbody>
+                <tr><td width="25%">開課單位</td><td> @ts.Get("indname").AsText() </td></tr>
+                <tr>
+                    <td width="25%">聯絡方式</td>
+                    <td>
+                        聯絡人： @ts.Get("indcontact").AsText() <br />
+                        聯絡電話：@ts.Get("indphone").AsText()  <br />
+                        電子郵件： @ts.Get("indphone").AsText()
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">授課日期</td>
+                    <td>
+                        @ts.Get("stime").AsDateTimeText("yyyy-MM-dd") &nbsp;~&nbsp; @ts.Get("etime").AsDateTimeText("yyyy-MM-dd") <br />
+                        授課總時數： @ts.Get("couhour").AsInt64()
+                    </td>
+                </tr>
+                <tr><td width="25%">課程地點</td><td> @ts.Get("couplace").AsText() </td></tr>
+                <tr><td width="25%">講師需求人數</td><td> @ts.Get("teano").AsInt64() </td></tr>
+                <tr><td width="25%">學員人數</td><td> @ts.Get("stuno").AsInt64() </td></tr>
+                <tr><td width="25%">課程類別</td><td> @ts.Get("couclass").AsText() </td></tr>
+                <tr><td width="25%">課程產業屬性</td><td> @ts.Get("indclass1").AsCodeText(CommonOptions.IndsClass()) </td></tr>
+                <tr><td width="25%">講師待遇</td><td> @ts.Get("salary").AsText() </td></tr>
+                <tr><td width="25%">其他需求</td><td> @ts.Get("indinfo").AsText() </td></tr>
+                <tr><td width="25%">公告截止日期</td><td> @ts.Get("fdate").AsDateTimeText("yyyy-MM-dd") </td></tr>
+                <tr><td width="25%">發布日期</td><td> @ts.Get("aodate").AsDateTimeText("yyyy-MM-dd") </td></tr>
+            </tbody>
+        </table>
+        <div class="clearfix"></div>
+        <div class="submit-bar">
+            <a class="btn btn-green" href="@Url.Action("Index", "Member", new { id = "Tcsv" })">回上頁</a> 
+        </div>				
+    </div>
+}
+

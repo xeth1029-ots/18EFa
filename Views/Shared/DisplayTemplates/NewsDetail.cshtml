@@ -1,0 +1,42 @@
+﻿@model WDACC.Models.NewsModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{ 
+    var files = Model.NewsFiles;
+    var item = Model.NewsItem;
+    var store = new Store();
+    store.Collection(Model.NewsItem);
+}
+
+<div class="news-content">
+    @*HM1130104E*@
+    <h4 class="news-headtitle"> @item.title </h4>
+    <div class="clearfix"></div>
+    <ul class="news-content-data">
+        <li>公告日期 : <span> @store.Get("sdate").AsDateTimeText("yyyy-MM-dd") </span></li>
+        <li>截止日期 : <span> @store.Get("edate").AsDateTimeText("yyyy-MM-dd") </span></li>
+    </ul>
+    <div class="clearfix"></div>
+    <!-- news group start -->
+    <div class="newsgroup">
+        @*<h5> @ item.title </h5>*@
+        <p> @Html.Raw(store.Get("content").AsHtmlDecodedText()) </p>
+
+        @if (item.fordownload == 1)
+        {
+            <ul class="download">
+                附件：
+                <br />
+                @foreach (var file in Model.NewsFiles)
+                {
+                    <li>
+                        <a href="@Url.Action("Download", "File", new { id = ActionName.File.News, fid = file.id })" target="_blank" title="另開新視窗,下載檔案" rel="noopener"> @file.comment </a>
+                        @*<span> @file.comment </span>*@
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+

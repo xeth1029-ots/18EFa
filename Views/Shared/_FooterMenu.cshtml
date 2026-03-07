@@ -1,0 +1,53 @@
+﻿@{
+//SessionModel sm = SessionModel.Get();
+}
+<div class="footer-nav-bg">
+    <div style="text-align:right">
+        <a title="下方功能選項區" accesskey="L" id="L" href="#L" style="color:#23527c; float:left;">:::</a>
+        <a href="javascript:void(0)" data-role="expand" title="展開功能清單" style="display:none"><span class="glyphicon glyphicon-chevron-down">展開</span></a>
+        <a href="javascript:void(0)" data-role="collapse" title="收合功能清單"><span class="glyphicon glyphicon-chevron-up" style="color:#265986">收合</span></a>
+        <br />
+    </div>
+    <div id="divFooter" class="container" style="padding: 10px 20px; overflow: auto;">
+        <div class="row">
+            <div class="clearfix"></div>
+            <ul class="footer-nav">
+                <li class="footer-title">最新消息</li>
+                <li><a href="@Url.Action("Index", "Facade", new { id = "News" })" title="前往最新消息">最新消息</a></li>
+            </ul>
+            <ul class="footer-nav">
+                <li class="footer-title">課程簡介</li>
+                <li><a href="@Url.Action("Index", "Facade", new { id = "CourseIntro" })" title="前往課程簡介">課程簡介</a></li>
+            </ul>
+            @*<ul class="footer-nav">
+                <li class="footer-title">課程需求刊登</li>
+                <li><a href="@Url.Action("Index", "Facade", new { id = "TeaSurvey" })" title="前往課程需求刊登">課程需求刊登</a></li>
+            </ul>*@
+            <ul class="footer-nav">
+                <li class="footer-title">課程師資介紹</li>
+                <li><a href="@Url.Action("Index", "Facade", new { id = "TeacherQuery" })" title="前往課程師資介紹">課程師資介紹</a></li>
+            </ul>
+            <ul class="footer-nav">
+                <li class="footer-title">課程師資搜尋</li>
+                <li><a href="@Url.Action("Index", "Facade", new { id = "TeacherSearch" })" title="前往課程師資搜尋">課程師資搜尋</a></li>
+            </ul>
+            <ul class="footer-nav">
+                <li class="footer-title">登入專區</li>
+                <li><a href="@Url.Action("Index", "Facade", new { id = "Login" })" title="前往登入專區">登入專區</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="footer-content"></div>
+<script>
+    $("a[data-role='collapse']").click(function () {
+        $("#divFooter").hide();
+        $("a[data-role='expand']").show();
+        $("a[data-role='collapse']").hide();
+    });
+    $("a[data-role='expand']").click(function () {
+        $("#divFooter").show();
+        $("a[data-role='expand']").hide();
+        $("a[data-role='collapse']").show();
+    });
+</script>

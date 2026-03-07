@@ -1,0 +1,31 @@
+﻿@using System.Collections
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@model WDACC.Models.StoreExt.Store
+
+@{
+    var item = Model;
+}
+
+<table style="width: 100%" class="table table-bordered">
+    <tbody>
+        <tr>
+            <td style="width: 189px;">帳號: @item.Get("username").AsText() &nbsp;</td>
+            <td style="width: 262px;">姓名: @item.Get("realname").AsText() &nbsp;</td>
+            <td style="width: 156px;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 189px;">操作類型: @ActionName.GetEditModelText(item.Get("logtype").AsText()) &nbsp;</td>
+            <td style="width: 262px;">功能項項目: @ActionName.GetMemberActionText(item.Get("logfunc").AsText()) &nbsp;</td>
+            <td style="width: 156px;">紀錄時間: @item.Get("createtime").AsDateTimeText("yyyy-MM-dd HH:mm:ss")  &nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 607px;" colspan="3">
+                異動資料說明:
+                <div>
+                 @Html.Raw(item.Get("arg").AsText().Replace("\\r\\n", "<br/>"))
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

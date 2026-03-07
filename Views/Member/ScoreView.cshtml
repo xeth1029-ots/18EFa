@@ -1,0 +1,195 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Models
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "積分表";
+    SessionModel sess = SessionModel.Get();
+    string memberName = sess.UserInfo.User.user_name;
+    var sc = Model.ScoreView;
+    int thisYear = DateTime.Now.Year;
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="score-view">
+    <div class="unit-border">
+        <div class="unit-bg unit-bg-blue">
+            <div class="row">
+                <div class="col-sm-8">
+                    講師： <span style="color:#00f;"> @memberName </span> &nbsp; &nbsp; 
+                    @Model.ScoreView.Year 年度總積分： <span style="color:#f00;"> @Model.ScoreView.TotalScore </span>
+                    &nbsp;
+                    @if (Model.ScoreView.IsInWatch)
+                    {
+                        <span style="color:red;font-weight:bold;">目前積分至少有一項未達門檻，請檢視以下各項積分。</span>
+                    }
+                </div>
+                <div class="col-sm-4">
+                    @using (Html.BeginForm("Query", "Member", new { id = ActionName.Member.ScoreView }, FormMethod.Post, new { id = "main_form" }))
+                    {
+                        <div class="form-group form-inline text-right">
+                            @{
+                                var years = Enumerable.Range(thisYear-6, 7)
+                                    .OrderByDescending(x => x)
+                                    .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() });
+                            }
+                            @Html.DropDownListFor(x => x.ScoreView.Year, years, "請選擇", new { @class = "form-control" })
+                            <input type="submit" value="年度查詢" class="btn btn-orange">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="content-title">※授課推廣積分&nbsp;
+        @if (!sc.IsTeachReach)
+        {
+            <span style="color:yellow;font-weight:bold;">此項目未達門檻</span>
+        }
+    </h4>
+    <div class="table-responsive">
+        <table class="table-index" width="100%" border="0">
+            <tbody>
+                <tr>
+                    <th width="50%">項目</th>
+                    <th width="30%">總時數</th>
+                    <th width="20%">積分</th>
+                </tr>
+                <tr>
+                    <td>訓練單位</td>
+                    <td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachHourClass1 </div></td>
+                    <td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachScoreClass1 </div></td>
+                </tr>
+                <tr>
+                    <td>職訓機構</td><td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachHourClass2 </div></td>
+                    <td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachScoreClass2 </div></td>
+                </tr>
+                <tr>
+                    <td>學校</td><td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachHourClass3 </div></td>
+                    <td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachScoreClass3 </div></td>
+                </tr>
+                <tr>
+                    <td>企業</td><td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachHourClass4 </div></td>
+                    <td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachScoreClass4 </div></td>
+                </tr>
+                <tr>
+                    <td>其他</td><td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachHourClass5 </div></td>
+                    <td style="text-align:right;padding-right:5px;"><div align="center"> @sc.TeachScoreClass5 </div></td>
+                </tr>
+                <tr>
+                    <td colspan="2">社群分享講師</td>
+                    <td style="text-align:right;padding-right:5px;">
+                        <div align="center"> @sc.TeachScoreCommunitySpeaker </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">發展署會議講師</td>
+                    <td style="text-align:right;padding-right:5px;">
+                        <div align="center"> @sc.TeachScoreSessionSpeaker </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>小計</td>
+                    <td style="text-align:right;padding-right:5px;">
+                        <div align="center">
+                            @(
+                                sc.TeachHourClass1 +
+                                sc.TeachHourClass2 +
+                                sc.TeachHourClass3 +
+                                sc.TeachHourClass4 +
+                                sc.TeachHourClass5
+                            )
+                        </div>
+                    </td>
+                    <td style="text-align:right;padding-right:5px;">
+                        <div align="center"> @sc.TeachTotalScore </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">※社群互動&nbsp;
+        @if (!sc.IsCommunityReach)
+        {
+            <span style="color:yellow;font-weight:bold;">此項目未達門檻</span>
+        }
+    </h4>
+    <div class="table-responsive">
+        <table class="table-index" width="100%" border="0">
+            <tbody>
+                <tr>
+                    <th width="50%">社群會議名稱</th>
+                    <th width="30%">活動日期</th>
+                    <th>積分</th>
+                </tr>
+            </tbody>
+            <tbody>
+                @foreach(var item in sc.CommunityScoreList)
+                {
+                    <tr>
+                        <td> @item.Get("metname").AsText() </td>
+                        <td> @item.Get("date").AsDateTimeText("yyyy-MM-dd") </td>
+                        <td> @item.Get("score").AsInt64() </td>
+                    </tr>
+                }
+            </tbody>
+            <tbody>
+                <tr>
+                    <td colspan="2">小計</td>
+                    <td style="text-align:right;padding-right:5px;">
+                        <div align="center"> @sc.CommunityScoreTotal </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">※教材分享&nbsp;
+        @if (!sc.IsShareReach)
+        {
+            <span style="color:yellow;font-weight:bold;">此項目未達門檻</span>
+        }
+    </h4>
+    <div class="table-responsive">
+        <table class="table-index" width="100%" border="0">
+            <tbody>
+                <tr>
+                    <th width="50%">教材分享篇數</th>
+                    <th>積分</th>
+                </tr>
+                <tr>
+                    <td style="text-align:right;padding-right:5px;width:40%;">
+                        <div align="center"> @sc.ShareCount </div>
+                    </td>
+                    <td style="text-align:right;padding-right:5px;">
+                        <div align="center"> @sc.ShareScore </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="content-title">※教材下載</h4>
+    <div class="table-responsive">
+        <table class="table-index" width="100%" border="0">
+            <tbody>
+                <tr>
+                    <th width="50%">教材被下載數量</th>
+                    <th>積分</th>
+                </tr>
+                <tr>    
+                    <td style="text-align:right;padding-right:5px;width:40%;">
+                        <div align="center"> @sc.DownloadCount </div>
+                    </td>
+                    <td style="text-align:right;padding-right:5px;">
+                        <div align="center"> @sc.DownloadScore </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,1058 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8B0971ED-8D8F-44E2-B1F9-0A0FBD10B87F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WDACC</RootNamespace>
+    <AssemblyName>WDACC</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>44309</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
+    <IncludeIisSettings>true</IncludeIisSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>packages\Portable.BouncyCastle.1.8.5\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="CheckBoxList.Mvc, Version=1.0.0.0, Culture=En, processorArchitecture=MSIL">
+      <HintPath>packages\CheckBoxList.Mvc.1.0.1\lib\net40\CheckBoxList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah, Version=1.2.13605.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>packages\FluentValidation.8.6.2\lib\net45\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="gudusoft.gsqlparser, Version=3.2.5.2, Culture=neutral, PublicKeyToken=2b2fd676a50a6d43, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\gudusoft.gsqlparser.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.16.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlAgilityPack.1.11.16\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="IBatisNet.DataMapper, Version=1.6.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\IBatisNet.DataMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=3.1.0.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit, Version=2.8.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>packages\MailKit.2.8.0\lib\net45\MailKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MimeKit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\MimeKit.2.9.1\lib\net45\MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc, Version=1.3.8.0, Culture=neutral, PublicKeyToken=973cde3f1cafed03, processorArchitecture=MSIL">
+      <HintPath>packages\ncalc.1.3.8\lib\NCalc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Omu.ValueInjecter, Version=3.1.1.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\Omu.ValueInjecter.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PreMailer.Net, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\PreMailer.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="RSACSP, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\RSACSP.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector, Version=4.9.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>packages\SimpleInjector.4.9.2\lib\net45\SimpleInjector.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector.Integration.Web, Version=4.9.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>packages\SimpleInjector.Integration.Web.4.9.2\lib\net40\SimpleInjector.Integration.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector.Integration.Web.Mvc, Version=4.9.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>packages\SimpleInjector.Integration.Web.Mvc.4.9.2\lib\net40\SimpleInjector.Integration.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="TuesPechkin, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\TuesPechkin.dll</HintPath>
+    </Reference>
+    <Reference Include="Turbo.Lib-Net45-x64, Version=1.9.17.1, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Turbo.Lib-Net45-x64.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Words.NET, Version=1.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\DocX.1.2.1\lib\Xceed.Words.NET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\ContainerConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Commons\ActionName.cs" />
+    <Compile Include="Commons\CommonOptions.cs" />
+    <Compile Include="Commons\CustomExceptions.cs" />
+    <Compile Include="Commons\CustomAttribute.cs" />
+    <Compile Include="Commons\CustomValidationAttribute.cs" />
+    <Compile Include="Commons\ExceptionHandler.cs" />
+    <Compile Include="Commons\FileTypeDetector.cs" />
+    <Compile Include="Commons\Filter\CustomActionFilter.cs" />
+    <Compile Include="Commons\Filter\CustomAuthAttribute.cs" />
+    <Compile Include="Commons\LogCollection.cs" />
+    <Compile Include="Commons\MailSender.cs" />
+    <Compile Include="Commons\MDBUtil.cs" />
+    <Compile Include="Commons\MyCheckUtil.cs" />
+    <Compile Include="Commons\MyCommonUtil.cs" />
+    <Compile Include="Commons\MyHelperUtil.cs" />
+    <Compile Include="Commons\MyModelBinder.cs" />
+    <Compile Include="Commons\RedirectToReport.cs" />
+    <Compile Include="Commons\RedirectToResult.cs" />
+    <Compile Include="Commons\ResultMessage.cs" />
+    <Compile Include="Commons\SecurityFilterAttribute.cs" />
+    <Compile Include="Commons\SmsMsgUtil.cs" />
+    <Compile Include="Commons\StaticCodeMap.cs" />
+    <Compile Include="Commons\StaticCodeMap_TableName.cs" />
+    <Compile Include="Content\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Content\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ErrorPageController.cs" />
+    <Compile Include="Controllers\EudcImgController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\FacadeController.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="css\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="css\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataLayers\AMDAO.cs" />
+    <Compile Include="DataLayers\BaseDAO.cs" />
+    <Compile Include="DataLayers\MyBaseDAO.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ControlExtension.cs" />
+    <Compile Include="Helpers\ButtonExtension.cs" />
+    <Compile Include="Helpers\CheckBoxExtension.cs" />
+    <Compile Include="Helpers\e_unitExtension.cs" />
+    <Compile Include="Helpers\ZIP_COExtension.cs" />
+    <Compile Include="images\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="images\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="js\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="js\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ApplicationModel.cs" />
+    <Compile Include="Models\base\ApplicationBaseModel.cs" />
+    <Compile Include="Models\base\ConfigModel.cs" />
+    <Compile Include="Models\ClamRoleFunc.cs" />
+    <Compile Include="Models\ClamUser.cs" />
+    <Compile Include="Models\DateField.cs" />
+    <Compile Include="Models\EmailModel.cs" />
+    <Compile Include="Models\EmptyPagingModel.cs" />
+    <Compile Include="Models\Entities\AMFUNCM.cs" />
+    <Compile Include="Models\Entities\CKFile.cs" />
+    <Compile Include="Models\Entities\FileLog.cs" />
+    <Compile Include="Models\Entities\FileShare.cs" />
+    <Compile Include="Models\Entities\FuncLog.cs" />
+    <Compile Include="Models\Entities\Intro.cs" />
+    <Compile Include="Models\Entities\MemIndusClass.cs" />
+    <Compile Include="Models\Entities\MemOrgAttrib.cs" />
+    <Compile Include="Models\Entities\MemTechReg.cs" />
+    <Compile Include="Models\Entities\Metdetail.cs" />
+    <Compile Include="Models\Entities\Memshare.cs" />
+    <Compile Include="Models\Entities\Memsrcs.cs" />
+    <Compile Include="Models\Entities\Meeting.cs" />
+    <Compile Include="Models\Entities\News.cs" />
+    <Compile Include="Models\Entities\NewsFile.cs" />
+    <Compile Include="Models\Entities\Opinion.cs" />
+    <Compile Include="Models\Entities\PasswordHistory.cs" />
+    <Compile Include="Models\Entities\TeacherShow.cs" />
+    <Compile Include="Models\Entities\TeaSurvey.cs" />
+    <Compile Include="Models\Entities\MemDetail.cs" />
+    <Compile Include="Models\Entities\Member.cs" />
+    <Compile Include="Models\Entities\PWDTOKEN.cs" />
+    <Compile Include="Models\Entities\e_user.cs" />
+    <Compile Include="Models\Entities\FILEGRID.cs" />
+    <Compile Include="Models\Entities\ZIP_CO.cs" />
+    <Compile Include="Models\Entities\__MigrationHistory.cs" />
+    <Compile Include="Models\ExamKind.cs" />
+    <Compile Include="Models\FtpModel.cs" />
+    <Compile Include="Models\CouClassField.cs" />
+    <Compile Include="Models\MonthlylogsModel.cs" />
+    <Compile Include="Models\PagingModel.cs" />
+    <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Models\SqlMapModel.cs" />
+    <Compile Include="Models\TeachUnitField.cs" />
+    <Compile Include="Models\LoginUserInfo.cs" />
+    <Compile Include="Models\MailResultList.cs" />
+    <Compile Include="Models\MDBUploadFile.cs" />
+    <Compile Include="Models\ExcelUploadFile.cs" />
+    <Compile Include="Models\FaxNumberModel.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
+    <Compile Include="Models\JpgImgUploadFile.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\MDBField.cs" />
+    <Compile Include="Models\MDBFieldType.cs" />
+    <Compile Include="Models\MDBModel.cs" />
+    <Compile Include="Models\MobileNumberModel.cs" />
+    <Compile Include="Models\NewsModel.cs" />
+    <Compile Include="Models\ParamItem.cs" />
+    <Compile Include="Models\ReturnModel.cs" />
+    <Compile Include="Models\SmsMsgModel.cs" />
+    <Compile Include="Models\SMSSentResult.cs" />
+    <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\SystemUploadFile.cs" />
+    <Compile Include="Models\TeacherDetail.cs" />
+    <Compile Include="Models\TimeField.cs" />
+    <Compile Include="Models\TwDate.cs" />
+    <Compile Include="Models\ViewModel\AdminViewModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminAccountModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminAuditExportModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminExportModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminFeedbackModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminFileUploadModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminMeetExportModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminMeetingModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminMgrModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminNewsModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminRecruitModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminScoreModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminScoreViewExportModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminSystemModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AdminTeacherModel.cs" />
+    <Compile Include="Models\ViewModel\Admin\AuditParameter.cs" />
+    <Compile Include="Models\ViewModel\CourseViewModel.cs" />
+    <Compile Include="Models\ViewModel\FacadeViewModel.cs" />
+    <Compile Include="Models\ViewModel\LoginViewModel.cs" />
+    <Compile Include="Models\ViewModel\LogViewModel.cs" />
+    <Compile Include="Models\ViewModel\Member\BaseInfoModel.cs" />
+    <Compile Include="Models\ViewModel\Member\FeedbackModel.cs" />
+    <Compile Include="Models\ViewModel\Member\NewsModel.cs" />
+    <Compile Include="Models\ViewModel\Member\PasswordModel.cs" />
+    <Compile Include="Models\ViewModel\Member\ScoreFormModel.cs" />
+    <Compile Include="Models\ViewModel\Member\ScoreGridParameter.cs" />
+    <Compile Include="Models\ViewModel\Member\ScoreViewModel.cs" />
+    <Compile Include="Models\ViewModel\Member\ShareFileModel.cs" />
+    <Compile Include="Models\ViewModel\Member\ShareWithMeParameter.cs" />
+    <Compile Include="Models\ViewModel\Member\TeacherShowModel.cs" />
+    <Compile Include="Models\ViewModel\ResulMessage.cs" />
+    <Compile Include="Models\ViewModel\MemberViewModel.cs" />
+    <Compile Include="Models\XlsUploadFile.cs" />
+    <Compile Include="Models\PdfUploadFile.cs" />
+    <Compile Include="Models\PdfWordUploadFile.cs" />
+    <Compile Include="Models\PhoneNumberModel.cs" />
+    <Compile Include="Models\TxtUploadFile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Scripts\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\CommonsServices.cs" />
+    <Compile Include="Services\AdminService.cs" />
+    <Compile Include="Services\CourseService.cs" />
+    <Compile Include="Services\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Services\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\FacadeService.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\LogService.cs" />
+    <Compile Include="Services\MemberService.cs" />
+    <Compile Include="Services\NewsService.cs" />
+    <Compile Include="Services\TeacherService.cs" />
+    <Compile Include="style\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="style\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Uploads\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Uploads\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Validator\AccountValidators.cs" />
+    <Compile Include="Validator\BaseValidator.cs" />
+    <Compile Include="Validator\FeedbackValidators.cs" />
+    <Compile Include="Validator\MeetValidators.cs" />
+    <Compile Include="Validator\ScoreValidators.cs" />
+    <Compile Include="Validator\ShareFileModelValidators.cs" />
+    <Compile Include="Validator\TeacherValidators.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\0.12.4.0\wkhtmltox.dll" />
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Castle.Core.dll" />
+    <Content Include="bin\Castle.DynamicProxy.dll" />
+    <Content Include="bin\DocumentFormat.OpenXml.dll" />
+    <Content Include="bin\EPPlus.dll" />
+    <Content Include="bin\gudusoft.gsqlparser.dll" />
+    <Content Include="bin\IBatisNet.Common.dll" />
+    <Content Include="bin\IBatisNet.Common.Logging.Log4Net.dll" />
+    <Content Include="bin\IBatisNet.Common.Logging.Log4Net.pdb" />
+    <Content Include="bin\IBatisNet.Common.Logging.Log4Net.xml" />
+    <Content Include="bin\IBatisNet.Common.pdb" />
+    <Content Include="bin\IBatisNet.Common.xml" />
+    <Content Include="bin\IBatisNet.DataMapper.dll" />
+    <Content Include="bin\itextsharp.dll" />
+    <Content Include="bin\license.elic.xml" />
+    <Content Include="bin\log4net.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.mshtml.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\NCalc.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Omu.ValueInjecter.dll" />
+    <Content Include="bin\Oracle.ManagedDataAccess.dll" />
+    <Content Include="bin\PdfSharp.Charting.dll" />
+    <Content Include="bin\PdfSharp.dll" />
+    <Content Include="bin\PreMailer.Net.dll" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\RSACSP.dll" />
+    <Content Include="bin\SharpConfig.dll" />
+    <Content Include="bin\SharpConfig.xml" />
+    <Content Include="bin\Spire.Common.dll" />
+    <Content Include="bin\Spire.License.dll" />
+    <Content Include="bin\Spire.Pdf.dll" />
+    <Content Include="bin\Spire.XLS.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\TuesPechkin.dll" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="bin\Xceed.Words.NET.dll" />
+    <Content Include="bin\zxing.dll" />
+    <Content Include="bin\zxing.pdb" />
+    <Content Include="bin\zxing.presentation.dll" />
+    <Content Include="bin\zxing.xml" />
+    <Content Include="Content\audio\0.mp3" />
+    <Content Include="Content\audio\0.wav" />
+    <Content Include="Content\audio\1.mp3" />
+    <Content Include="Content\audio\1.wav" />
+    <Content Include="Content\audio\2.mp3" />
+    <Content Include="Content\audio\2.wav" />
+    <Content Include="Content\audio\3.mp3" />
+    <Content Include="Content\audio\3.wav" />
+    <Content Include="Content\audio\4.mp3" />
+    <Content Include="Content\audio\4.wav" />
+    <Content Include="Content\audio\5.mp3" />
+    <Content Include="Content\audio\5.wav" />
+    <Content Include="Content\audio\6.mp3" />
+    <Content Include="Content\audio\6.wav" />
+    <Content Include="Content\audio\7.mp3" />
+    <Content Include="Content\audio\7.wav" />
+    <Content Include="Content\audio\8.mp3" />
+    <Content Include="Content\audio\8.wav" />
+    <Content Include="Content\audio\9.mp3" />
+    <Content Include="Content\audio\9.wav" />
+    <Content Include="Content\audio\A.mp3" />
+    <Content Include="Content\audio\A.wav" />
+    <Content Include="Content\audio\B.mp3" />
+    <Content Include="Content\audio\B.wav" />
+    <Content Include="Content\audio\C.mp3" />
+    <Content Include="Content\audio\C.wav" />
+    <Content Include="Content\audio\D.mp3" />
+    <Content Include="Content\audio\D.wav" />
+    <Content Include="Content\audio\E.mp3" />
+    <Content Include="Content\audio\E.wav" />
+    <Content Include="Content\audio\F.mp3" />
+    <Content Include="Content\audio\F.wav" />
+    <Content Include="Content\audio\G.mp3" />
+    <Content Include="Content\audio\G.wav" />
+    <Content Include="Content\audio\H.mp3" />
+    <Content Include="Content\audio\H.wav" />
+    <Content Include="Content\audio\I.mp3" />
+    <Content Include="Content\audio\I.wav" />
+    <Content Include="Content\audio\J.mp3" />
+    <Content Include="Content\audio\J.wav" />
+    <Content Include="Content\audio\K.mp3" />
+    <Content Include="Content\audio\K.wav" />
+    <Content Include="Content\audio\L.mp3" />
+    <Content Include="Content\audio\L.wav" />
+    <Content Include="Content\audio\M.mp3" />
+    <Content Include="Content\audio\M.wav" />
+    <Content Include="Content\audio\N.mp3" />
+    <Content Include="Content\audio\N.wav" />
+    <Content Include="Content\audio\O.mp3" />
+    <Content Include="Content\audio\O.wav" />
+    <Content Include="Content\audio\P.mp3" />
+    <Content Include="Content\audio\P.wav" />
+    <Content Include="Content\audio\Q.mp3" />
+    <Content Include="Content\audio\Q.wav" />
+    <Content Include="Content\audio\R.mp3" />
+    <Content Include="Content\audio\R.wav" />
+    <Content Include="Content\audio\S.mp3" />
+    <Content Include="Content\audio\S.wav" />
+    <Content Include="Content\audio\T.mp3" />
+    <Content Include="Content\audio\T.wav" />
+    <Content Include="Content\audio\U.mp3" />
+    <Content Include="Content\audio\U.wav" />
+    <Content Include="Content\audio\V.mp3" />
+    <Content Include="Content\audio\V.wav" />
+    <Content Include="Content\audio\W.mp3" />
+    <Content Include="Content\audio\W.wav" />
+    <Content Include="Content\audio\X.mp3" />
+    <Content Include="Content\audio\X.wav" />
+    <Content Include="Content\audio\Y.mp3" />
+    <Content Include="Content\audio\Y.wav" />
+    <Content Include="Content\audio\Z.mp3" />
+    <Content Include="Content\audio\Z.wav" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap-treeview.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap3-3-6.min.css" />
+    <Content Include="Content\default.aspx" />
+    <Content Include="Content\font-awesome-4.7.0.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\jquery-confirm.min.css" />
+    <Content Include="Content\jquery.fileupload-ui.css" />
+    <Content Include="Content\jquery.fileupload.css" />
+    <Content Include="Content\perfect-scrollbar.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="css\base.css" />
+    <Content Include="css\default.aspx" />
+    <Content Include="css\font.css" />
+    <Content Include="css\pagination.css" />
+    <Content Include="css\pivot.css" />
+    <Content Include="css\print.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="images\aria_aa.png" />
+    <Content Include="images\bodybg.jpg" />
+    <Content Include="images\bodybg.png" />
+    <Content Include="images\default.aspx" />
+    <Content Include="images\down_adobereader.jpg" />
+    <Content Include="images\empty.jpg" />
+    <Content Include="images\headerBg.jpg" />
+    <Content Include="images\icon-arrow-blue.png" />
+    <Content Include="images\icon-arrow-gray.png" />
+    <Content Include="images\icon-arrow-green.png" />
+    <Content Include="images\icon-arrow-pink.png" />
+    <Content Include="images\icon-arrow.svg" />
+    <Content Include="images\icon-document.svg" />
+    <Content Include="images\icon-download-point.svg" />
+    <Content Include="images\icon-download.svg" />
+    <Content Include="images\icon-facebook.svg" />
+    <Content Include="images\icon-footerPoint.png" />
+    <Content Include="images\icon-news.svg" />
+    <Content Include="images\icon-note.svg" />
+    <Content Include="images\icon-plan.png" />
+    <Content Include="images\icon-point.png" />
+    <Content Include="images\icon-print-machine.svg" />
+    <Content Include="images\icon-question.png" />
+    <Content Include="images\icon-services.svg" />
+    <Content Include="images\icon-timer.svg" />
+    <Content Include="images\icon-twitter.svg" />
+    <Content Include="images\icon-type-01taiwan.svg" />
+    <Content Include="images\icon-type-02reading.svg" />
+    <Content Include="images\icon-type-03soldier.svg" />
+    <Content Include="images\icon-type-04miner.svg" />
+    <Content Include="images\icon-type-05exam.svg" />
+    <Content Include="images\icon-type-06clipboard.svg" />
+    <Content Include="images\icon-type-07carpenter.svg" />
+    <Content Include="images\icon-type-08helmet.svg" />
+    <Content Include="images\icon-type-default.png" />
+    <Content Include="images\icon-type-helmet.svg" />
+    <Content Include="images\icon-type-prisoner.svg" />
+    <Content Include="images\icon-type-secretary.svg" />
+    <Content Include="images\icon-type-suitcase.svg" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\mainBanner.jpg" />
+    <Content Include="images\newsPicsEx.jpg" />
+    <Content Include="images\ok.jpg" />
+    <Content Include="images\open.jpg" />
+    <Content Include="images\processing.gif" />
+    <Content Include="images\space.GIF" />
+    <Content Include="images\speaker.png" />
+    <Content Include="images\ts3995985a37eb5e64.png" />
+    <Content Include="images\warning.jpg" />
+    <Content Include="images\wdacc_web_QR_code.png" />
+    <Content Include="js\default.aspx" />
+    <Content Include="js\jquery.flexslider.js" />
+    <Content Include="js\modernizr.js" />
+    <Content Include="log4net.config" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include=".editorconfig" />
+    <Content Include="libman.json" />
+    <Content Include="packages.config" />
+    <Content Include="properties.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Properties\PublishProfiles\WDACC_dp_2026.pubxml" />
+    <None Include="Properties\PublishProfiles\wdacc_rc1.pubxml" />
+    <Content Include="providers.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Scripts\App\Facade\TeaSurvey.js" />
+    <Content Include="Scripts\App\Shared\DateField.js" />
+    <Content Include="Scripts\bootstrap-treeview.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\cert\HiPKICerts.js" />
+    <Content Include="Scripts\cert\HiPKIErrorcode.js" />
+    <Content Include="Scripts\cert\waiting.gif" />
+    <Content Include="Scripts\datetimepicker\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\datetimepicker\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\datetimepicker\locales.min.js" />
+    <Content Include="Scripts\datetimepicker\locale\af.js" />
+    <Content Include="Scripts\datetimepicker\locale\ar-ma.js" />
+    <Content Include="Scripts\datetimepicker\locale\ar-sa.js" />
+    <Content Include="Scripts\datetimepicker\locale\ar-tn.js" />
+    <Content Include="Scripts\datetimepicker\locale\ar.js" />
+    <Content Include="Scripts\datetimepicker\locale\az.js" />
+    <Content Include="Scripts\datetimepicker\locale\be.js" />
+    <Content Include="Scripts\datetimepicker\locale\bg.js" />
+    <Content Include="Scripts\datetimepicker\locale\bn.js" />
+    <Content Include="Scripts\datetimepicker\locale\bo.js" />
+    <Content Include="Scripts\datetimepicker\locale\br.js" />
+    <Content Include="Scripts\datetimepicker\locale\bs.js" />
+    <Content Include="Scripts\datetimepicker\locale\ca.js" />
+    <Content Include="Scripts\datetimepicker\locale\cs.js" />
+    <Content Include="Scripts\datetimepicker\locale\cv.js" />
+    <Content Include="Scripts\datetimepicker\locale\cy.js" />
+    <Content Include="Scripts\datetimepicker\locale\da.js" />
+    <Content Include="Scripts\datetimepicker\locale\de-at.js" />
+    <Content Include="Scripts\datetimepicker\locale\de.js" />
+    <Content Include="Scripts\datetimepicker\locale\el.js" />
+    <Content Include="Scripts\datetimepicker\locale\en-au.js" />
+    <Content Include="Scripts\datetimepicker\locale\en-ca.js" />
+    <Content Include="Scripts\datetimepicker\locale\en-gb.js" />
+    <Content Include="Scripts\datetimepicker\locale\eo.js" />
+    <Content Include="Scripts\datetimepicker\locale\es.js" />
+    <Content Include="Scripts\datetimepicker\locale\et.js" />
+    <Content Include="Scripts\datetimepicker\locale\eu.js" />
+    <Content Include="Scripts\datetimepicker\locale\fa.js" />
+    <Content Include="Scripts\datetimepicker\locale\fi.js" />
+    <Content Include="Scripts\datetimepicker\locale\fo.js" />
+    <Content Include="Scripts\datetimepicker\locale\fr-ca.js" />
+    <Content Include="Scripts\datetimepicker\locale\fr.js" />
+    <Content Include="Scripts\datetimepicker\locale\fy.js" />
+    <Content Include="Scripts\datetimepicker\locale\gl.js" />
+    <Content Include="Scripts\datetimepicker\locale\he.js" />
+    <Content Include="Scripts\datetimepicker\locale\hi.js" />
+    <Content Include="Scripts\datetimepicker\locale\hr.js" />
+    <Content Include="Scripts\datetimepicker\locale\hu.js" />
+    <Content Include="Scripts\datetimepicker\locale\hy-am.js" />
+    <Content Include="Scripts\datetimepicker\locale\id.js" />
+    <Content Include="Scripts\datetimepicker\locale\is.js" />
+    <Content Include="Scripts\datetimepicker\locale\it.js" />
+    <Content Include="Scripts\datetimepicker\locale\ja.js" />
+    <Content Include="Scripts\datetimepicker\locale\ka.js" />
+    <Content Include="Scripts\datetimepicker\locale\km.js" />
+    <Content Include="Scripts\datetimepicker\locale\ko.js" />
+    <Content Include="Scripts\datetimepicker\locale\lb.js" />
+    <Content Include="Scripts\datetimepicker\locale\lt.js" />
+    <Content Include="Scripts\datetimepicker\locale\lv.js" />
+    <Content Include="Scripts\datetimepicker\locale\mk.js" />
+    <Content Include="Scripts\datetimepicker\locale\ml.js" />
+    <Content Include="Scripts\datetimepicker\locale\mr.js" />
+    <Content Include="Scripts\datetimepicker\locale\ms-my.js" />
+    <Content Include="Scripts\datetimepicker\locale\my.js" />
+    <Content Include="Scripts\datetimepicker\locale\nb.js" />
+    <Content Include="Scripts\datetimepicker\locale\ne.js" />
+    <Content Include="Scripts\datetimepicker\locale\nl.js" />
+    <Content Include="Scripts\datetimepicker\locale\nn.js" />
+    <Content Include="Scripts\datetimepicker\locale\pl.js" />
+    <Content Include="Scripts\datetimepicker\locale\pt-br.js" />
+    <Content Include="Scripts\datetimepicker\locale\pt.js" />
+    <Content Include="Scripts\datetimepicker\locale\ro.js" />
+    <Content Include="Scripts\datetimepicker\locale\ru.js" />
+    <Content Include="Scripts\datetimepicker\locale\sk.js" />
+    <Content Include="Scripts\datetimepicker\locale\sl.js" />
+    <Content Include="Scripts\datetimepicker\locale\sq.js" />
+    <Content Include="Scripts\datetimepicker\locale\sr-cyrl.js" />
+    <Content Include="Scripts\datetimepicker\locale\sr.js" />
+    <Content Include="Scripts\datetimepicker\locale\sv.js" />
+    <Content Include="Scripts\datetimepicker\locale\ta.js" />
+    <Content Include="Scripts\datetimepicker\locale\th.js" />
+    <Content Include="Scripts\datetimepicker\locale\tl-ph.js" />
+    <Content Include="Scripts\datetimepicker\locale\tr.js" />
+    <Content Include="Scripts\datetimepicker\locale\tzm-latn.js" />
+    <Content Include="Scripts\datetimepicker\locale\tzm.js" />
+    <Content Include="Scripts\datetimepicker\locale\uk.js" />
+    <Content Include="Scripts\datetimepicker\locale\uz.js" />
+    <Content Include="Scripts\datetimepicker\locale\vi.js" />
+    <Content Include="Scripts\datetimepicker\locale\zh-cn.js" />
+    <Content Include="Scripts\datetimepicker\locale\zh-tw.js" />
+    <Content Include="Scripts\datetimepicker\moment-with-locales.min.js" />
+    <Content Include="Scripts\datetimepicker\moment.js" />
+    <Content Include="Scripts\default.aspx" />
+    <Content Include="Scripts\gchart_renderers.js" />
+    <Content Include="Scripts\global.js" />
+    <Content Include="Scripts\is.min.js" />
+    <None Include="Scripts\jquery-3.6.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.6.0.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.js" />
+    <None Include="Scripts\jquery-3.7.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.7.1.js" />
+    <Content Include="Scripts\jquery-3.7.1.min.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
+    <Content Include="Scripts\jquery-confirm.min.js" />
+    <Content Include="Scripts\jquery-migrate-3.3.0.js" />
+    <Content Include="Scripts\jquery-migrate-3.3.0.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.fileupload-process.js" />
+    <Content Include="Scripts\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\jquery.fileupload.js" />
+    <Content Include="Scripts\jquery.Huploadify.js" />
+    <Content Include="Scripts\jquery.iframe-transport.js" />
+    <Content Include="Scripts\jquery.ui.widget.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.7.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\pagination.js" />
+    <Content Include="Scripts\perfect-scrollbar.jquery.min.js" />
+    <Content Include="Scripts\pivot.js" />
+    <Content Include="Scripts\pivot.zh_TW.js" />
+    <Content Include="Scripts\polyfill\pointer_events_polyfill.js" />
+    <Content Include="Scripts\print.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\treemenu\localstorage.js" />
+    <Content Include="Scripts\treemenu\sessionstorage.js" />
+    <Content Include="Scripts\treemenu\treemenu.css" />
+    <Content Include="Scripts\treemenu\treemenu.js" />
+    <Content Include="Scripts\vue.js" />
+    <Content Include="Scripts\windowload1.js" />
+    <Content Include="Services\default.aspx" />
+    <Content Include="SqlMaps\DBTable.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Meeting.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\ShareFile.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Log.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Account.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Intro.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\News.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Admin.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Course.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Facade.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Teacher.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Commons.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\KeyMap.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SqlMaps\Report.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="style\base.css" />
+    <Content Include="style\bootstrap.css" />
+    <Content Include="style\default.aspx" />
+    <Content Include="style\flexslider.css" />
+    <Content Include="Uploads\default.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="SqlMap.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Shared\_CommonDialog.cshtml" />
+    <Content Include="Views\Shared\_DatePickerInc.cshtml" />
+    <Content Include="Views\Shared\_DatePickerTW.cshtml" />
+    <Content Include="Views\Shared\_DropdownOptions.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_PagingLink.cshtml" />
+    <Content Include="Views\Shared\_SearchJobCode.cshtml" />
+    <Content Include="Views\Shared\_SearchJobCodeLv2.cshtml" />
+    <Content Include="Views\Shared\_SelectOptions.cshtml" />
+    <Content Include="Views\Shared\_PrintLayout.cshtml" />
+    <Content Include="Views\Shared\_FileUpload.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PhoneNumberModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FaxNumberModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MobileNumberModel.cshtml" />
+    <Content Include="Views\Shared\_PagingLink_js.cshtml" />
+    <Content Include="Views\Shared\_PagingLink2.cshtml" />
+    <Content Include="Views\Shared\_PagingLink3.cshtml" />
+    <Content Include="Views\Shared\_PagingLink3_js.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SystemUploadFile.cshtml" />
+    <Content Include="Views\Shared\SystemUploadFile.cshtml" />
+    <Content Include="Views\Member\Home.cshtml" />
+    <Content Include="Views\Facade\Login.cshtml" />
+    <Content Include="Views\Facade\Home.cshtml" />
+    <Content Include="Views\Facade\News.cshtml" />
+    <Content Include="Views\Facade\CourseIntro.cshtml" />
+    <Content Include="Views\Facade\TeaSurveyForm.cshtml" />
+    <Content Include="Views\Facade\TeacherQuery.cshtml" />
+    <Content Include="Views\Facade\TeacherSearch.cshtml" />
+    <Content Include="Views\Facade\_ViewStart.cshtml" />
+    <Content Include="Views\Member\News.cshtml" />
+    <Content Include="Views\Member\Memdeup\_PasswordChange.cshtml" />
+    <Content Include="Views\Member\Memdeup.cshtml" />
+    <Content Include="Views\Member\ScoreHome.cshtml" />
+    <Content Include="Views\Member\ScoreRegister.cshtml" />
+    <Content Include="Views\Member\TeachShow.cshtml" />
+    <Content Include="Views\Member\ScoreView.cshtml" />
+    <Content Include="Views\Member\Feedback.cshtml" />
+    <Content Include="Views\Admin\Home.cshtml" />
+    <Content Include="Views\Admin\News.cshtml" />
+    <Content Include="Views\Admin\System.cshtml" />
+    <Content Include="Views\Admin\Teacher.cshtml" />
+    <Content Include="Views\Admin\Account.cshtml" />
+    <Content Include="Views\Admin\Meeting.cshtml" />
+    <Content Include="Views\Admin\ClassReview.cshtml" />
+    <Content Include="Views\Admin\Score.cshtml" />
+    <Content Include="Views\Admin\Feedback.cshtml" />
+    <Content Include="Views\Admin\Recruit.cshtml" />
+    <Content Include="Views\Admin\Export.cshtml" />
+    <Content Include="Views\Admin\AdminAccount.cshtml" />
+    <Content Include="Views\Shared\_NewMainLayout.cshtml" />
+    <Content Include="Views\Shared\_MainMenu.cshtml" />
+    <Content Include="Views\Member\Tcsv.cshtml" />
+    <Content Include="Views\Member\Sharei.cshtml" />
+    <Content Include="Views\Facade\NewsDetail.cshtml" />
+    <Content Include="Views\Shared\_TitleBar.cshtml" />
+    <Content Include="Views\Facade\TeaSurvey.cshtml" />
+    <Content Include="Views\Facade\TeacherDetail.cshtml" />
+    <Content Include="Views\Facade\TeacherShow.cshtml" />
+    <Content Include="Views\Shared\_NewFullMainLayout.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\News.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\TeacherDetail.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateField.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CouClassField.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\NewsDetail.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TeachUnitField.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\TeachUnitField.cshtml" />
+    <Content Include="Views\Admin\Log.cshtml" />
+    <Content Include="Views\Admin\Log\_LoginLog.cshtml" />
+    <Content Include="Views\Admin\Log\_FileLog.cshtml" />
+    <Content Include="Views\Admin\Log\_FuncLog.cshtml" />
+    <Content Include="Views\Admin\Log\_LoginLogGridRows.cshtml" />
+    <Content Include="Views\Admin\Log\_FileLogGridRows.cshtml" />
+    <Content Include="Views\Admin\Log\_FuncLogGridRows.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TwDate.cshtml" />
+    <Content Include="Views\Shared\_PagingLink_backup.cshtml" />
+    <Content Include="Views\Shared\_PagingLink_js_backup.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTimeField.cshtml" />
+    <Content Include="Views\Member\ScoreGrid.cshtml" />
+    <Content Include="Views\Member\ScoreShowoff.cshtml" />
+    <Content Include="Views\Member\MemberShare\_ShareRegister.cshtml" />
+    <Content Include="Views\Member\MemberShare\_ShareWithMe.cshtml" />
+    <Content Include="Views\Member\MemberShare\_MyShareList.cshtml" />
+    <Content Include="Views\Member\MemberShare.cshtml" />
+    <Content Include="Views\Member\ShareHome.cshtml" />
+    <Content Include="Views\Member\MemberShare\_ShareWithMeGridRows.cshtml" />
+    <Content Include="Views\Member\TeachShow\_VideoForm.cshtml" />
+    <Content Include="Views\Member\TeachShow\_ImageForm.cshtml" />
+    <Content Include="Views\Member\Memdeup\_TeacherInfo.cshtml" />
+    <Content Include="Views\Member\Memdeup\_TeachIndsc.cshtml" />
+    <Content Include="Views\Admin\ClassReview\_FileAudit.cshtml" />
+    <Content Include="Views\Admin\ClassReview\_CourseAudit.cshtml" />
+    <Content Include="Views\Admin\ClassReview\_CourseAuditRows.cshtml" />
+    <Content Include="Views\Admin\ClassReview\_FileAuditRows.cshtml" />
+    <Content Include="Views\Admin\CourseAudit.cshtml" />
+    <Content Include="Views\Admin\FilesAudit.cshtml" />
+    <Content Include="Views\Admin\Meeting\_EditForm.cshtml" />
+    <Content Include="Views\Admin\Meeting\_Grid.cshtml" />
+    <Content Include="Views\Admin\Meeting\_GridRows.cshtml" />
+    <Content Include="Views\Admin\News\_Grid4.cshtml" />
+    <Content Include="Views\Admin\News\_Form.cshtml" />
+    <Content Include="Views\Admin\News\_GridRows.cshtml" />
+    <Content Include="Views\Admin\System\_CourseIntro.cshtml" />
+    <Content Include="Views\Admin\System\_ScoreIntro.cshtml" />
+    <Content Include="Views\Admin\System\_ShareIntro.cshtml" />
+    <Content Include="Views\Admin\System\_ScoreDate.cshtml" />
+    <Content Include="Views\Admin\System\_PlanIntro.cshtml" />
+    <Content Include="Views\Admin\Score\_GridRows.cshtml" />
+    <Content Include="Views\Admin\RecruitDetail.cshtml" />
+    <Content Include="Views\Admin\FeedbackDetail.cshtml" />
+    <Content Include="Views\Admin\SystemDetail.cshtml" />
+    <Content Include="Views\Admin\TeacherDetail.cshtml" />
+    <Content Include="Views\Admin\TeacherDetail\_PasswordChange.cshtml" />
+    <Content Include="Views\Admin\TeacherDetail\_TeacherInfo.cshtml" />
+    <Content Include="Views\Admin\TeacherDetail\_TeachIndsc.cshtml" />
+    <Content Include="Views\Admin\News\_Grid3.cshtml" />
+    <Content Include="Views\Admin\News\_Grid1.cshtml" />
+    <Content Include="Views\Admin\News\_Grid2.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TimeField.cshtml" />
+    <Content Include="Views\Admin\MeetingDetail.cshtml" />
+    <Content Include="Views\Admin\Meeting\_MemberList.cshtml" />
+    <Content Include="Views\Admin\Meeting\_MemberResult.cshtml" />
+    <Content Include="Views\Admin\Export\_ExportMemberInfo.cshtml" />
+    <Content Include="Views\Admin\Export\_ExportMeeting.cshtml" />
+    <Content Include="Views\Admin\Export\_ExportFeedback.cshtml" />
+    <Content Include="Views\Admin\Export\_ExportScoreAudit.cshtml" />
+    <Content Include="Views\Admin\Export\_ExportFileAudit.cshtml" />
+    <Content Include="Views\Admin\Export\_ExportScoreView.cshtml" />
+    <Content Include="Views\Member\Home\_Score.cshtml" />
+    <Content Include="Views\Shared\_Breadcrumb.cshtml" />
+    <Content Include="Views\Facade\ForgetPassword.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateFieldInput.cshtml" />
+    <Content Include="Views\Admin\Meeting\_ShareList.cshtml" />
+    <Content Include="Views\Admin\FixUpload.cshtml" />
+    <Content Include="Views\Admin\FileUpload.cshtml" />
+    <Content Include="Views\Admin\AdminAccountDetail.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_FooterMenu.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Facade\SiteMap.cshtml" />
+    <Content Include="Views\Facade\Privacy.cshtml" />
+    <Content Include="Views\Facade\GovAnnounce.cshtml" />
+    <Content Include="Views\Admin\Export\_ExportMonthlylogs.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\" />
+    <Folder Include="Downloads\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2855</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44309</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>https://localhost:44309</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

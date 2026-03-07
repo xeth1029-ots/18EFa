@@ -1,0 +1,95 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "_EditGrid";
+}
+
+<div id="meeting_grid">
+    <p class="form-title">
+        <span class="year"> @Model.MeetingModel.Year </span> 年度會議活動修改
+    </p>
+    <div class="col-sm-4">
+        @using (Html.BeginForm("Query", "Admin", new { id = ActionName.Admin.Meeting }, FormMethod.Post,
+            new { id = "main_form", @class = "form-inline" }))
+        {
+            <div class="form-group">
+                <label for="text" class="control-label">年度查詢</label>
+                @Html.DropDownListFor(x => x.MeetingModel.Year, CommonOptions.BeforeYears(10, DateTime.Now.Year), "請選擇", new { @class = "form-normal", id = "year" })
+                <input type="button" id="query" value="年度查詢" class="btn btn-orange">
+            </div>
+        }
+
+    </div>
+    <div class="col-sm-8 text-right">
+        @using (Html.BeginForm("Export", "Admin", new { id = ActionName.Admin.Meeting }, FormMethod.Post,
+            new { id = "rpt_form", @class = "form-inline" }))
+        {
+            @Html.HiddenFor(x => x.MeetExportModel.Year, new { id = "year", @class="year" })
+            @Html.HiddenFor(x => x.MeetExportModel.MClass, new { id = "mclass" })
+        }
+
+        <a href="javascript:void(0)" data-year="@Model.MeetingModel.Year" data-mclass="1" class="export btn btn-green">
+            <span class="year"></span> 社群會議列表
+        </a>
+        <a href="javascript:void(0)" data-year="@Model.MeetingModel.Year" data-mclass="2" class="export btn btn-green">
+            <span class="year"></span> 社群讀書會列表
+        </a>
+        <a href="javascript:void(0)" data-year="@Model.MeetingModel.Year" data-mclass="3" class="export btn btn-green">
+            <span class="year"></span> 發展署會議列表
+        </a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-class">
+            <tbody>
+                <tr>
+                    <th width="25%">日期/時間</th>
+                    <th width="40%">會議名稱(會議類型)</th>
+                    <th width="25%">會議地點</th>
+                    <th width="10%">動作</th>
+                </tr>
+            </tbody>
+            <tbody id="rows">
+                @Html.Partial("Meeting/_GridRows")
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#meeting_grid');
+
+        function syncYearParam() {
+            var year = root.find('select#year').val();
+            root.find('.year').text(year);
+            root.find('.year').val(year);
+        }
+
+        root.on('click', '#query', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: root.find('#main_form').serialize(),
+                method: 'post'
+            }).done(function (resp) {
+                if (resp) {
+                    root.find('tbody#rows').html(resp);
+                    syncYearParam();
+                }
+            });
+        });
+
+        root.on('click', 'a.export', function (e) {
+            e.preventDefault();
+            var form = root.find('form#rpt_form');
+            var mclass = $(e.currentTarget).attr('data-mclass');
+            form.find('input#mclass').val(mclass);
+            form.submit();
+        });
+
+        syncYearParam();
+    });
+</script>
+

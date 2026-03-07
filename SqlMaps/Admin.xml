@@ -1,0 +1,626 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Admin"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <resultMaps>
+  </resultMaps>
+
+  <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+  </cacheModel>
+
+  <statements>
+    <!-- 帳號管理相關作業 -->
+
+    <!-- 取得會議活動清單 -->
+    <select id="GetMeetingList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <!--  -->
+      <![CDATA[
+          select 
+           id
+          ,date
+          ,format([time], 'hh\:mm') timestr
+          ,convert(integer, format([time], 'hh')) shour
+		      ,convert(integer, format([time], 'mm')) sminute
+          ,metname
+          ,metloc
+          ,mclass
+          ,format([etime], 'hh\:mm') etimestr
+          ,convert(integer, format([etime], 'hh')) ehour
+		      ,convert(integer, format([etime], 'mm')) eminute
+        from meeting where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="year">
+          <![CDATA[ and year(date) = #year# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="dates">
+          <![CDATA[ and date >= #dates# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="datee">
+          <![CDATA[ and date <= #datee# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="meetname">
+          <![CDATA[ and meetname like concat('%', #meetname#, '%') ]]>
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+    <!-- 取得會議參與人員 -->
+    <select id="GetMeetingDetailList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.*, b.realname
+        from metdetail a join memdetail b on a.mid=b.mid 
+      ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and a.id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="metid">
+          <![CDATA[ and a.metid = #metid# ]]>
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+    <!-- 積分課程審核統計 -->
+    <select id="CourseAuditList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.mid, a.realname 
+          ,isnull(sum(case when b.ckeckd=1 and year(b.sdate)=#AuditYear# then 1 else 0 end),0) sum1
+          ,isnull(sum(case when b.ckeckd=2 and year(b.sdate)=#AuditYear# then 1 else 0 end),0) sum2 
+          ,isnull(sum(case when b.ckeckd=3 and year(b.sdate)=#AuditYear# then 1 else 0 end),0) sum3
+          ,isnull(sum(case when b.ckeckd=4 and year(b.sdate)=#AuditYear# then 1 else 0 end),0) sum4
+        from memdetail a 
+          left join memsrcs b on a.mid=b.mid 
+        where a.active=1
+        group by a.mid,a.realname
+        order by a.realname
+      ]]>
+    </select>
+
+    <!-- 上傳檔案審核統計 -->
+    <select id="FileAuditList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.mid, a.realname
+          ,isnull(sum(case when b.checked=1 and year(b.date)=#AuditYear# then 1 else 0 end),0) sum1
+          ,isnull(sum(case when b.checked=2 and year(b.date)=#AuditYear# then 1 else 0 end),0) sum2
+          ,isnull(sum(case when b.checked=3 and year(b.date)=#AuditYear# then 1 else 0 end),0) sum3
+          ,isnull(sum(case when b.checked=4 and year(b.date)=#AuditYear# then 1 else 0 end),0) sum4
+        from memdetail a
+          left join memshare b on a.mid=b.mid
+        where a.active=1
+        group by a.mid,a.realname
+        order by a.realname
+      ]]>
+    </select>
+
+    <!-- 意見回饋 -->
+    <select id="GetFeedbackList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.*, b.realname
+        from opinion a join memdetail b on a.mid=b.mid
+        where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and a.id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="answer">
+          <![CDATA[ and a.answer = #answer# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by date desc ]]>
+    </select>
+
+    <!-- 最新消息 -->
+    <select id="GetNewsList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select * from news where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="showoff">
+          <![CDATA[ and showoff = #showoff# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="class">
+          <![CDATA[ and class = #class# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by sdate desc  ]]>
+    </select>
+
+    <select id="GetTeacherList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select * from memdetail where 1=1 
+      ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="realname">
+          <![CDATA[ and realname like '%' + #realname# + '%' ]]>
+        </isNotEmpty>
+        <isNotEmpty property="s_loginemail">
+          <![CDATA[ and mid IN (SELECT id FROM member WHERE email like '%' + #s_loginemail# + '%') ]]>
+        </isNotEmpty>
+        <isNotEmpty property="s_email">
+          <![CDATA[ and email like '%' + #s_email# + '%' ]]>
+        </isNotEmpty>
+        <isNotEmpty property="s_pid">
+          <![CDATA[ and pid like '%' + #s_pid# + '%' ]]>
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+    <select id="GetScoreList2014"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+
+declare @YEARC INT=#year#;
+WITH WC1 AS (
+	select md.mid, md.realname, md.regyear 
+	from memdetail md 
+	where md.active = 1
+)  
+ select md.mid, md.realname, md.regyear 
+,isnull((select sum01 from (
+	select a.mid,sum(b.hours) sum01
+	from WC1 a 
+	join memsrcs b on a.mid=b.mid 
+	where 1=1
+	and b.tuclass between 1 and 5 
+	AND b.ckeckd=2 AND year(b.sdate)=@YEARC
+	group by a.mid
+) a where 1=1 and md.mid=a.mid),0) sum01  /* 授課推廣 */
+,isnull((select sum02 from (
+	select mtd.mid,sum(mtd.score) sum02 
+	from WC1 a
+	join metdetail mtd on mtd.mid=a.mid
+	join meeting mt on mt.id=mtd.metid  
+	where 1=1 
+	AND year(mt.date)=@YEARC
+	AND (mt.mclass=1 OR mt.mclass=2) 
+	group by mtd.mid
+) a where md.mid=a.mid),0) sum02  /* 社群互動 */
+,isnull((select sum03 from (
+	select a.mid,sum(b.score) sum03 
+	from WC1 a 
+	join editor b on a.mid=b.mid 
+	where b.year=@YEARC
+	group by a.mid
+) a where md.mid=a.mid),0) sum03  /* 教材編輯 */
+,isnull((select sum04 from (
+	select mtd.mid,sum(mtd.score) sum04 
+	from WC1 a
+	join metdetail mtd on mtd.mid=a.mid
+	join meeting mt on mt.id=mtd.metid 
+	where 1=1 
+	AND year(mt.date)=@YEARC
+	AND mt.mclass=3 
+	group by mtd.mid	
+) a where md.mid=a.mid),0) sum04  /* 會議參與 */
+,isnull((select sum05 from (
+	select a.mid,count(1) sum05 
+	from WC1 a 
+	join memshare b on a.mid=b.mid 
+	where 1=1 
+	AND b.checked=2 
+	AND year(b.date)=@YEARC
+	group by a.mid
+) a where md.mid=a.mid),0) sum05  /* 教材分享-1 */
+,isnull((select sum06 from (
+	select ms.mid,count(1) sum06 
+	from WC1 a
+	join memshare ms on ms.mid=a.mid
+	join fileshare fs on fs.mfid =ms.id
+	where 1=1 
+	AND ms.checked=2 
+	AND year(ms.date)=@YEARC
+	group by ms.mid
+) a where md.mid=a.mid),0) sum06  /* 教材分享-2 */
+from WC1 md 
+order by md.realname
+ 
+      ]]>
+    </select>
+
+    <!-- 2015年後 -->
+    <select id="GetScoreList2015"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+
+declare @YEARC INT=#year#;
+WITH WC1 AS (
+	select md.mid
+	,md.realname ,md.regyear ,md.active
+	from memdetail md 
+	where md.active = 1
+)  
+select md.mid, md.realname, md.regyear
+,isnull((select sum11 from (
+	select a.mid,sum(hours) sum11
+	from WC1 a
+	join memsrcs b on a.mid=b.mid
+	where b.ckeckd=2 AND year(sdate)=@YEARC
+	and tuclass between 1 and 5
+	group by a.mid 
+)a where 1=1 and a.mid=md.mid),0) sum11 /* 授課推廣1 */
+,isnull((select sum12 from (
+	select mtd.mid,sum(mtd.score) sum12
+	from WC1 a
+	join metdetail mtd on mtd.mid=a.mid
+	join meeting mt on mt.id=mtd.metid
+	where 1=1 
+	and year(mt.date)=@YEARC
+	AND (mt.mclass=1 OR mt.mclass=2)
+	AND mtd.mcont=2 
+	group by mtd.mid 
+) a where a.mid=md.mid),0) sum12  /* 社群分享 */
+,isnull((select sum13 from ( 
+	select mtd.mid,sum(mtd.score) sum13
+	from WC1 a
+	join metdetail mtd on mtd.mid=a.mid
+	join meeting mt on mt.id=mtd.metid   
+	where 1=1 
+	and year(mt.date)=@YEARC
+	AND mt.mclass=3 
+	AND mtd.mcont=2 
+	group by mtd.mid 
+) a where a.mid=md.mid),0) sum13  /* 發展署講師 */
+,isnull((select sum02 from ( 
+	select mtd.mid,sum(mtd.score) sum02 
+	from WC1 a 
+	join metdetail mtd on mtd.mid=a.mid
+	join meeting mt on mt.id=mtd.metid  
+	where 1=1 
+	and year(mt.date)=@YEARC
+	AND (mt.mclass=1 OR mt.mclass=2) 
+	AND mtd.mcont=1 
+	group by mtd.mid 
+) a where a.mid=md.mid),0) sum02  /* 社群互動 */
+,isnull((
+	select cnt03 from (
+	select ms.mid,count(1) cnt03 
+	from WC1 a 
+	JOIN memshare ms ON ms.mid=a.mid 
+	where ms.checked=2 
+	AND year(ms.date)=@YEARC 
+	group by ms.mid
+) a where a.mid=md.mid),0) sum03  /* 教材分享 */
+,isnull((select cnt from ( 
+	select a.mid,count(1) cnt 
+	from WC1 a 
+	join memshare b on a.mid=b.mid 
+	join fileshare c on b.id=c.mfid 
+	where a.active=1 
+	and b.checked=2 
+	and year(b.date)=@YEARC
+	group by a.mid 
+) a where 1=1 and a.mid=md.mid),0) sum04  /* 教材下載 */
+from WC1 md 
+order by md.realname 
+ 
+      ]]>
+    </select>
+
+    <select id="GetTeasurveyList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[ select * from teasurvey where 1=1 ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="confirm">
+          <![CDATA[ and confirm = #confirm# ]]>
+        </isNotEmpty>
+        <![CDATA[ order by aodate desc ]]>
+      </dynamic>
+    </select>
+
+    <select id="GetMemberList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+  select a.*
+  ,b.realname, b.pid
+  from Member a join Memdetail b on a.id=b.mid
+  where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and a.id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="role">
+          <![CDATA[ and a.role = #role# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="email">
+          <![CDATA[ and (b.email = #email# or a.email = #email# or a.username = #email#) ]]>
+        </isNotEmpty>
+        <isNotEmpty property="pid">
+          <![CDATA[ and b.pid = #pid# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="realname">
+          <![CDATA[ and b.realname like '%' + #realname# + '%' ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[
+        order by b.realname
+      ]]>
+    </select>
+
+    <select id="GetMeetExportList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select distinct
+           mt.[id]
+          ,mt.[date]
+          ,mt.[metname]
+          ,mt.[metloc]
+          ,mt.[mclass]
+          ,mt.[starttime]
+          ,mt.[endtime]
+        ,(select 
+          mm.realname + ','
+          from metdetail md join memdetail mm on md.mid=mm.mid where md.metid=a.metid and mcont=2
+          order by mm.realname for xml path ('')
+        ) as [shares]
+        ,(select 
+          mm.realname + ','
+          from metdetail md join memdetail mm on md.mid=mm.mid where md.metid=a.metid and mcont=1
+          order by mm.realname for xml path ('')
+        ) as [metdtl]
+        from meeting mt join metdetail a on mt.id=a.metid
+        where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty property="year">
+          <![CDATA[ and year(mt.date)=#year# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="mclass">
+          <![CDATA[ and mt.mclass=#mclass# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by mt.[date] ]]>
+    </select>
+
+    <select id="GetFeedbackExportList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.*, b.realname
+        from opinion a join memdetail b on a.mid=b.mid
+        where answer = 2
+        order by date desc
+      ]]>
+    </select>
+
+    <select id="GetMonthlylogsExportList"
+     resultClass="WDACC.Models.StoreExt.Store"
+     parameterClass="Hashtable"
+     cacheModel="WDASE-cache">
+      <![CDATA[
+/*帳號、姓名、紀錄時間、IP、使用瀏覽器、訊息*/
+select distinct a.id ,a.username,a.logtype,a.createtime,a.ip,a.message,a.useragent,c.realname 
+from loginlog a
+join member b on a.username=b.email
+join memdetail c on b.id=c.mid
+LEFT JOIN CDHOLIDAY CH ON CONVERT(date,CH.HOLDATE)=CONVERT(date,a.createtime)
+WHERE ((FORMAT(a.createtime,'HH:mm:ss')>='00:00:00' AND FORMAT(a.createtime,'HH:mm:ss')<='06:00:00') OR CH.REASON IS NOT NULL) 
+AND YEAR(a.createtime)=#ExpYear1# AND MONTH(a.createtime)=#ExpMonth1#
+ORDER BY a.createtime DESC
+      ]]>
+    </select>
+
+    <select id="GetScoreList2015Export"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select md.mid,md.realname,md.regyear,md.phone
+				,md.mobile,md.email,md.jemail 
+				,isnull((select sum11a
+					from (select mid,sum(hours) sum11a 
+						from memsrcs 
+						where 1=1 
+						AND tuclass between 1 and 5 
+						AND ckeckd=2 
+						AND year(sdate)=#year#
+						and isnull(govplan,'')=''
+						group by mid
+					) a where md.mid=a.mid),0) sum11a /*授課推廣(非政府補助)*/
+				,isnull((select sum11b 
+					from (select mid,sum(hours) sum11b
+						from memsrcs 
+						where 1=1 
+						AND tuclass between 1 and 5
+						AND ckeckd=2 
+						AND year(sdate)=#year#
+						and isnull(govplan,'')!=''
+						group by mid
+					) a where md.mid=a.mid),0) sum11b /*授課推廣(政府補助)*/
+				,isnull((select sum12
+					from (select mtd.mid,sum(mtd.score) sum12 
+						from meeting mt 
+						join metdetail mtd on mt.id=mtd.metid 
+						where 1=1 
+						AND year(mt.date)=#year#
+						AND (mt.mclass=1 OR mt.mclass=2) 
+						AND mtd.mcont=2 
+						group by mtd.mid
+					) a where md.mid=a.mid),0) sum12 /*社群分享*/
+				,isnull((select sum13
+					from (select mtd.mid,sum(mtd.score) sum13
+						from meeting mt 
+						join metdetail mtd on mt.id=mtd.metid 
+						where 1=1 
+						AND year(mt.date)=#year#
+						AND mt.mclass=3 
+						AND mtd.mcont=2 
+						group by mtd.mid
+					) a where md.mid=a.mid),0) sum13 /*發展署講師*/
+				,isnull((select sum02
+					from (select mtd.mid,sum(mtd.score) sum02 
+						from meeting mt 
+						join metdetail mtd on mt.id=mtd.metid 
+						where 1=1 
+						AND year(mt.date)=#year#
+						AND (mt.mclass=1 OR mt.mclass=2) 
+						AND mtd.mcont=1 
+						group by mtd.mid
+					) a where md.mid=a.mid),0) sum02 /*社群互動*/
+				,isnull((select sum03 
+					from (select mid,count(1) sum03 
+						from memshare
+						where 1=1
+						AND checked=2 
+						AND year(date)=#year#
+						group by mid
+					) a where md.mid=a.mid),0) sum03 /*教材分享*/
+				,isnull((select sum041
+					from (select ms.mid,count(1) sum041 
+						from fileshare fs 
+						join memshare ms on ms.id=fs.mfid 
+						where 1=1 
+						AND ms.checked=2 
+						AND year(ms.date)=#year#
+						group by ms.mid
+					) a where md.mid=a.mid),0) sum04
+				from memdetail md 
+				where md.active=1 
+				order by md.realname
+      ]]>
+    </select>
+
+    <select id="ExportScoreAuditStatistic"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.mid, a.realname, a.phone, a.mobile, a.email, a.jemail, a.regyear
+        ,isnull(sum(case when b.ckeckd=1 and year(b.sdate)=#year# then 1 else 0 end),0) sum1
+        ,isnull(sum(case when b.ckeckd=2 and year(b.sdate)=#year# then 1 else 0 end),0) sum2
+        ,isnull(sum(case when b.ckeckd=3 and year(b.sdate)=#year# then 1 else 0 end),0) sum3
+        ,isnull(sum(case when b.ckeckd=3 and year(b.sdate)=#year# then 1 else 0 end),0) sum4
+        from memdetail a
+        left join memsrcs b on a.mid=b.mid
+        where a.active=1
+        group by a.mid, a.realname, a.phone, a.mobile, a.email, a.jemail, a.regyear
+        order by a.realname 
+      ]]>
+    </select>
+
+    <select id="ExportScoreAuditList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+  select a.realname, a.phone, a.mobile, a.email, a.jemail, a.teachunit
+  , b.*
+  from memdetail a
+  left join memsrcs b on a.mid=b.mid
+  where a.active=1 and year(b.sdate)=#year#
+  order by a.realname 
+      ]]>
+    </select>
+
+    <select id="ExportFileAuditStatistic"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select a.mid,a.realname, a.phone, a.mobile, a.email, a.jemail, a.regyear
+        ,isnull(sum(case when b.checked=1 and year(b.date)=#year# then 1 else 0 end),0) sum1
+        ,isnull(sum(case when b.checked=2 and year(b.date)=#year# then 1 else 0 end),0) sum2
+        ,isnull(sum(case when b.checked=3 and year(b.date)=#year# then 1 else 0 end),0) sum3
+        ,isnull(sum(case when b.checked=4 and year(b.date)=#year# then 1 else 0 end),0) sum4
+        from memdetail a
+        left join memshare b on a.mid=b.mid
+        where a.active=1
+        group by a.mid,a.realname, a.phone, a.mobile, a.email, a.jemail, a.regyear
+        order by a.realname 
+      ]]>
+    </select>
+
+    <select id="ExportFileAuditList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+  select a.realname, a.phone, a.mobile, a.email, a.jemail, a.teachunit
+  , b.*
+  from memdetail a
+  left join memshare b on a.mid=b.mid
+  where a.active=1 and year(b.date)=#year#
+  order by a.realname
+      ]]>
+    </select>
+
+    <!-- 取得待審核上傳檔案人員清單, 以上傳日期排序(由小到大) -->
+    <select id="HomeFileAuditList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[
+        select * from (
+          select a.mid, a.realname, min(b.date) as [date]
+          from memdetail a
+            left join memshare b on a.mid=b.mid
+            where a.active=1 and year(b.date)=#AuditYear# and checked=1
+            group by a.mid, a.realname
+        ) x
+        order by [date]
+      ]]>
+    </select>
+
+    <!-- 查詢講師姓名  -->
+    <select id="QueryMemberList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="WDACC.Models.StoreExt.Store">
+      <![CDATA[
+  select realname as Text, mid as Code 
+  from memdetail
+  where realname like '%' + #keyword# + '%'
+  and active = 1
+      ]]>
+    </select>
+
+  </statements>
+</sqlMap>

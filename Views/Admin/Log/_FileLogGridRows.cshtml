@@ -1,0 +1,39 @@
+﻿@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@model WDACC.Models.StoreExt.Store
+
+@{
+    var statusList = CommonOptions.ActionEditStatus();
+    var item = Model;
+}
+
+<table class="table table-bordered table-condensed col-sm-12">
+    <tbody>
+        <tr>
+            <td>項次: @item.Get("sno").AsText() </td>
+            <td>帳號: @item.Get("username").AsText() </td>
+            <td>姓名: @item.Get("realname").AsText() </td>
+            <td>紀錄時間: @item.Get("createtime").AsDateTimeText("yyyy-MM-dd HH:mm:ss")</td>
+        </tr>
+        <tr>
+            <td>類型: @ActionName.GetFileEditTypeText(item.Get("logtype").AsText())</td>
+            <td>
+                使用功能:
+                @if (item.Get("logtype").AsText() == "DOWNLOAD")
+                {
+                    @ActionName.GetFileActionText(item.Get("logfunc").AsText())
+                }
+                else
+                {
+                    @ActionName.GetMemberActionText(item.Get("logfunc").AsText())
+                }
+            </td>
+            <td>執行結果: @item.Get("result").AsCodeText(statusList) </td>
+            <td>檔名: @item.Get("filename").AsText() </td>
+        </tr>
+        <tr>
+            <td colspan="4">訊息: @item.Get("message").AsText() </td>
+        </tr>
+    </tbody>
+</table>
+

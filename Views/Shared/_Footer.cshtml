@@ -1,0 +1,101 @@
+﻿@using Turbo.MVC.Base3.Commons
+@{
+
+    //無障礙標章網址
+    ViewBag.Handicap_free_href = "https://accessibility.moda.gov.tw/Applications/Detail?category=20240603153936";
+    ViewBag.Pass_level_desc = "無障礙網站";
+    ViewBag.Pass_level_desc2 = "通過AA無障礙網頁檢測";
+    ViewBag.QR_code_desc1 = "共通核心職能專區頁尾QR code";
+    //隱私權及資訊安全政策 /隱私權及安全政策
+    ViewBag.Url_Privacy1 = "https://www.wda.gov.tw/cp.aspx?n=13";
+    string ctrl = ViewContext.RouteData.Values["controller"].ToString();
+    if (ctrl == "Admin" || ctrl == "Member")
+    {
+        @FooterLogins()
+    }
+    else
+    {
+        @FooterFacade()
+    }
+}
+
+@helper FooterFacade()
+{
+    string ShowNowYear = DateTime.Today.Year.ToString();
+    <div class="footer-bg footer">
+        <div class="container">
+            <div class="col-sm-3">
+                <div class="logo">
+                    @*<img src="@Url.Content("~/images/footer-logo.png")" class="img-responsive" alt="台灣就業通｜產業人才投資方案計畫網" title="台灣就業通｜產業人才投資方案計畫網">*@
+                    @*<span style="color:#ffffff">@(ViewBag.LocalAddr)</span>*@
+                    @*2019-02-23 無障礙修正：EV2040300：確認文字（及影像文字）與文字後面的背景間，至少有4.5:1的對比值，改成用hidden*@
+                    @*<input type="hidden" id="localAddr" value="@(ViewBag.LocalAddr)" />*@
+                    @*<img id="localAddr-img" src="@Url.Content("~/images/footer-logo-cr2.png")" class="img-responsive" alt="@(ViewBag.LocalAddr)" title="@(ViewBag.LocalAddr)">*@
+                </div>
+                <ul class="footer-link">
+                    @*<li><a href="@Url.Content("~/Facade/Index/Privacy")" title="前往隱私權及安全政策">隱私權及安全政策</a></li>*@
+                    <li><a href="@ViewBag.Url_Privacy1" title="[另開新視窗]「隱私權及資訊安全政策」" target="_blank">隱私權及資訊安全政策</a></li>
+                    <li><a href="@Url.Content("~/Facade/Index/GovAnnounce")" title="前往政府網站資訊開放宣告">政府網站資訊開放宣告</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-7">
+                <div class="footer-title">勞動部勞動力發展署</div>
+                @Html.Raw(MyHelperUtil.ChangeBreakLine(ViewBag.Unit))
+                <p></p>
+                @Html.Raw(MyHelperUtil.ChangeBreakLine(ViewBag.Copyright))
+                <br />©@(ShowNowYear) All rights reserved. 本網站為勞動部勞動力發展署版權所有.
+                <p class="text-center"></p>
+            </div>
+            <div class="col-md-2" style="text-align:right">
+                <p style="height:10px">&nbsp;</p>
+                <a href="@ViewBag.Handicap_free_href" title="[另開新視窗]@ViewBag.Pass_level_desc" target="_blank">
+                    <img src="@Url.Content("~/images/aria_aa.png")" alt="@ViewBag.Pass_level_desc2" border="0" width="88" height="31">
+                </a>
+                <p style="height:10px">&nbsp;</p>
+                <p>&nbsp;<img src="@Url.Content("~/images/wdacc_web_QR_code.png")" alt="@ViewBag.QR_code_desc1" title="@ViewBag.QR_code_desc1" border="0" width="99" height="99"></p>
+                <p style="height:10px">&nbsp;</p>
+            </div>
+        </div>
+    </div>
+}
+
+@helper FooterLogins()
+{
+    string ShowNowYear = DateTime.Today.Year.ToString();
+    <div class="footer-bg footer">
+        <div class="container">
+            <div class="col-sm-12 text-center">
+                <p class="text-center">
+                    ©
+                    @(ShowNowYear) All rights reserved. 本網站為勞動部勞動力發展署版權所有.
+                    @*<script type="text/javascript">ShowNowYear(); </script>*@
+                </p>
+                <p class="text-left">
+                    <a title="" href="https://www.wda.gov.tw/" target="">主辦單位：勞動部勞動力發展署</a>
+                    ｜<i class="fas fa-location-arrow space-right"></i>24249新北市新莊區中平路439號南棟4樓｜<i class="fas fa-phone space-right"></i>(02)8995-6000(代表號)｜
+                </p>
+            </div>
+            <div class="col-sm-8">
+                <ul>
+                    <li>執行單位：勞動部勞動力發展署所屬分署</li>
+                    <li>北基宜花金馬分署：<i class="fas fa-phone space-right"></i>02-8995-6399#1365、#1369、#1375｜<i class="fas fa-fax space-right"></i>02-8995-6378｜<a href="mailto:service2@wda.gov.tw" title="service2@wda.gov.tw"><i class="fas fa-envelope"></i></a></li>
+                    <li>桃竹苗分署：<i class="fas fa-phone space-right"></i>03-485-5368#1331｜<i class="fas fa-fax space-right"></i>03-475-2584｜<a href="mailto:thmr@wda.gov.tw" title="thmr@wda.gov.tw"><i class="fas fa-envelope"></i></a></li>
+                    <li>中彰投分署：<i class="fas fa-phone space-right"></i>04-2359-2181#1516、1521、1522、1550｜<i class="fas fa-fax space-right"></i>04-2359-0893｜<a href="mailto:tcnrps@wda.gov.tw" title="tcnrps@wda.gov.tw"><i class="fas fa-envelope"></i></a></li>
+                    <li>雲嘉南分署：<i class="fas fa-phone space-right"></i>06-698-5945#1311｜<i class="fas fa-fax space-right"></i>06-693-5601｜<a href="mailto:yct@wda.gov.tw" title="yct@wda.gov.tw"><i class="fas fa-envelope"></i></a></li>
+                    <li>高屏澎東分署：<i class="fas fa-phone space-right"></i>07-821-0171#2803-5、2808、2810、2816｜<i class="fas fa-fax space-right"></i>07-821-2100｜<a href="mailto:080@wda.gov.tw" title="080@wda.gov.tw"><i class="fas fa-envelope"></i></a></li>
+                </ul>
+            </div>
+            @*彙管單位：就業情報資訊股份有限公司 300016新竹市北區經國路二段100號10樓1002室
+                03-621-0160　　林小姐  email：gracelin@career.com.tw
+                03-621-0165　　張先生  email：cm.chang@career.com.tw*@
+            <div class="col-sm-4">
+                <ul>
+                    <li>彙管單位：就業情報資訊股份有限公司</li>
+                    <li><i class="fas fa-location-arrow space-right"></i>300016新竹市北區經國路二段100號10樓1002室</li>
+                    <li><i class="fas fa-phone space-right"></i>03-621-0160　林小姐&nbsp;&nbsp;<a href="mailto:gracelin@career.com.tw" title="gracelin@career.com.tw"><i class="fas fa-envelope"></i></a></li>
+                    <li><i class="fas fa-phone space-right"></i>03-621-0165　張先生&nbsp;&nbsp;<a href="mailto:cm.chang@career.com.tw" title="cm.chang@career.com.tw"><i class="fas fa-envelope"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}

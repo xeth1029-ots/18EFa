@@ -1,0 +1,84 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "_TeachIndsClass";
+}
+
+<div id="teach-inds-class">
+    <h3 class="news-headtitle">可授課產業別</h3>
+    <div class="clearfix"></div>
+    <div>
+        @using (Html.BeginForm("Save", "Member", new { id = ActionName.Member.TeacherIndesc }, FormMethod.Post, new { id = "main_form" }))
+        {
+            <div class="table-responsive">
+                <table class="table table-teacher" width="100%">
+                    <tbody>
+                        @for (int i = 0; i < 10; i++)
+                        {
+                            <tr>
+                                <td>可授課產業別(@(i + 1))</td>
+                                <td>
+                                    @Html.HiddenFor(x => x.TeacherInfoForm.IndusList[i].id)
+                                    @Html.HiddenFor(x => x.TeacherInfoForm.IndusList[i].mid)
+                                    @Html.HiddenFor(x => x.TeacherInfoForm.IndusList[i].order)
+                                    @if (i < 3)
+                                    {
+                                        @Html.HiddenFor(x => x.TeacherInfoForm.IndusList[i].indscid)
+                                        if (Model.TeacherInfoForm.IndusList[i].indscid.HasValue)
+                                        {
+                                            var item = CommonOptions.IndsClass()
+                                                    .Where(x => x.Value == Model.TeacherInfoForm.IndusList[i].indscid.ToString())
+                                                    .FirstOrDefault();
+                                            @item.Text
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(x => x.TeacherInfoForm.IndusList[i].indscid,
+                                            CommonOptions.IndsClass(Model.TeacherInfoForm.IndusList[i].indscid),
+                                        "請選擇", new { @class = "form-control" })
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="2" style="text-align:center;">
+                                <input type="submit" name="submitc2" id="save" value="送出" class="btn btn-orange">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('#teach-inds-class');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: root.find('#main_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Member", new { id = ActionName.Member.Home })';
+                    });
+                } else {
+                    if (resp && resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, item) {
+                            res += item + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+    });
+</script>

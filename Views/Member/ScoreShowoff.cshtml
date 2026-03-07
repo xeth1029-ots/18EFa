@@ -1,0 +1,72 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "前台未顯示之開授課程";
+    //ViewBag.Title = "前台顯示之開授課程";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="showoff-panel">
+    @using (Html.BeginForm("Save", "Member", new { id = ActionName.Member.ScoreShowoff }, FormMethod.Post, new { id = "main_form" }))
+    {
+        <table class="table-index table" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    <th width="25%">開課單位</th>
+                    <th width="30%">課程名稱</th>
+                    <th width="35%">開課期間</th>
+                    <th width="10%">顯示狀況</th>
+                </tr>
+                @for (int i = 0; i < Model.ScoreGrid.Count; i++)
+                {
+                    var item = Model.ScoreGrid[i];
+                    <tr>
+                        <td>
+                            @item.tuname
+                        </td>
+                        <td> @item.tcname </td>
+                        <td>
+                            <div align="center">
+                                @item.sdate.Value.ToString("yyyy-MM-dd HH:mm") ~ @item.edate.Value.ToString("yyyy-MM-dd HH:mm")
+                            </div>
+                        </td>
+                        <td>
+                            <div align="center">
+                                @Html.HiddenFor(x => x.ScoreGrid[i].id)
+                                <label> @Html.RadioButtonFor(x => x.ScoreGrid[i].showoff, "0") 否 </label>
+                                <label> @Html.RadioButtonFor(x => x.ScoreGrid[i].showoff, "1") 是 </label>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="submit-bar">
+            <button class="btn btn-orange" id="query">更改</button>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        root = $('div#showoff-panel');
+        root.on('click', '#query', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $('#main_form').attr('action'),
+                data: $('#main_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Member", new { id = ActionName.Member.ScoreRegister })';
+                    });
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,99 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+
+@{
+    ViewBag.Title = "_VideoForm";
+    Model.TeachShow.Kind = "VIDEO";
+}
+
+<div id="video-form">
+    <h3 class="news-headtitle">授課影片</h3>
+    <div class="clearfix"></div>
+    <!-- news group start -->
+    <div class="mark-blue">◎影片標題及位址均需填寫，前台才會呈現。◎</div>
+    <div class="mark-blue">◎若要刪除資料，請將影片標題或位址清空即可。◎</div>
+    @using (Html.BeginForm("Save", "Member", new { id = "TeachShow" }, FormMethod.Post, new { id = "video_form" }))
+    {
+        @*<input type="hidden" name="mid" value="557">*@
+        @Html.HiddenFor(x => x.TeachShow.Kind)
+        <div class="table-responsive">
+            <table class="table-index table" width="100%" border="0">
+                <tbody>
+                    <tr>
+                        <th width="20%">影片標題</th>
+                        <th width="60%">影片位址</th>
+                        <th width="20%">簡要說明</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[0].title, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @*<input type="text" size="35" maxlength="300" name="tscont[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[0].content, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @*<input type="text" name="info[]" size="25" maxlength="255" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[0].info, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[1].title, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @*<input type="text" size="35" maxlength="300" name="tscont[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[1].content, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @*<input type="text" name="info[]" size="25" maxlength="255" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[1].info, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @*<input type="text" size="25" maxlength="255" name="tstitle[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[2].title, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @*<input type="text" size="35" maxlength="300" name="tscont[]" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[2].content, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @*<input type="text" name="info[]" size="25" maxlength="255" class="form-control">*@
+                            @Html.TextBoxFor(x => x.TeachShow.VideoGrid[2].info, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="submit-bar">
+            <button type="submit" id="save" class="btn btn-orange">資料送出</button>
+            <button type="reset" class="btn btn-refill">資料清除</button>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#video-form');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#video_form').attr('action'),
+                data: root.find('#video_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功");
+                } else {
+                    if (resp && resp.message) {
+                        blockWarning(resp.message);
+                    }
+                }
+            });
+        });
+    });
+</script>
+

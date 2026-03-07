@@ -1,0 +1,174 @@
+﻿@{
+    ViewBag.Title = "_NewMainLayout";
+    string ShowNowYear = DateTime.Today.Year.ToString();
+    //在職訓練共通核心職能專區
+    ViewBag.HTitle = "勞動部勞動力發展署共通核心職能專區";
+    ViewBag.HTitle2 = "共通核心職能專區";
+    ViewBag.HTitle3 = "歡迎光臨 共通核心職能專區";
+    ViewBag.HTitle2alt = "圖2";
+}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <title>@ViewBag.HTitle2 @(string.IsNullOrEmpty(ViewBag.TitleS) ? "" : "--" + ViewBag.TitleS)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=8,9,edge,chrome=1">
+    <meta charset="utf-8">
+    <meta name="google-site-verification" content="xO1rl3yyV9pA8bYEEbsrQHV6bsvYiN-OmygfyITWAyQ">
+    <meta name="description" content="@ViewBag.HTitle">
+    <meta name="keywords" content="在職訓練,共通核心,職能,專區,課程,師資,勞動部,勞動力,發展署" />
+    <meta name="author" content="東柏資訊">
+    <meta name="copyright" content="本網頁著作權屬勞動部勞動力發展署所有">
+    <meta name="robots" content="all">
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <!-- antiClickjack -->
+    <style id="antiClickjack" type="text/css">
+        html { display: none; }
+        body { display: none !important; background-color: #ffffff; }
+    </style>
+    <script type="text/javascript">
+        //解決不支援 X-Frame-Options設定，需額外判斷
+        //if (top != self) { top.location = self.location; }
+        if (self === top || self == top) {
+            var antiClickjack = document.getElementById("antiClickjack");
+            if (antiClickjack) { antiClickjack.parentNode.removeChild(antiClickjack); }
+            document.documentElement.style.display = 'block';
+        }
+        else { top.location = self.location; }
+        if (parent.document.frames != undefined && parent.document.frames.length != 0) {
+            top.location.replace(self.location);
+        }
+    </script>
+    <!-- Resource style -->
+    <link href="~/style/base.css" rel="stylesheet" type="text/css" />
+    <link href="~/style/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/style/flexslider.css" type="text/css" media="screen" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>*@
+    @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+    <style type="text/css">
+        .padding20 { padding: 20px; }
+    </style>
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    <script src="~/Scripts/jquery-migrate-3.3.0.js"></script>
+    @*AE67471778FAD2E7A1BBB12CB95D8B9A2A6E3FB034F0BD9E9C0F8190B59261CBD13CE6EF8DFCB4D3CAB527A9A8ACBB6C7E6FAB27183A2BF665E840C648780692*@
+    @*<script src="https://code.jquery.com/jquery-3.6.0.js"></script><script src="https://code.jquery.com/jquery-migrate-3.4.0.js"></script>*@
+    <!-- FlexSlider -->
+    <script defer src="~/js/jquery.flexslider.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/windowload1.js"></script>
+    @*<script src="~/Scripts/windowload2.js"></script>*@
+
+    <script type="text/javascript">
+        @*2019-01-16 無障礙檢測：add 按esc鍵關閉彈跳視窗*@
+        var app = {
+            alertWindow: null,
+            alertWindowCallback: [], // function[]
+            confirmWindow: null,
+            confirmWindowCallback: [], // function[]
+        };
+
+        @*2019-01-16 無障礙檢測：add 按esc鍵關閉彈跳視窗*@
+        $(document).on('keyup', function (e) {
+            if (app && app.confirmWindow) {  // app.confirmWindow in global.js: blockMessage function
+                if (e.keyCode === 27) { // 如果按下esc
+                    console.log('confirm escape press');
+                    app.confirmWindow.close();
+                }
+            }
+            if (app && app.alertWindow) {  // app.alertWindow in global.js: blockMessage function
+                if (e.keyCode === 27) { // 如果按下esc
+                    console.log('alert escape press');
+                    app.alertWindow.close();
+                }
+            }
+        });
+    </script>
+    <style type="text/css">
+        /*2019-01-08 無障礙檢測：聚焦當前物件(加粗邊框)*/
+        input:focus, a:focus, select:focus, textarea:focus, button:focus, .form-control:focus, .dropdown-toggle:focus, .carousel-control:focus { /* border: 0.17em dashed; border-color: #0000ff; */ outline-style: dashed; outline-color: #0000ff; outline-width: 3px; }
+        .alogo:focus, .aBanner:focus { border: 3px dashed; border-color: #0000ff; }
+    </style>
+</head>
+<body>
+    <a name="gotop"></a>
+
+    <!-- header start -->
+    @Html.Partial("_Header")
+    <!-- header end -->
+
+    <!-- menu start-->
+    <div class="container-fluid logobg">
+        @*logo header-link*@
+        @RenderHeaderImageLink()
+    </div>
+    <nav class="navbar">
+        @Html.Partial("_MainMenu")
+    </nav>
+    <!-- menu end-->
+
+    <!-- content -->
+    <div class="padding20">
+        @RenderBody()
+    </div>
+
+    <div class="gotop"><a href="#gotop"><span class="sr-only">移至最上方(回上頁)</span><i class="fas fa-arrow-alt-circle-up"></i></a></div>
+
+    <!-- footer menu--->
+    @RenderFooterMenuLink() @*footer menu @Html.Partial("_FooterMenu")*@
+
+    <!-- footer --->
+    @Html.Partial("_Footer")
+
+</body>
+</html>
+
+@helper RenderFooterMenuLink()
+{
+string ctrlName = ViewContext.RouteData.Values["controller"].ToString();
+if (ctrlName == "Facade")
+{
+        @Html.Partial("_FooterMenu")
+}
+}
+
+@helper RenderHeaderImageLink()
+{
+    <noscript>
+        <div class="text-center" style="font-size:1.2em">
+            @*fix無障礙檢測:EV1120200：暴露名稱與角色，允許直接設定可由使用者設定的屬性，並在變更時提供通知*@
+            您的瀏覽器不支援JavaScript功能，若網頁功能無法正常使用時，請開啟瀏覽器JavaScript狀態
+        </div>
+        <style type="text/css">
+            html { display: block; }
+            body { display: block !important; }
+        </style>
+    </noscript>
+    <!--logo -->
+    <div class="navbar-logo-lt">
+        <div class="navbar-logo">
+            <h1 style="font-size: 0em; margin: 0;">@ViewBag.HTitle</h1>
+            <h2 style="font-size: 0em; margin: 0;">@ViewBag.HTitle3</h2>
+            <a class="aBanner" href="@Url.Action("Index", "Facade", new { id = "Home" })">
+                <img src="@Url.Content("~/images/wda-logo.svg")" class="img-responsive" width="300px" alt="@ViewBag.HTitle" title="@ViewBag.HTitle" /><div class="title"><img src="~/images/h1-bg.svg" alt="@ViewBag.HTitle2alt" />@ViewBag.HTitle2</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="navbar-logo-rt">
+        <img src="~/images/rt-bg.svg" alt="" class="rt-bg" />@*插圖BG2*@
+        <img src="~/images/img-core-people.svg" alt="" />@*插圖people*@
+        <!--導覽列開關按鈕 行動版選單按鈕-->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar" alt="選單" title="選單" src="#">
+                <span class="sr-only">導覽列開關按鈕</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+    </div>
+}

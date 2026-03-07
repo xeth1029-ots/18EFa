@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="KeyMap"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <resultMaps>
+  </resultMaps>
+
+  <cacheModel id="Turbo.MVC.Base3-cache" implementation="MEMORY">
+    <flushInterval hours="1" />
+    <property name="Type" value="WEAK" />
+  </cacheModel>
+
+  <!--
+    這個檔案專門用來定義 代碼DDL清單內容，資料來源可以是 DB 代碼表格,
+    也可以是用 Union 直接定義在這裡, 而不要寫在程式中.
+    SQL 返回結果欄位, 一律 Alias 成「CODE」與「TEXT」
+    -->
+  <statements>
+
+    <!-- 筆數條件(共用區塊) -->
+    <sql id="SQLROWNUM">
+      <![CDATA[ AND ROWNUM <= 1001 ]]>
+    </sql>
+
+    <!-- 筆數條件(共用區塊) -->
+    <sql id="SQLROWNUM2">
+      <![CDATA[  AND ROWNUM <= 2001 ]]>
+    </sql>
+
+    <select id="CityRegionZip"
+      parameterClass="Hashtable"
+      resultClass="WDACC.Models.StoreExt.Store">
+      <![CDATA[
+        select
+          rtrim(ltrim(str(cityid))) as city,
+          a.title as cityname,
+          rtrim(ltrim(str(zipcode))) as zipcode,
+          rtrim(ltrim(b.title)) zipname
+        from city a join region b on a.id=b.cityid
+        order by city, zipcode
+      ]]>
+    </select>
+
+    <select id="TeachUnit"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[
+        select '21' as CODE, '【D1】工作價值與工作願景' as TEXT
+  union select '22' as CODE, '【D2】群我倫理與績效表現' as TEXT
+  union select '23' as CODE, '【D3】專業精神與自我管理' as TEXT
+  union select '11' as CODE, '【B1】職場與職務之認知與溝通協調' as TEXT
+  union select '12' as CODE, '【B2】工作團隊與團隊協作' as TEXT
+  union select '13' as CODE, '【B3】職場夥伴關係與衝突管理' as TEXT
+  union select '31' as CODE, '【K1】職場環境的學習與創新' as TEXT
+  union select '32' as CODE, '【K2】價值概念與成本意識' as TEXT
+  union select '33' as CODE, '【K3】問題反映與分析解決' as TEXT
+         ]]>
+    </select>
+
+    <!--授課區域-->
+    <select id="Region"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[ select rtrim(ltrim(str(id))) as CODE, title as TEXT  from city order by id ]]>
+    </select>
+
+    <!--服務單位屬性-->
+    <select id="OrgAttrib"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[     
+        select '1' CODE, '工會' TEXT
+  union select '2' CODE, '協會' TEXT
+  union select '3' CODE, '管顧' TEXT
+  union select '4' CODE, '顧問' TEXT ]]>
+    </select>
+
+    <!-- 學歷 -->
+    <select id="Degree"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[ 
+  select '1' as CODE, '國中小' as TEXT
+  union select '2', '高中職'
+  union select '3', '學士'
+  union select '4', '碩士'
+  union select '5', '博士'
+      ]]>
+    </select>
+
+    <!-- 處理社群 -->
+    <select id="Group"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[ 
+  select '1' as CODE, '北區' as TEXT
+  union select '2', '桃園區'
+  union select '3', '中區'
+  union select '4', '台南區'
+  union select '5', '南區'
+  union select '6', '個人師資'
+      ]]>
+    </select>
+
+    <!-- 產學類別 -->
+    <select id="AcadeType"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[ 
+        select '1' as CODE, '產業界' as TEXT
+        union         select '2', '學術界-講師'
+        union         select '3', '學術界-助理教授'
+        union         select '4', '學術界-副教授'
+        union         select '5', '學術界-教授'
+      ]]>
+    </select>
+
+    <!-- 產業類別  -->
+    <select id="IndsClass"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[
+        SELECT rtrim(ltrim(str(id))) as CODE,
+        (case
+            when mclass='1' then '製造業-' + name 
+            when　mclass='2'　then　'服務業-' + name
+            when mclass='3' then '其它-' + name end
+        ) AS TEXT 
+        FROM indsclass
+      ]]>
+    </select>
+
+    <select id="GovPlan"
+         parameterClass="Hashtable"
+         resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[
+  select '1' as CODE, '企業人力資源提升計畫' as TEXT 
+  union select '2', '小型企業人力提升計畫' 
+  union select '3', '大專就業學程' 
+  union select '4', '產業人才投資方案' 
+  union select '5', '失業者職前訓練' 
+     ]]>
+    </select>
+
+    <select id="TeachUnitClass" parameterClass="Hashtable" resultClass="Turbo.DataLayer.KeyMapModel">
+      <![CDATA[
+  select '1' as CODE, '訓練單位' as TEXT 
+  union        select '2', '職訓機構' 
+  union        select '3', '學校' 
+  union        select '4', '企業' 
+  union        select '5', '其他' 
+     ]]>
+    </select>
+
+    <select id="ExcuteDeactiveEmail"
+      parameterClass="Hashtable"
+      resultClass="WDACC.Models.StoreExt.Store">
+    <![CDATA[
+  select 'mairian9988@yahoo.com.tw' as email
+  union select 'attsai@tcfst.org.tw' 
+  union select 'AdminAdmin'
+    ]]>
+    </select>
+
+  </statements>
+</sqlMap>

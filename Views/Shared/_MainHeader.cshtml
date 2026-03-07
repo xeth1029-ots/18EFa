@@ -1,0 +1,100 @@
+﻿@using Turbo.MVC.Base3.Models;
+@{
+    int timeout = Session.Timeout;
+    DateTime now = DateTime.Now;
+    string twyr = (now.Year - 1911).ToString();
+    string mon = now.Month.ToString("d2");
+    string day = now.Day.ToString("d2");
+    //const string arrDayOfWeek = "日一二三四五六";
+    //char weekday = arrDayOfWeek[(int) now.DayOfWeek];
+}
+
+<style>
+    .custom {
+        display: inline-block;
+        margin-right: 5px;
+    }
+</style>
+
+<!-- header start -->
+<div class="header clearfix" style="background:#E8E8E8">
+    <div class="logo-index col-md-9">
+        <a href="~/" title="回首頁">
+            <img src="/images/logo-index_new2.jpg" alt="沒有找到圖片" align="left" style="text-align:left;width:100%;height: 100%; width: 100%;
+        object-fit: contain" class="img-responsive" id="">
+        </a>
+    </div>
+    <div class="col-md-3">
+        <div class="data-set" style="width:100%">
+            <div class="data-timer"><img src="~/images/icon-timer.svg" alt="自動登出">自動登出&nbsp;<span class="data-timer-number" style="font-size:16pt;"> </span></div>
+            <div class="data-cal">
+                <span class="data-cal-number-small" style="font-size:10pt;">@(twyr)</span><span style="font-size:9pt;">年</span>
+                <span class="data-cal-number-small" style="font-size:10pt;">@(mon)</span><span style="font-size:9pt;">月</span>
+                <span class="data-cal-number-small" style="font-size: 10pt;">@(day)</span><span style="font-size:9pt;">日</span>
+                <span class="user-unit">@(SessionModel.Get().UserInfo.User.user_name) 您好!   <a href=""><b>點我登出</b></a></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" style="border-radius:5px;background-color:rgba(0,0,0,0.05);padding:0px;text-align:center;">
+    </div>
+</div>
+<script>
+    var __ssTimeout = {
+        //timeout   系統登入逾時時間，單位：秒
+        //counter   倒數計時計數器。
+        //hint      登入即將過期提醒訊息的彈出時間點。單位：秒
+        //hintFired 是否顯示過登入即將過期訊息。
+        "timerId": undefined,
+        "redirectUrl": "@Url.Content("~/Login/Logout")",
+        "board": $("span.data-timer-number"),
+        "timeout": parseInt("@(timeout * 60)", 10),
+        "counter": parseInt("@(timeout * 60)", 10),
+        "hint": 300,
+        "hintFired": 0,
+        refreshBoard: function () {
+            if (this.counter > 0) {
+                //20171214 修正 IE11 不支援 Math.trunc 方法問題
+                var m = (Math.trunc) ? Math.trunc(this.counter / 60) : Math.floor(this.counter / 60);
+                var s = this.counter % 60;
+                m = ((m < 10) ? "0" : "") + m;
+                s = ((s < 10) ? "0" : "") + s;
+                this.board.text([m, ":", s].join(""));
+            }
+            else {
+                this.board.text("00:00");
+            }
+        },
+        resetCount: function () {
+            this.counter = this.timeout;
+            this.hintFired = 0;
+            this.refreshBoard();
+        },
+        countDown: function () {
+            var self = this;
+            if (this.counter <= 0) {
+                blockAlert("您的登入已經過期，請重新登入系統！", "登入逾時", function () {
+                    window.location.href = self.redirectUrl;
+                });
+                return;
+            }
+
+            this.timerId = setTimeout(function () { self.countDown(); }, 1000);
+            if (this.counter > 0) this.counter--;
+            this.refreshBoard();
+
+            if (this.counter <= this.hint && this.hintFired == 0) {
+                this.hintFired = 1;
+                blockConfirm("您的登入即將過期，要延長時間嗎？", "", function () { self.resetCount(); }, null, "延長", "不延長");
+            }
+        }
+    }
+
+    function logout() {
+        blockConfirm("您確定要登出系統？", null, function () {
+            window.location.href = "@(Url.Action("Logout", "Login", new { area = "" }))";
+        });
+    }
+
+    $(document).ready(function () { __ssTimeout.countDown(); });
+</script>
+<!-- header end -->

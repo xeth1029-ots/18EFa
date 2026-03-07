@@ -1,0 +1,61 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@using System.Web
+
+@{
+    // 課程簡介修改
+    ViewBag.Title = "_CourseIntro";
+}
+
+<div class="table-responsive">
+    <table border="0" width="100%" class="table-teacher">
+        <tbody>
+            <tr>
+                <td width="15%">共通核心<br>職能課程<br>說明</td>
+                <td>
+                    @*<h2>
+                                <span style="font-family: 微軟正黑體, sans-serif; font-size: 12pt;">【</span><font size="4"><b>計畫緣起與目的範圍</b></font><span style="font-size:12.0pt;mso-bidi-font-size:11.0pt;
+        font-family:&quot;微軟正黑體&quot;,&quot;sans-serif&quot;;mso-bidi-font-family:&quot;Times New Roman&quot;;
+        mso-bidi-theme-font:minor-bidi;mso-ansi-language:EN-US;mso-fareast-language:
+        ZH-TW;mso-bidi-language:AR-SA">】</span><font size="4"><b><br></b></font><font size="4"><b>（一）緣起<br></b></font><font size="4"><b>九O年代中期以來，工業先進國家對於勞動力必要具備的核心知識職能與技能職能(core knowledge/skill competencies)，大多已形成具有一般共識的結構化、系統化之體系典範與類目組合，並藉由在政府公共部門的方案以及在民間自辦的訓練計畫中付諸實施，以作為各該國家人力資本投資開發與升級進步的重要基礎建設事項。行政院經建會九十三年六月完成之院頒「服務業發展綱領及行動方案」提列十二項國家前瞻性服務產業，勞動力發展署依決議應辦理「核心職能課程訓練」。爰準據訂定本項「共通核心職能課程」計畫。</b></font><hr><font size="4"><b>（二）目的<br></b></font><font size="4"><b>本方案計畫之目的，乃為積極促進國家人力發展基礎建設，藉政府公共部門之主動規劃促進，以形成我國人力資本投資開發之有營養的土壤，強化國家優勢的社會資本，建構有特色的國家競爭力，啟發民間活力，落實普遍化的有魅力有競爭力的國家勞動力。</b></font>
+                            </h2>*@
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 6).FirstOrDefault().content)))
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "6" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+            <tr>
+                <td>動機職能<br>-DC說明及教材規範</td>
+                <td>
+                    @*<h2><font size="4"><b>本計畫共通核心職能訓練第一群組課目之主旨名稱、講授綱要說明及實例操作演練之教材教案規範與程式作法分別陳列如下：</b></font><font size="4"><b><br></b></font><font size="4"><b>動機職能（DC）之16小時三課目</b></font></h2> <h2><span style="font-family: 新細明體, serif; font-size: 14pt;">※</span><b style="font-size: large;">學分訓練－「認知」之訓練；建立「自我」條件</b></h2> <h2><font size="4"><b>D1 工作價值與工作願景（5 小時）<br></b></font><font size="4"><b>●個人優勢與職業適性</b><br></font><font size="4"><b>●工作願景與職涯發展<br></b></font><font size="4"><b>●工作價值與組織願景</b></font><font size="4"><b><br></b></font><font size="4"><b>●正向職場人生觀</b></font></h2> <h2><font size="4"><b>D2 群我倫理與績效表現 （5 小時）<br></b></font><font size="4"><b>●職場生涯的小社會與大社會<br></b></font><b style="font-size: large;">●</b><font size="4"><b>工作倫理與職場道德之認知與掌握</b></font><br><b style="font-size: large;">●</b><font size="4"><b>績效意識與工作效能</b></font><br><b style="font-size: large;">●</b><font size="4"><b>績效表現被認同的應有方式</b></font></h2> <h2><font size="4"><b>D3 專業精神與自我管理 （6 小時）<br></b></font><font size="4"><b>●專業態度與敬業精神<br></b></font><font size="4"><b>●自動自發與創新精神<br></b></font><font size="4"><b>●個人形象的建立與展現<br></b></font><font size="4"><b>●情緒管理與自律自制</b></font></h2><p><br></p> <h2><b style="font-size: large;"><a title="" href="https://corecompetencies.wda.gov.tw/nsdownload/ns00901DC.odt" target="">DC教材規劃說明</a>(ODT檔請點此下載)</b></h2><h2><b style="font-size: large;"><a title="" href="https://corecompetencies.wda.gov.tw/nsdownload/ns00901DC.pdf" target="">DC教材規畫說明</a>(PDF檔請點此下載)..</b></h2>*@
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 7).FirstOrDefault().content)))
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "7" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+            <tr>
+                <td>動機職能<br>-BC說明及教材規範</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 8).FirstOrDefault().content)))
+                    @*<h2><b><font size="4">本計畫共通核心職能訓練第二群組課目之主旨名稱、講授綱要說明及實例操作演練之教材教導規範與流程作法，分別陳列如次：</font><font size="4"><br></font><font size="4">行為職能(BC)之16小時三課目</font></b></h2><h2><b><span style="font-family: 新細明體, serif; font-size: 14pt;">※</span><font size="4">學分訓練</font><font size="4">－「認同」之訓練；建立「有他」條件</font></b></h2><h2><b><font size="4">B1職場與職務之認知與溝通協調 (6小時)<br></font><font size="4">●角色定位與職責<br> </font><font size="4">●職務安全意識與法令規範<br></font><font size="4">●組織內外的溝通與協調<br></font><font size="4">●跨領域跨單位之協同合作</font></b></h2><h2><b><font size="4">B2工作團隊與團隊協作 (5小時)<br></font><font size="4">●團隊構成要件與團隊意涵<br></font><font size="4">●團隊精神與團隊運作型態<br></font><font size="4">●團隊共識與團隊協作<br></font><font size="4">●團隊領導與綜效發揮</font></b></h2><h2><b><font size="4">B3職場夥伴關係與衝突管理 (5小時)<br></font><font size="4">●職場夥伴之組織定位與任務關係<br></font><font size="4">●多元文化與個體差異的諒解與包容<br></font><font size="4">●對自利自害及共利共害的體認與調和<br></font><font size="4">●</font><font size="4">衝突管理的運用<br></font><font size="4"><a title="" href="https://corecompetencies.wda.gov.tw/nsdownload/ns00902BC.odt" target="">BC教材規劃說明</a>(ODT檔請點此下載)</font></b></h2><h2><b><font size="4"><a title="" href="https://corecompetencies.wda.gov.tw/nsdownload/ns00902BC.pdf" target="">BC教材規劃說明</a>(PDF檔請點此下載)..</font></b></h2>*@
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "8" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+            <tr>
+                <td>動機職能<br>-KC說明及教材規範</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 9).FirstOrDefault().content)))
+                    @*<h2><b><font size="4">第三群組「知識職能」之教材規範與程式說明</font><font size="4"><br></font><font size="4">本計畫核心職能訓練第三群組課目之主旨名稱、講授綱要說明及實例操作演練之教材教學規範與程式作法，分別陳列如次：</font><font size="4"><br></font><font size="4">知識職能(KC)之16小時</font><span style="font-size: large;">三課目</span></b></h2><h2><b><span style="font-family: 新細明體, serif; font-size: 14pt;">※</span><font size="4">學分訓練</font><font size="4">－「認識」之訓練；建立「客觀」條件</font><font size="4"><br></font><font size="4">K1職場環境的學習與創新 (5小時)<br></font><font size="4">●<span lang="EN-US">職場大環境的認知與探索<br></span></font><font size="4">●職場知識的管理與運用<br> </font><font size="4">●掌握職務脈動與積極促進創新<br>●跨領域整合的思維與運用</font></b></h2><h2><b><font size="4">K2價值概念與成本意識 (5小時)<br></font><font size="4">●成本意識與價值概念的基本意涵<br></font><font size="4">●成本的節制與控制<br></font><font size="4">●價值的加值與創造<br></font><font size="4">●開源節流的策略與倫理</font><br></b></h2><h2><b><font size="4">K3問題反映與分析解決 (6小時)<br></font><font size="4">●問題定義與問題意識<br></font><font size="4">●問題的描述<br></font><font size="4">●問題發現與分析的工具<br></font><font size="4">●問題解決的步驟流程與標準化</font></b></h2><h2><font size="4"><b><a title="" href="nsdownload/ns00903KC.odt" target="">KC教材規劃說明</a>(ODT檔請點此下載)..</b></font></h2><h2><font size="4"><b><a title="" href="nsdownload/ns00903KC.pdf" target="">KC教材規劃說明</a>(PDF檔請點此下載)..</b></font></h2>*@
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "9" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

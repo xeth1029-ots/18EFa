@@ -1,0 +1,81 @@
+﻿@model  WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "最新消息設定";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="news">
+    <div class="submenu">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#btnn1" aria-expanded="false">@GetFormLabel()</a></li>
+            <!--<li><a data-toggle="tab" href="#btnn2">產業人才投資方案</a></li>--><!-- 2018-11-13 移除此項目 -->
+            <li class=""><a data-toggle="tab" href="#btnn3" aria-expanded="true">共通核心職能課程</a></li>
+            <li class=""><a data-toggle="tab" href="#btnn4" aria-expanded="false">師資訊息</a></li>
+            <li class=""><a data-toggle="tab" href="#btnn5" aria-expanded="false">跑馬燈訊息</a></li>
+            <li class=""><a data-toggle="tab" href="#btnn6" aria-expanded="false">已下架公告</a></li>
+        </ul>
+    </div>
+    <div class="news-content">
+        <div class="tab-content">
+            <div id="btnn1" class="tab-pane fade active in">
+                @Html.Partial("News/_Form")
+            </div>
+            @*<div id="btnn2" class="tab-pane fade">
+                    @{
+                        Model.NewsModel.Showoff = 1;
+                        Model.NewsModel.ClassId = 1;
+                    }
+                    @Html.Partial("News/_Grid")
+                </div>*@
+            <div id="btnn3" class="tab-pane fade">
+                @Html.Partial("News/_Grid1")
+            </div>
+            <div id="btnn4" class="tab-pane fade">
+                @Html.Partial("News/_Grid2")
+            </div>
+            <div id="btnn5" class="tab-pane fade">
+                @Html.Partial("News/_Grid3")
+            </div>
+            <div id="btnn6" class="tab-pane fade">
+                @Html.Partial("News/_Grid4")
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#news');
+        root.on('click', 'a.news.toggle', function (e) {
+            e.preventDefault();
+            blockConfirm('確定要上/下架 最新消息?', null, function () {
+                $.ajax({
+                    method: 'POST',
+                    url: $(e.target).attr('href')
+                }).done(function (resp) {
+                    if (resp && resp.status) {
+                        blockAlert('修改成功', null, function () {
+                            window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.News })';
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+@helper GetFormLabel()
+{
+    if (Model.Action == ActionName.Admin.News)
+    {
+        <span>新增消息</span>
+    }
+    else
+    {
+        <span>編輯消息</span>
+    }
+}

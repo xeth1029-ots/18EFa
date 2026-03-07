@@ -1,0 +1,12 @@
+﻿@model WDACC.Models.TimeField
+@{
+    IList<SelectListItem> hour = Enumerable.Range(8, 15).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).ToList();
+    IList<SelectListItem> mint = new List<SelectListItem>();
+    mint.Add(new SelectListItem { Value = "00", Text = "00" });
+    mint.Add(new SelectListItem { Value = "15", Text = "15" });
+    mint.Add(new SelectListItem { Value = "30", Text = "30" });
+    mint.Add(new SelectListItem { Value = "45", Text = "45" });
+}
+@Html.DropDownListFor(x => x.Hour, hour, null, new { @class = "form-normal" }) :
+@Html.DropDownListFor(x => x.Minute, mint, null, new { @class = "form-normal" })
+

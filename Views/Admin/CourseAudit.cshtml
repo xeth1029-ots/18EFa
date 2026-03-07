@@ -1,0 +1,114 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "課程審核";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="course_audit" class="news-content">
+    <div>
+        @Model.AuditParam.RealName &nbsp;講師&nbsp;課程審核<span style="float:right;color:#f00;font-weight:bold;">若課程未通過或退回，請務必填寫審查意見</span><br>
+    </div>
+    @using (Html.BeginForm("Save", "Admin", new { id = ActionName.Admin.CourseAudit }, FormMethod.Post, new { id = "main_form" }))
+    {
+        <table class="table-index" width="100%">
+            <tbody>
+                <tr>
+                    <th width="8%">&nbsp;</th>
+                    <th>開課單位</th>
+                    <th>課程名稱</th>
+                    <th>授課日期</th>
+                    <th>授課時數</th>
+                    <th>佐證資料</th>
+                    <th>審查意見</th>
+                </tr>
+                @for (int i = 0; i < Model.AuditCourseDetailList.Count; i++)
+                {
+                    Store store = new Store();
+                    var item = Model.AuditCourseDetailList[i];
+                    store.Collection(item);
+                    <tr class="data_row">
+                        <td>
+                            @Html.HiddenFor(x => x.AuditCourseDetailList[i].id)
+                            @Html.DropDownListFor(x => x.AuditCourseDetailList[i].ckeckd, CommonOptions.AuditStatus(item.ckeckd + ""), null, new { @class = "form-normal ckeckd" })
+                        </td>
+                        <td> @store.Get("tuclass").AsCodeText(CommonOptions.TeachUnitClass()) - @item.tuname </td>
+                        <td> @store.Get("tcclass").AsCodeText(CommonOptions.TeachUnit()) - @item.tcname </td>
+                        <td>
+                            @store.Get("sdate").AsDateTimeText("yyyy-MM-dd HH:mm:00") ~ <br>  @store.Get("edate").AsDateTimeText("yyyy-MM-dd HH:mm:00")
+                        </td>
+                        <td>
+                            @item.hours
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Download", "File", new { id = ActionName.File.Score, fid = item.id })" target="_blank" rel="noopener">檔案</a>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(x => x.AuditCourseDetailList[i].comment, new { @class = "form-normal comment" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="submit-bar">
+            <button type="submit" id="save" class="btn btn-orange" name="submitcs">送出</button>
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#course_audit');
+
+        function checkRow(callback) {
+            var res = true;
+
+            $('tr.data_row').each(function (i, item) {
+                var selval = $(item).find('select.ckeckd').val();
+                var reason = $(item).find('input.comment').val();
+                if (selval == '3' || selval == '4') {
+                    if (!reason) {
+                        res &= false
+                    }
+                }
+            });
+
+            if (res) {
+                callback();
+            } else {
+                blockAlert('課程已選取未通過或退回，請填寫審查意見');
+            }
+        };
+
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            checkRow(function () {
+                $.ajax({
+                    url: root.find('#main_form').attr('action'),
+                    data: root.find('#main_form').serialize(),
+                    method: 'POST'
+                }).done(function (resp) {
+                    if (resp && resp.status) {
+                        blockAlert("儲存成功", null, function () {
+                            window.location = '@Url.Action("Index", "Admin", new { id = ActionName.Admin.ClassReview })' + '#tab1';
+                        });
+                    } else {
+                        if (resp.message) {
+                            var res = '';
+                            $.each(resp.message, function (i, item) {
+                                res += item + '\n';
+                            });
+                            blockWarning(res);
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+

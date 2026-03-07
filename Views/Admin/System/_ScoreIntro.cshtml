@@ -1,0 +1,27 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@using System.Web
+
+@{
+    // 師資積分說明
+    ViewBag.Title = "_ScoreIntro";
+}
+
+
+<div class="table-responsive">
+    <table border="0" width="100%" class="table-teacher">
+        <tbody>
+            <tr>
+                <td width="15%">師資積分說明</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 11).FirstOrDefault().content)))
+                    @*<p style="text-align: left;"><font size="4"><span style="color: rgb(0, 0, 255);"><font color="#990066">審核授課積分之佐證資料應檢附之證明文件，敬請依下述說明辦理:</font> <br><span style="background-color: rgb(255, 204, 255);"><font color="#666666">一、 主要佐證 (請擇一提供)</font></span><br>(一)開課單位講師邀請函:<br><font color="#663366">紙本(請用印該單位公司章)-內容須包含邀課單位、承辦人、聯絡電話、課程名稱、日期時間地點...等)電子郵件-內容須包含邀課單位、承辦人、聯絡電話、課程名稱、日期時間地點...等)。</font><br></span></font></p><p style="text-align: left;"><font size="4"><span style="color: rgb(0, 0, 255);">(二)上課課表:<br></span></font><font size="4">內容須包含邀課單位、承辦人、聯絡電話、課程名稱、日期時間地點以及課程大綱等)。<br></font><font size="4"><span style="color: rgb(0, 0, 255);">(三)招生宣傳DM或EDM:<br></span></font><font size="4">內容須包含授課講師、邀課單位、承辦人、聯絡電話、課程名稱、日期時間地點...等)。<br></font><font size="4"><span style="color: rgb(0, 0, 255);">(四)其他:<br></span></font><font size="4">若為學校內聘講師，可利用選課系統網頁截取圖檔(需含課程名稱、授課講師)，或紙本公文，電子郵件邀課信件，另請檢附辦理課程系所名稱、承辦人、聯絡電話等，以玆證明。<br></font><span style="background-color: rgb(255, 204, 255);"><font size="4">二、 輔助佐證 (可選擇性提供)</font><br></span><font size="4"><font color="#0000ff">(一)上課照片1-2張</font>(辨識方式:請攝入學員、講師、投影幕內容為核心職能課程簡報為宜)<br></font><font size="4"><span style="color: rgb(0, 0, 255);">(二)課程簡報或上課講義<br></span></font><span style="background-color: rgb(255, 204, 255);"><font size="4">三、 提醒事項:</font><br></span><font size="4">(一)課程名稱需與共通核心職能課程大綱名稱相符或能以辨識為共通核心職能課程名稱為準。<br></font><font size="4">(二)上述主要佐證，若不易辨識或內容不全者，請提供課程簡報或上課講義，提供之課程相關資料僅供積分審核存查。<br></font><font size="4">(三)積分登入應以當年度師資可授課單元為主，非公告之可授課單元將無法進行審核。<br></font><font size="4">(四)<font face="times new roman">本課程師資所提供認列課程積分之佐證資料須敘明授課內涵、架構、目標，並符合勞動部勞動力發展署所訂定之「共通核心職能課程大</font>綱」，始得認列積分。<br></font><font size="4">(五)若佐證資料顯示之課程內容、架構等與共通核心職能課程大綱內容無相關聯，雖以書面說明將共通核心職能課程內容或精神融入專業課程中，卻未提出實際佐證資料者，該課程時數將無法認列積分。<br></font><font size="4">(六)仍有疑義者，將彙整所提供之課程佐證資料，於「共通核心職能課程自撰教材暨積分審查會議」提出，由審查委員共同討論。</font></p><p></p>*@
+                </td>
+                <td>
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = "11" })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

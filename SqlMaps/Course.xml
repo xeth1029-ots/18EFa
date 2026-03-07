@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Course"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <resultMaps>
+  </resultMaps>
+
+  <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+  </cacheModel>
+
+  <statements>
+    <select id="GetScoreList"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[ select * from memsrcs where 1=1 ]]>
+      <dynamic>
+        <isNotEmpty property="id">
+          <![CDATA[ and id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="mid">
+          <![CDATA[ and mid = #mid# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="year">
+          <![CDATA[ and year(sdate) = #year# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="showoff">
+          <![CDATA[ and showoff = #showoff# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="ckeckd">
+          <![CDATA[ and ckeckd = #ckeckd# ]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by sdate desc ]]>
+    </select>
+
+
+
+
+  </statements>
+</sqlMap>

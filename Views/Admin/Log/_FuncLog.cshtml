@@ -1,0 +1,111 @@
+﻿@model WDACC.Models.ViewModel.LogViewModel
+@using WDACC.Commons
+
+@* 系統操作Log *@
+@{
+    string guid = Guid.NewGuid().ToString();
+}
+
+<div id="tab-@(guid)">
+    <div id="form">
+        @using (Html.BeginForm("Query", "Admin", new { id = ActionName.Admin.FuncLog, formid = Model.FuncLogForm.rid }, FormMethod.Post, new { id = "func-form" }))
+        {
+            <div class="table">
+                <table border="0" width="100%" class="table-teacher">
+                    <tbody>
+                        <tr>
+                            <td width="14%">日期區間</td>
+                            <td>
+                                @Html.EditorFor(x => x.FuncLogForm.StartDateTw, "TwDate")
+                                ~
+                                @Html.EditorFor(x => x.FuncLogForm.EndDateTw, "TwDate")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">功能項目</td>
+                            <td colspan="3">
+                                @Html.DropDownListFor(x => x.FuncLogForm.LogFunc, CommonOptions.FuncLogItems(), "請選擇", new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">操作項目</td>
+                            <td colspan="3">
+                                @Html.DropDownListFor(x => x.FuncLogForm.LogType, CommonOptions.FuncLogType(), "請選擇", new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="14%">帳號</td>
+                            <td colspan="3">
+                                @Html.TextBoxFor(x => x.FuncLogForm.UserName, new { @class = "form-normal" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="submit-bar">
+                <button type="submit" class="btn btn-orange" id="query">查詢</button>
+            </div>
+        }
+    </div>
+
+    <div id="paging-container"></div> 
+    <div id="grid" class="row">
+        @if (Model != null && Model.FuncGrid != null && Model.FuncGrid.Count > 0)
+        {
+            var typeList = CommonOptions.FuncLogType();
+            var funcList = CommonOptions.FuncLogItems();
+
+            foreach (var item in Model.FuncGrid)
+            {
+                @Html.Partial("Log/_FuncLogGridRows", item)
+            }
+        }
+        else
+        {
+            <table style="width:100%">
+                <tr>
+                    <td  class="text-center"> 查無資料 </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('#tab-@(guid)');
+
+        function setupPaging(totalNumber) {
+            root.find('div#paging-container').pagination({
+                dataSource: '@Html.Raw(Url.Action("Paging", "Admin", new { id = ActionName.Admin.FuncLog, formid = Model.FuncLogForm.rid }))',
+                locator: 'data',
+                totalNumber: totalNumber, 
+                pageSize: 30,
+                callback: function (data, pagination) {
+                    var res = '';
+                    $.each(data, function (i, item) {
+                        res += item;
+                    });
+                    root.find('#grid.row').html(res);
+                }
+            });
+        }
+
+        root.on('click', '#query', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#func-form').attr('action'),
+                data: root.find('#func-form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                var res = '';
+                $.each(resp.data, function (i, item) {
+                    res += item;
+                });
+                root.find('#grid.row').html(res);
+                setupPaging(resp.totalNumber);
+            });
+        });
+    });
+</script>
+

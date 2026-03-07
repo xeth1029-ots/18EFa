@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Teacher"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <resultMaps>
+  </resultMaps>
+
+  <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+  </cacheModel>
+
+  <statements>
+
+    <!-- 取得老師基本資料清單 -->
+    <select id="GetTeacherList"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        select b.*
+        from member a join memdetail b on a.id = b.mid
+        where a.role=2
+      ]]>
+      <dynamic>
+        <!-- 師資課程查詢 -->
+        <isNotEmpty property="Mid">
+          <![CDATA[ and a.id = #id# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="username">
+          <![CDATA[ and a.username like '%' + #username# + '%' ]]>
+        </isNotEmpty>
+        <isNotEmpty property="email">
+          <![CDATA[ and a.email = #email# ]]>
+        </isNotEmpty>
+        <isNotEmpty property="pid">
+          <![CDATA[ and a.pid = #pid# ]]> 
+        </isNotEmpty>
+        <isNotEmpty property="active">
+          <![CDATA[ and b.active = #active# ]]> 
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[ order by b.realname ]]>
+    </select>
+
+    <!-- 師資課程查詢 -->
+    <select id="GetTeacherSearchList"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+        <![CDATA[
+select distinct b.*
+from member a
+join memdetail b on a.id=b.mid
+left join memteachreg c on b.mid=c.mid 
+left join memsrcs d on b.mid=d.mid
+left join memindusclass e on b.mid=e.mid
+/* left join  f on b.mid=f.mid */
+where a.role=2
+        ]]>
+        <dynamic>
+          <!-- 關鍵字 -->
+          <isNotEmpty property="KeyWord">
+            <![CDATA[ and ( b.realname like '%' + #KeyWord# + '%' or b.nickname like '%' + #KeyWord# + '%' or b.major like '%' + #KeyWord# + '%') ]]>
+          </isNotEmpty>
+          <!-- 授課單元 -->
+          <isNotEmpty property="TeachUnit">
+            <![CDATA[ and d.tcclass = #TeachUnit# ]]>  
+          </isNotEmpty>
+          <!-- 授課區域 -->
+          <isNotEmpty property="RegOp">
+            <![CDATA[ and c.cityid = #RegOp# ]]>  
+          </isNotEmpty>
+          <!-- 授課產業別 -->
+          <isNotEmpty property="IndsOp">
+            <![CDATA[ and e.indscid=#IndsOp# ]]>  
+          </isNotEmpty>
+          <!-- 居住地 -->
+          <isNotEmpty property="LiveReg">
+            <![CDATA[ and b.zipcode in (select b.zipcode from city a join region b on a.id=b.cityid where a.id =#LiveReg#) ]]>  
+          </isNotEmpty>
+          <isNotEmpty property="active">
+            <![CDATA[ and b.active = #active# ]]> 
+          </isNotEmpty>
+        </dynamic>
+        <![CDATA[  order by b.realname ]]>
+    </select>
+
+    <!-- 取得老師基本資料清單 -->
+    <select id="GetMemberScore"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        select * from memsrcs where 1=1
+      ]]>
+      <dynamic>
+        <isNotEmpty propery="mid">
+          <![CDATA[ mid = #mid# ]]>
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+    <!-- 授課區域 -->
+    <select id="GetTechRegion"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+select cityid, title
+from memteachreg a 
+join city b on a.cityid=b.id
+where mid = #mid# 
+      ]]>
+    </select>
+
+    <!-- 授課產業別  -->
+    <select id="GetTechIndClass"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        select distinct mid, indscid, name, [order]
+        from memindusclass a join indsclass b on a.indscid=b.id 
+        where mid = #mid#
+        order by mid, [order]
+      ]]>
+    </select>
+
+    <!-- 取得前年度師資授課時數 -->
+    <select id="GetTeacherCourseHours"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        select
+          b.mid, 
+          b.realname,
+          isnull(sum(c.hours), 0) sum_total, /* 所有時數加總 */
+          isnull(sum(case when c.tcclass='11' or c.tcclass='12' or c.tcclass='13' then c.hours else 0 end), 0) sum_bc, /* BC */
+          isnull(sum(case when c.tcclass='21' or c.tcclass='22' or c.tcclass='23' then c.hours else 0 end), 0) sum_dc, /* DC */
+          isnull(sum(case when c.tcclass='31' or c.tcclass='32' or c.tcclass='33' then c.hours else 0 end), 0) sum_kc  /* KC */
+        from
+          memdetail b join memsrcs c on b.mid = c.mid
+        where 1=1
+          and b.mid = #mid# 
+          and c.ckeckd='2' /* 審核通過 */
+          and year(c.sdate) = year(getdate()) - 1  /* 前一年 */
+        group by
+          b.mid, realname
+      ]]>
+    </select>
+
+    <!-- 取得講師曾開授課程 -->
+    <select id="GetTeacherCourseList"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        select * from memsrcs 
+        where showoff=1 and ckeckd=2 and mid = #mid#
+        order by sdate desc
+      ]]>
+    </select>
+
+    <!-- 課程師資招募 -->
+    <select id="GetTeacherTcsvList"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[
+        select *
+        from teasurvey as ts
+        where ts.confirm=2 AND ts.fdate >= #today#
+        order by ts.aodate
+      ]]>
+    </select>
+
+    <select id="GetTeacherTcsv"
+        resultClass="WDACC.Models.StoreExt.Store"
+        parameterClass="Hashtable"
+        cacheModel="WDASE-cache">
+      <![CDATA[ select * from teasurvey where id = #id# ]]>
+    </select>
+
+
+  </statements>
+</sqlMap>

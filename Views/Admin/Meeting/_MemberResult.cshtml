@@ -1,0 +1,22 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+@using WDACC.Models.ViewModel.Admin
+
+@if (Model.MeetingModel.MetDetailList != null)
+{
+    foreach (var item in Model.MeetingModel.MetDetailList)
+    {
+        @MemberItem(item)
+    }
+}
+
+@helper MemberItem(AdminMeetMemberModel item)
+{
+    <div class="col-sm-2 outline">
+        <span class="label label-default large item-result" data-id="@item.Value" data-text="@item.Name" style="background-color:lightblue;color:black;cursor:pointer">
+            <font style="font-size:1.25em">@item.Name</font>
+        </span>
+    </div>
+}
+

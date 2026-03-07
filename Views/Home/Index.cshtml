@@ -1,0 +1,19 @@
+﻿@using Turbo.MVC.Base3.Models;
+@{
+    //Layout = null;
+    Layout = "~/Views/Shared/_NewMainLayout.cshtml";
+    ViewBag.Title = "Index";
+    ViewBag.TitleS = "起始頁";
+    //Html.Action("NoResults", "Home");
+    //ViewBag.HTitle = "勞動部勞動力發展署共通核心職能專區";
+    //ViewBag.HTitle2 = "共通核心職能專區";
+    //ViewBag.HTitle3 = "歡迎光臨 共通核心職能專區";
+    //ViewBag.HTitle2alt = "圖2";
+
+}
+@if (!ConfigModel.TestHomeStop1)
+{
+    <script type="text/javascript">
+        $(function () { window.location.href = "@Url.Action("Index", "Facade", new { id = "Home" })"; });
+    </script>
+}

@@ -1,0 +1,261 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+
+@{
+    ViewBag.Title = "積分課程登錄";
+    //string s_file_accept = ".xls,.doc,.ppt,.pdf,.jpg,.png,.msg,.odt,.odf";
+    string s_file_accept = Turbo.MVC.Base3.Models.ConfigModel.Get_FileExtAccept;
+    string s_file_accept_upper = s_file_accept.ToUpper().Replace(",", "、");
+    string s_TxtbokUploadFormat = string.Concat("◎ 佐證資料檔案格式限定", s_file_accept_upper);
+
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div class="unit-border" id="ScoreRegister">
+    <div class="unit-bg unit-bg-blue">
+        <div class="mark-blue">◎<a href="nsdownload/courserules.pdf">佐證資料認列標準</a>◎</div>
+        <div class="mark-blue">◎請務必上傳佐證資料，以便管理者審核。◎</div>
+        <div class="mark-red">@(s_TxtbokUploadFormat)，檔案大小以&nbsp;<span style="color:red;">18MB</span>為限。◎</div>
+        @using (Html.BeginForm("Save", "Member", new { id = ActionName.Member.ScoreRegister }, FormMethod.Post, new { id = "main_form", enctype = "multipart/form-data", @class = "form-horizontal inputSet" }))
+        {
+            @*<form id="main_form" action="member.php?do=addsrcs" method="post" enctype="multipart/form-data" class="form-horizontal inputSet">*@
+            @Html.HiddenFor(x => x.ScoreForm.Score.id)
+            @Html.HiddenFor(x => x.ScoreForm.Score.mid)
+            @Html.HiddenFor(x => x.ScoreForm.EditMode)
+            <fieldset>
+                <div class="form-block">
+                    <div class="form-group">
+                        <label for="text" class="control-label col-sm-2"><span style="color:red;">開課單位</span></label>
+                        <div class="col-sm-5">
+                            @Html.DropDownListFor(x => x.ScoreForm.Score.tuclass, CommonOptions.TeachUnitClass(), "請選擇", new { @class = "form-control" })
+                            @*<select name="tuclass[]" id="tuclass0" class="form-control"><option value="1">訓練單位</option><option value="2">職訓機構</option><option value="3">學校</option><option value="4">企業</option><option value="5">其他</option></select>*@
+                        </div>
+                        <div class="col-sm-5">
+                            @*<input type="text" name="tuname[]" id="tuname0" class="form-control" placeholder="請輸入開課單位名稱">*@
+                            @Html.TextBoxFor(x => x.ScoreForm.Score.tuname, new { @class = "form-control", placeholder = "請輸入開課單位名稱" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text" class="control-label col-sm-2"><span style="color:red;">授課單元</span></label>
+                        <div class="col-sm-10">
+                            @Html.DropDownListFor(x => x.ScoreForm.Score.tcclass, CommonOptions.TeachUnit(), "請選擇", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text" class="control-label col-sm-2"><span style="color:red;">課程名稱</span></label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.ScoreForm.Score.tcname, new { @class = "form-control", placeholder = "請輸入課程名稱" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text" class="control-label col-sm-2">日期</label>
+                        <div class="col-sm-10">
+                            <div style="margin-bottom:5px">
+                                @Html.EditorFor(x => x.ScoreForm.StartDateTw, "DateTimeField") ~
+                            </div>
+                            <div>
+                                @Html.EditorFor(x => x.ScoreForm.EndDateTw, "DateTimeField")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text" class="control-label col-sm-2"><span style="color:red;">授課時數</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(x => x.ScoreForm.Score.hours, new { @class = "form-control numeric" })
+                            @*<input type="text" size="5" name="hours[]" id="hours0" class="form-control">*@
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text" class="control-label col-sm-2" style="color:red">是否顯示於前台</label>
+                        <div class="col-sm-4">
+                            @{
+                                if (!Model.ScoreForm.Score.showoff.HasValue)
+                                {
+                                    Model.ScoreForm.Score.showoff = 1;
+                                }
+                            }
+                            <label class="radio-inline"> @Html.RadioButtonFor(x => x.ScoreForm.Score.showoff, "0") 否 </label> &nbsp;
+                            <label class="radio-inline"> @Html.RadioButtonFor(x => x.ScoreForm.Score.showoff, "1") 是 </label>
+                            @*
+                            <label class="radio-inline"><input type="radio" name="showoff[0]" value="0" checked="">否</label>
+                            <label class="radio-inline"><input type="radio" name="showoff[0]" value="1">是</label>
+                            *@
+                        </div>
+                        <label for="text" class="control-label col-sm-2">勞動部補助計畫</label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(x => x.ScoreForm.Score.govplan, CommonOptions.GovPlan(), "非補助計畫", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text" class="control-label col-sm-2"><span style="color:red;">佐證資料</span></label>
+                        <div class="col-sm-10">
+                            @Html.HiddenFor(x => x.ScoreForm.CkFile.id)
+                            <input type="file" name="File" id="cfname" class="form-control" accept="@s_file_accept" />
+                        </div>
+                    </div>
+                </div>
+                <div class="submit-bar">
+                    @Html.HiddenFor(x => x.ScoreForm.Score.id)
+                    <button type="submit" data-role="btnSubmit" class="btn btn-orange" id="save">送出</button>
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>
+
+<div class="teacher-result">
+    <p class="form-title">本年度積分課程審查狀況</p>
+    @{
+        int thisYear = DateTime.Now.Year;
+        var thisYearList = Model.ScoreForm.AuditList
+            .Where(x => x.Get("sdate").AsDateTime().Value.Year == thisYear)
+            .ToList();
+        var audit = thisYearList.Where(x => x.Get("ckeckd").AsText() == "1").ToList().Count;    // 審核中
+        var pass = thisYearList.Where(x => x.Get("ckeckd").AsText() == "2").ToList().Count;     // 通過
+        var deny = thisYearList.Where(x => x.Get("ckeckd").AsText() == "3").ToList().Count;     // 不通過
+        var withdraw = thisYearList.Where(x => x.Get("ckeckd").AsText() == "4").ToList().Count; // 退回
+    }
+
+    <table class="table-class" width="100%" border="0">
+        <tbody>
+            <tr style="text-align:center;">
+                <th width="25%">審核中</th>
+                <th width="25%">通過</th>
+                <th width="25%">未通過</th>
+                <th width="25%">退回</th>
+            </tr>
+            <tr style="text-align:center;">
+                <td>@GetLink(audit, new { id = ActionName.Member.Score, year = thisYear, ckeckd = "1" })</td>
+                <td>@GetLink(pass, new { id = ActionName.Member.Score, year = thisYear, ckeckd = "2" })</td>
+                <td>@GetLink(deny, new { id = ActionName.Member.Score, year = thisYear, ckeckd = "3" })</td>
+                <td>@GetLink(withdraw, new { id = ActionName.Member.Score, year = thisYear, ckeckd = "4" })</td>
+            </tr>
+        </tbody>
+    </table>
+    <p></p>
+    <p class="form-title">去年度積分課程審查狀況</p>
+    @{
+        int lastYear = thisYear - 1;
+        var lastYearList = Model.ScoreForm.AuditList
+            .Where(x => x.Get("sdate").AsDateTime().Value.Year == lastYear)
+            .ToList();
+        var lastAudit = lastYearList.Where(x => x.Get("ckeckd").AsText() == "1").ToList().Count;    // 審核中
+        var lastPass = lastYearList.Where(x => x.Get("ckeckd").AsText() == "2").ToList().Count;     // 通過
+        var lastDeny = lastYearList.Where(x => x.Get("ckeckd").AsText() == "3").ToList().Count;     // 不通過
+        var lastWithdraw = lastYearList.Where(x => x.Get("ckeckd").AsText() == "4").ToList().Count; // 退回
+    }
+    <table class="table-class" width="100%" border="0">
+        <tbody>
+            <tr style="text-align:center;">
+                <th width="25%">審核中</th>
+                <th width="25%">通過</th>
+                <th width="25%">未通過</th>
+                <th width="25%">退回</th>
+            </tr>
+            <tr style="text-align:center;">
+                <td> @GetLink(lastAudit, new { id = ActionName.Member.Score, year = lastYear, ckeckd = "1" }) </td>
+                <td> @GetLink(lastPass, new { id = ActionName.Member.Score, year = lastYear, ckeckd = "2" }) </td>
+                <td> @GetLink(lastDeny, new { id = ActionName.Member.Score, year = lastYear, ckeckd = "3" }) </td>
+                <td> @GetLink(lastWithdraw, new { id = ActionName.Member.Score, year = lastYear, ckeckd = "4" }) </td>
+            </tr>
+        </tbody>
+    </table>
+    <p></p>
+    <p class="form-title">前台課程顯示狀況(審查通過)</p>
+    @{
+       var showoffList = Model.ScoreForm.AuditList;
+       var showCount = showoffList.Where(x => x.Get("ckeckd").AsText() == "2" && x.Get("showoff").AsText() == "1").ToList().Count;
+       var unShowCount = showoffList.Where(x => x.Get("ckeckd").AsText() == "2" && x.Get("showoff").AsText() == "0").ToList().Count;
+    }
+    <table class="table-class" width="100%" border="0">
+        <tbody>
+            <tr style="text-align:center;">
+                <th width="50%">已顯示</th>
+                <th width="50%">未顯示</th>
+            </tr>
+            <tr style="text-align:center;">
+                <td> @GetLink(showCount, new { id = ActionName.Member.Score, ckeckd = "2", showoff = "1" }) </td>
+                <td> @GetLink(unShowCount, new { id = ActionName.Member.Score, ckeckd = "2", showoff = "0" }) </td>
+            </tr>
+        </tbody>
+    </table>
+    <p></p>
+    <p class="form-title">歷年審查通過課程</p>
+    @{
+        int[] years = new int[] { thisYear - 1, thisYear - 2, thisYear - 3 };
+    }
+    <table class="table-class" width="100%" border="0">
+        <tbody>
+            <tr style="text-align:center;">
+                <th width="50%">年度</th>
+                <th width="50%">數量</th>
+            </tr>
+            @foreach(int year in years)
+            {
+                var count = Model.ScoreForm.AuditList.Where(x => x.Get("ckeckd").AsText() == "2" && x.Get("sdate").AsDateTime().Value.Year == year).ToList();
+                <tr style="text-align:center;">
+                    <td> @year </td>
+                    <td> @GetLink(count.Count(), new { id = ActionName.Member.Score, ckeckd = "2", year = year }) </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@helper GetLink(int count, object param)
+{
+    if (count == 0)
+    {
+        @count
+    }
+    else
+    {
+        <a href="@Url.Action("Query", "Member", param)">@count</a>
+    }
+}
+
+<script>
+    $(function () {
+        var root = $('div#ScoreRegister');
+        root.on('click', '#save', function (e) {
+            //alert('save');
+            e.preventDefault();
+            $.ajax({
+                //url: root.find('#main_form').attr('action'),
+                url: $('#main_form').attr('action'),
+                data: new FormData($('#main_form')[0]),
+                method: 'POST',
+                processData: false,  // tell jQuery not to process the data
+                contentType: false   // tell jQuery not to set contentType
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert('儲存成功', null, function () {
+                        window.location = '@Url.Action("Index", "Member", new { id = ActionName.Member.ScoreRegister })'
+                    });
+                } else {
+                    if (resp && resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, err) {
+                            res += err + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+
+        root.on('change', 'input[type=file]', function (e) {
+            if (this.files[0].size > 18000000) {
+                blockAlert('檔案大小不可超過18MB!', null, function () {
+                    $(e.target).val(null);
+                });
+            }
+        });
+
+        $('.numeric').numericOnly();
+    });
+</script>

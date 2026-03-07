@@ -1,0 +1,27 @@
+﻿@model  WDACC.Models.DateField
+
+@{
+    int[] years = new int[] { DateTime.Now.Year, DateTime.Now.Year - 1 };
+    int[] months = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    int maxDay = 31;
+    if (Model != null && Model.Year != null && Model.Month != null)
+    {
+        maxDay = DateTime.DaysInMonth(Model.Year.Value, Model.Month.Value);
+    }
+    int[] days = Enumerable.Range(1, maxDay + 1).ToArray();
+}
+
+<span class="tb-date-container form-inline">
+    @Html.LabelFor(x => x.Year, "選擇西元年", new { @class = "sr-only" })
+    @Html.DropDownListFor(x => x.Year,
+        years.Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).ToList(),
+        new { @class = "form-control tb-date tb-date-year" }) 年
+    @Html.LabelFor(x => x.Month, "選擇月份", new { @class = "sr-only" })
+    @Html.DropDownListFor(x => x.Month,
+        months.Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).ToList(),
+        new { @class = "form-control tb-date tb-date-month" }) 月
+    @Html.LabelFor(x => x.Day, "選擇日期", new { @class = "sr-only" })
+    @Html.DropDownListFor(x => x.Day, days.Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).ToList(),
+        new { @class = "form-control tb-date tb-date-day" }) 日
+</span>
+

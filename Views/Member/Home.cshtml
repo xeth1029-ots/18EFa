@@ -1,0 +1,31 @@
+﻿@using WDACC
+@using WDACC.Commons
+@using WDACC.Models.ViewModel
+@using WDACC.Models
+@model MemberViewModel
+
+@{ SessionModel sess = SessionModel.Get(); }
+
+@Html.Partial("News")
+
+@if (sess.IsShowMemberHint != "N")
+{
+    sess.IsShowMemberHint = "N";
+    //因自110年起毋須計算當年度各項指標積分， //請移除登入後顯示當年度該名師資各項指標積分統計之彈跳式視窗。
+    @*@Html.Partial("Home/_Score")*@
+
+}
+
+
+@if (sess.UserInfo != null && sess.UserInfo.ChangePwdRequired)
+{
+    <script>
+        $(function () {
+            blockAlert('目前登入密碼已使用超過2個月，請至基本資料維護功能變更密碼!', '', function () {
+                window.location = '@Url.Action("Index", "Member", new { id = "MemdeupHome" })';  @* 跳至變更密碼頁 *@
+            });
+        });
+    </script>
+
+}
+

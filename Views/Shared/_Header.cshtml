@@ -1,0 +1,57 @@
+﻿@using Turbo.MVC.Base3.Models;
+@{
+//Layout = null;
+}
+
+<noscript>
+    <div class="text-center" style="font-size:1.2em">
+        @*fix無障礙檢測:EV1120200：暴露名稱與角色，允許直接設定可由使用者設定的屬性，並在變更時提供通知*@
+        您的瀏覽器不支援JavaScript功能，若網頁功能無法正常使用時，請開啟瀏覽器JavaScript狀態
+    </div>
+</noscript>
+
+<!--header-->
+<div class="header">
+    @RenderHeaderLink()  @* 頁首超連結頁籤 *@
+</div>
+@if (ConfigModel.TestEnvironment)
+{
+    <div style="background-color:#FFE4E1; width: 200px; height: 22px; margin:0 auto;"><font color="#FF0000" style="font-size:2rem;font-weight:700">(測試環境)</font></div>
+}
+
+@helper RenderHeaderLink()
+{
+string ctrlName = ViewContext.RouteData.Values["controller"].ToString();
+if (ctrlName == "Admin")
+{
+        <div class="header-right">
+            <a href="#C" class="sr-only sr-only-focusable" title="跳到主要內容區塊" tabindex="1">跳到主要內容區塊</a>
+            <a title="右上方功能選項區" accesskey="U" id="U" href="#U" style="padding-right:0;">:::</a>
+            <a href="@Url.Action("Index", "Facade", new { id = "SiteMap" })" title="前往網站導覽">網站導覽</a>
+            @*｜<a href="@Url.Action("Index", "Facade", new { id = "Home" })" title="前往首頁">網站首頁</a>*@
+            ｜<a href="@Url.Action("Index", "Admin", new { id = "Home" })" title="管理者首頁">管理者首頁</a>
+            ｜<a href="@Url.Action("Logout", "Login")" title="登出">登出</a>
+        </div>
+}
+else if (ctrlName == "Member")
+{
+        <div class="header-right">
+            <a href="#C" class="sr-only sr-only-focusable" title="跳到主要內容區塊" tabindex="1">跳到主要內容區塊</a>
+            <a title="右上方功能選項區" accesskey="U" id="U" href="#U" style="padding-right:0;">:::</a>
+            <a href="@Url.Action("Index", "Facade", new { id = "SiteMap" })" title="前往網站導覽">網站導覽</a>
+            @*｜<a href="@Url.Action("Index", "Facade", new { id = "Home" })" title="前往首頁">網站首頁</a>*@
+            ｜<a href="@Url.Action("Index", "Member", new { id = "Home" })" title="師資首頁">師資首頁</a>
+            ｜<a href="@Url.Action("Logout", "Login")" title="登出">登出</a>
+        </div>
+}
+else
+{
+        <div class="header-right">
+            <a href="#C" class="sr-only sr-only-focusable" title="跳到主要內容區塊" tabindex="1">跳到主要內容區塊</a>
+            <a title="右上方功能選項區" accesskey="U" id="U" href="#U" style="padding-right:0;">:::</a>
+            <a href="@Url.Action("Index", "Facade", new { id = "SiteMap" })" title="前往網站導覽">網站導覽</a>
+            ｜<a href="@Url.Action("Index", "Facade", new { id = "Home" })" title="前往首頁">回首頁</a>
+        </div>
+}
+}
+

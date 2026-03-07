@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="News"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+    <resultMaps>
+    </resultMaps>
+
+    <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+    </cacheModel>
+
+  <statements>
+    <!-- 最新消息相關作業 -->
+
+    <!-- 取得最新消息清單 -->
+    <select id="GetNewsList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <!-- -->
+      <![CDATA[ select * from news where 1=1  ]]>
+      <dynamic>
+        <isParameterPresent>
+          <isNotEmpty property="id">
+              <![CDATA[ and id = #id# ]]>
+          </isNotEmpty>
+          <isNotEmpty property="today">
+              <![CDATA[ and sdate <= #today# and edate >= #today# ]]>
+          </isNotEmpty>
+          <isNotEmpty property="dates">
+              <![CDATA[ and sdate >= #dates# ]]>
+          </isNotEmpty>
+          <isNotEmpty property="datee">
+              <![CDATA[ and edate <= #datee# ]]>
+          </isNotEmpty>
+          <isNotEmpty property="title">
+              <![CDATA[ and title like concat('%', #title#, '%') ]]>
+          </isNotEmpty>
+          <isNotEmpty property="content">
+              <![CDATA[ and content like concat('%', #content#, '%') ]]>
+          </isNotEmpty>
+          <isNotEmpty property="class">
+              <![CDATA[ and class = #class# ]]>
+          </isNotEmpty>
+          <isNotEmpty property="ishot">
+              <![CDATA[ and ishot = #ishot# ]]>
+          </isNotEmpty>
+          <isNotEmpty property="showoff">
+              <![CDATA[ and showoff = #showoff# ]]>
+          </isNotEmpty>
+        </isParameterPresent>
+      </dynamic>
+      <![CDATA[ order by sdate desc ]]>
+    </select>
+
+    <!-- 取得最新消息清單 -->
+    <select id="GetHotNewsList"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[ select * from news where ishot='Y' order by sdate desc ]]>
+    </select>
+
+    <select id="GetDetail"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="WDASE-cache">
+      <![CDATA[ select * from news where id = #id# ]]>
+    </select>
+
+  </statements>
+</sqlMap>

@@ -1,0 +1,25 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@using System.Web
+
+@{
+    // 積分時間設定
+    ViewBag.Title = "_ScoreIntro";
+}
+<div class="table-responsive">
+    <table border="0" width="100%" class="table-teacher">
+        <tbody>
+            <tr>
+                <td width="15%">積分時間設定</td>
+                <td>
+                    @(Html.Raw(HttpUtility.HtmlDecode(Model.SystemModel.IntroList.Where(x => x.id == 13).FirstOrDefault().content)))
+                    @*積分課程計算日期： 2020-1-1 ~ 2020-12-31<br>教材上傳計算時段： 2020-1-1 ~ 2020-10-31*@
+                </td>
+                <td width="50px">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.System, nid = 13 })" class="btn btn-orange">修改</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

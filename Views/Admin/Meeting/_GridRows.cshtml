@@ -1,0 +1,38 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "_MeetingGrid";
+}
+
+@if (Model != null && Model.MeetingGrid != null && Model.MeetingGrid.Count > 0)
+{
+    foreach (var item in Model.MeetingGrid)
+    {
+        var row = item.GetFinder();
+        <tr>
+            <td>
+                @row("date").AsDateTimeText("yyyy-MM-dd") @row("timestr").AsText()
+                @*2020-06-09&nbsp;  18:30:00*@
+            </td>
+            <td>
+                @row("metname").AsText() (@row("mclass").AsCodeText(CommonOptions.MeetingClass()))
+                @*高屏澎東區共通核心職能分享會(6月)&nbsp;(社群會議)*@
+            </td>
+            <td>
+                @row("metloc").AsText()
+                @*高雄市三民區博愛一路70號9樓*@
+            </td>
+            <td>
+                <div align="center">
+                    <a href="@Url.Action("Detail", "Admin", new { id = ActionName.Admin.Meeting, metid = row("id").AsInt64() })" class="btn btn-orange">
+                        修改
+                    </a>
+                    @*<a href="admin.php?do=metmod&amp;metid=531" class="btn btn-orange"> 修改 </a>*@
+                </div>
+            </td>
+        </tr>
+    }
+}
+

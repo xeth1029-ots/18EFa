@@ -1,0 +1,32 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Commons
+@using WDACC.Models.StoreExt
+@using WDACC.Models.ViewModel.Admin
+
+@if (Model.MeetingModel.SharedList != null)
+{
+    foreach (var item in Model.MeetingModel.SharedList)
+    {
+        @MemberItem(item)
+    }
+}
+
+@helper MemberItem(AdminMeetMemberModel item)
+{
+    <div class="col-sm-2 outline">
+        <span class="label label-default" style="background-color:lightgreen">
+            <label>
+                <input type="checkbox"
+                       name="SaveShareList"
+                       value="@item.Value"
+                       checked
+                       style="display:none">
+                <span style="color:black">
+                    <font style="font-size:1.25em"> @item.Name </font>
+                </span>
+                <a id="remove-link" href="javascript:void(0)">X</a>
+            </label>
+        </span>
+    </div>
+}
+

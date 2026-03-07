@@ -1,0 +1,95 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Commons
+@using WDACC.Models
+
+@{
+    ViewBag.Title = "意見回饋";
+    SessionModel sess = SessionModel.Get();
+    string userName = sess.UserInfo.User.user_name;
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div id="feedback" class="unit-bg unit-bg-blue">
+@using (Html.BeginForm("Save", "Member", new { id = ActionName.Member.Feedback }, FormMethod.Post,
+    new { id = "feedback_form", @class="form-horizontal inputSet" }))
+{
+    <input type="hidden" name="mid" value="557">
+    <div class="form-group">
+        <label for="text" class="control-label col-sm-2">意見類別</label>
+        <div class="col-sm-10">
+            @Html.DropDownListFor(x => x.Feedback.Opinion.@class, CommonOptions.FeedbackClass(), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="text" class="control-label col-sm-2">提問人姓名</label>
+        <div class="col-sm-10">
+            <p class="form-control-static"> @userName </p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="text" class="control-label col-sm-2">聯絡信箱</label>
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.Feedback.Opinion.email, new { @class = "form-control", maxlength = 300 })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="text" class="control-label col-sm-2">聯絡電話</label>
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.Feedback.Opinion.mobile, new { @class = "form-control", maxlength = 300 })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="text" class="control-label col-sm-2">諮詢/意見內容</label>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(x => x.Feedback.Opinion.content, new { @class = "form-control", rows = 5, cols = 10 })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(x => x.Feedback.IsAgree, new { @class = "check" })
+                    本人同意將個人資料(包括但不限於姓名、E-mail、聯絡電話)提供予產業人才投資方案計畫專案辦公室，作為「意見回饋」聯繫及回覆之用。
+                </label>
+            </div>
+            附註：<br>
+            1. 為提供完善的服務， 請詳細填寫以供參考。<br>
+            2. 謝謝您的耐心填寫，相關人員將會儘快回覆您的意見。
+        </div>
+    </div>
+    <div class="submit-bar">
+        <button type="submit" id="save" class="btn btn-orange">資料送出</button>
+        <button type="reset" class="btn btn-refill">資料清除</button>
+    </div>
+}
+</div>
+
+<script>
+    $(function () {
+        var root = $('#feedback');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#feedback_form').attr('action'),
+                data: root.find('#feedback_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert("儲存成功", null, function () {
+                        window.location = '@Url.Action("Index", "Member", new { id = ActionName.Member.Home })';
+                    });
+                } else {
+                    if (resp && resp.message) {
+                        var res = '';
+                        $.each(resp.message, function (i, item) {
+                            res += item + '\n';
+                        });
+                        blockWarning(res);
+                    }
+                }
+            });
+        });
+    });
+</script>

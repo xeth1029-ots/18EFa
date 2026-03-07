@@ -1,0 +1,248 @@
+﻿@model WDACC.Models.TeacherDetail
+
+@using WDACC.Models.ViewModel.Facade
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+@using WDACC.Models
+
+@{
+    ViewBag.Title = "教師詳細資料";
+    var item = Model.MemDetail;
+    Store store = new Store();
+    store.Collection(item);
+    string s_M_noshow = item.noshow;
+    if (!string.IsNullOrEmpty(s_M_noshow) && s_M_noshow == "Y") { return; }
+    item.skill = (item.skill ?? "").Replace("\\r\\n", "\r\n").Replace("\r\n", "<br/>");
+    item.history = (item.history ?? "").Replace("\\r\\n", "\r\n").Replace("\r\n", "<br/>");
+    string s_acadetype = store.Get("acadetype").AsCodeText(WDACC.Commons.CommonOptions.AcadeType());
+    s_acadetype = (s_acadetype ?? "").Replace("\\r\\n", "\r\n").Replace("\r\n", "<br/>");
+    string s_birthdat = item.birthdat.HasValue ? item.birthdat.Value.ToString("yyyy-MM-dd") : "";
+}
+
+<div class="news-content">
+    <div class="clearfix"></div>
+    <div class="newsgroup">
+        <div class="table-responsive">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table-teacher">
+                <tbody>
+                    @*<tr><th width="15%" id="th1">項目</th><th colspan="3" width="85%" id="ct1">內容</th></tr>*@
+                    <tr>
+                        <th width="15%" scope="row">姓名</th>
+                        <td colspan="3" width="85%">
+                            <div style="float:left">
+                                <strong>
+                                    @item.realname &nbsp; @(string.IsNullOrEmpty(item.nickname) ? "" : "(" + item.nickname + ")") &nbsp;
+                                </strong>
+                                <br />&nbsp;
+                            </div>
+                            <div style="width:50%;float:right">
+                                <span class="btn-active">
+                                    <a href="@Url.Action("Detail", "Facade", new { id = FacadeViewModel.ActionName.TeachShow, mid = item.mid })" target="_blank" title="另開新視窗,查看講師授課花絮">
+                                        講師授課花絮
+                                        <i class="fas fa-arrow-circle-right"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            @*<div style="width:50%;float:right">
+                                @{long? total = 0;long? bc = 0;long? dc = 0;long? kc = 0;
+                                if (Model.CourseHours != null){total = Model.CourseHours.Get("sum_total").AsInt64();
+                                bc = Model.CourseHours.Get("sum_bc").AsInt64();dc = Model.CourseHours.Get("sum_dc").AsInt64();
+                                kc = Model.CourseHours.Get("sum_kc").AsInt64();}}
+                                前一年度授課總時數： @total  小時 <br />
+                                DC： @dc 小時 &nbsp;&nbsp;&nbsp;&nbsp; BC：  @bc 小時 &nbsp;&nbsp;&nbsp;&nbsp; KC： @kc 小時
+                                </div>*@
+                        </td>
+                    </tr>
+
+                    @{ var so = Model.ShowOff; }
+
+                    @if (so[0] || so[2])
+                    {
+                        <tr>
+                            @if (so[0])
+                            {
+                                <th scope="row"> 性別 </th>
+                                <td> @store.Get("gender").AsCodeText(CommonOptions.Gender()) </td>
+                            }
+                            else
+                            {
+                                <th scope="row"> &nbsp;</th>
+                                <td> &nbsp;</td>
+                            }
+                            @if (so[2])
+                            {
+                                <td> 電話 </td>
+                                <td> @item.phone </td>
+                            }
+                        </tr>
+                    }
+                    @if (so[3] || so[4])
+                    {
+                        <tr>
+                            @if (so[3])
+                            {
+                                <th width="15%" scope="row">手機</th>
+                                <td width="35%">@item.mobile</td>
+                            }
+                            else
+                            {
+                                <th scope="row"> &nbsp;</th>
+                                <td> &nbsp;</td>
+                            }
+                            @if (so[4])
+                            {
+                                <td> 傳真 </td>
+                                <td> @item.fax </td>
+                            }
+                        </tr>
+                    }
+
+                    @if (so[1])
+                    {
+                        <tr>
+                            <th scope="row"> 生日 </th>
+                            <td colspan="3"> @s_birthdat</td>
+                        </tr>
+                    }
+
+                    @if (so[5] || so[6])
+                    {
+                        <tr>
+                            @if (so[5])
+                            {
+                                <th scope="row"> EMail </th>
+                                <td> @item.email </td>
+                            }
+                            else
+                            {
+                                <th scope="row"> &nbsp;</th>
+                                <td> &nbsp;</td>
+                            }
+                            @if (so[6])
+                            {
+                                <td> EMail(工作) </td>
+                                <td> @item.jemail </td>
+                            }
+                        </tr>
+                    }
+                    @if (so[7])
+                    {
+                        <tr>
+                            <th scope="row"> 聯絡地址 </th>
+                            <td colspan="3"> @store.Get("zipcode").AsCodeText(CommonOptions.ZipWithRegion()) (@item.zipcode) @item.address</td>
+                        </tr>
+                    }
+
+                    @if (so[8])
+                    {
+                        <tr>
+                            <th scope="row"> 個人網站 </th>
+                            <td colspan="3"> @item.website </td>
+                        </tr>
+                    }
+
+                    @if (so[9])
+                    {
+                        <tr>
+                            <th scope="row"> Facebook </th>
+                            <td colspan="3"> @item.facebook </td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <th width="15%" scope="row">學歷</th>
+                        <td colspan="3">
+                            <span>@store.Get("degree").AsCodeText(WDACC.Commons.CommonOptions.Degree())</span>
+                        </td>
+                    </tr>
+
+                    <tr><th scope="row">畢業學校</th><td colspan="3">@item.school</td></tr>
+
+                    <tr><th scope="row">服務單位/職稱</th><td colspan="3">@item.jobcomp &nbsp;/&nbsp; @item.jobtitle </td></tr>
+
+                    <tr>
+                        <th scope="row">所屬社群</th>
+                        <td colspan="3">
+                            @store.Get("group").AsCodeText(WDACC.Commons.CommonOptions.Group())
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">專長/領域</th>
+                        <td colspan="3">
+                            @Html.Raw(item.skill)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th width="15%" scope="row">產學類別</th>
+                        <td width="35%">
+                            @Html.Raw(s_acadetype)
+                        </td>
+                        <td width="15%">授課單元</td>
+                        <td width="35%">
+                            @{
+                                Model.TeachUnit.SetValue(item.teachunit);
+                            }
+                            @Html.DisplayFor(x => x.TeachUnit, "TeachUnitField")
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="15%" scope="row">授課區域</th>
+                        <td width="35%" colspan="3">
+                            @if (Model.MemTechReg != null && Model.MemTechReg.Count > 0)
+                            {
+                                var region = Model.MemTechReg.Select(x => x.Get("title").AsText()).ToArray();
+                                <span> @(string.Join("、", region)) </span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">授課產業別</th>
+                        <td colspan="3">
+                            @if (Model.IndClass != null && Model.IndClass.Count > 0)
+                            {
+                                var indClass = Model.IndClass.Select(x => x.Get("name").AsText()).ToArray();
+                                <span> @Html.Raw(string.Join("<br/>", indClass)) </span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">工作經歷</th>
+                        <td class="ww" colspan="3">
+                            @Html.Raw(item.history)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">曾開授課程</th>
+                        <td colspan="3">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-class">
+                                <tbody>
+                                    <tr><th width="30%" scope="col">開課單位</th><th width="40%" scope="col">課程名稱</th><th width="30%" scope="col">開課起訖</th></tr>
+                                    @foreach (var course in Model.CourseList)
+                                    {
+                                        <tr>
+                                            <td style="text-align:left"> @course.Get("tuname").AsText() </td>
+                                            <td> @course.Get("tcname").AsText() </td>
+                                            <td> @course.Get("sdate").AsDateTimeText("yyyy-MM-dd") ~ @course.Get("edate").AsDateTimeText("yyyy-MM-dd") </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div><!-- news group end -->
+    <!-- news page start -->
+    <div class="clearfix"></div>
+    <div class="submit-bar">
+        <!--<button type="submit" class="btn-green"><a href="#gotop"><font color="white">回上頁</font></a></button>-->
+
+        <a href="@Url.Action("Index", "Facade", new { id = FacadeViewModel.ActionName.TeacherQuery })" class="btn-green" style="font-color:white" title="按下後回課程師資介紹">
+            回上頁(課程師資介紹)
+        </a>
+    </div>
+    <!--   news page end -->
+</div>

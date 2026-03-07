@@ -1,0 +1,37 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@if (Model != null && Model.CourseAuditList != null && Model.CourseAuditList.Count > 0)
+{
+    foreach (var item in Model.CourseAuditList)
+    {
+        var act = ActionName.Admin.CourseAudit;
+        var mid = item.Get("mid").AsInt64();
+        var year = Model.AuditParam.AuditYear;
+        <tr>
+            <td> @item.Get("realname").AsText() </td>
+            @GetLink(Url.Action("Detail", "Admin", new { id = act, Mid = mid, Ckeckd = 1, AuditYear = year }), item.Get("sum1").AsInt64(), "#FF5151")
+            @GetLink(Url.Action("Detail", "Admin", new { id = act, Mid = mid, Ckeckd = 2, AuditYear = year }), item.Get("sum2").AsInt64(), "#97CBFF")
+            @GetLink(Url.Action("Detail", "Admin", new { id = act, Mid = mid, Ckeckd = 3, AuditYear = year }), item.Get("sum3").AsInt64(), "#4EFEB3")
+            @GetLink(Url.Action("Detail", "Admin", new { id = act, Mid = mid, Ckeckd = 4, AuditYear = year }), item.Get("sum4").AsInt64(), "#FF5151")
+        </tr>
+    }
+}
+
+@helper GetLink(string url, long? count, string color)
+{
+    if (count.HasValue && count.Value > 0)
+    {
+        <td style="background-color:@color">
+            <a href="@url"> @count </a>
+        </td>
+    }
+    else
+    {
+        <td>
+            @count
+        </td>
+    }
+}
+

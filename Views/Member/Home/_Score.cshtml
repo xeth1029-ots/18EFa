@@ -1,0 +1,65 @@
+﻿@using WDACC
+@using WDACC.Commons
+@using WDACC.Models.ViewModel
+@using WDACC.Models
+@model MemberViewModel
+
+@{
+    Layout = null;
+    var svm = Model.ScoreView;
+    string guid = Guid.NewGuid().ToString();
+    string name = SessionModel.Get().UserInfo.User.user_name;
+}
+
+<script type="text/template" id="score-@(guid)">
+    <div class="unit-border">
+        <div><b>@(name)</b> 老師您好，歡迎登入共通核心職能專區，至目前您的年度積分如下：</div>
+        <div class="unit-bg unit-bg-blue">
+            @svm.Year 年度總積分：
+            <span style="color:#f00;"> @svm.TotalScore </span>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>積分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>授課推廣</th>
+                        <td>@svm.TeachTotalScore</td>
+                    </tr>
+                    <tr>
+                        <th>社群互動</th>
+                        <td> @svm.CommunityScoreTotal </td>
+                    </tr>
+                    <tr>
+                        <th>教材分享</th>
+                        <td> @svm.ShareScore </td>
+                    </tr>
+                    <tr>
+                        <th>教材下載</th>
+                        <td> @svm.DownloadScore </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+
+<script>
+    $(function () {
+        var scoreContent = $('#score-@(guid)').html();
+        $.confirm({
+            backgroundDismiss: false,
+            icon: 'glyphicon glyphicon-check',
+            title: "<span class='blockAlertTitle'>個人積分</span>",
+            confirmButton: '確定',
+            confirmButtonClass: 'btn-info',
+            cancelButton: false,
+            closeIcon: false,
+            content: scoreContent,
+            theme: 'white'
+        });
+    });
+</script>

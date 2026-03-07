@@ -1,0 +1,81 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.StoreExt
+
+@{
+    //SiteMap.cshtml 網站導覽 SiteMap 
+    ViewBag.Title = "網站導覽";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@helper RenderBlock()
+{
+
+    <div class="container-fluid content-bg">
+        <div class="row">
+            <div class="clearfix"></div>
+            <!-- member control start-->
+            <div class="col-md-12">
+                <br />
+                <div class="searchzone">
+                    @*<div class="member-title"><i class="fa fa-sitemap" aria-hidden="true"></i>  網站導覽</div>*@
+                    <div style="padding: 10px 20px; overflow: auto;">
+                        <div class="row">
+                            <div>
+                                <ul style="list-style-type:none;padding:0 0 0 20px; margin:0 0 0 0">
+                                    本網站主要內容分為三大區塊：
+                                    <li>
+                                        <ul>
+                                            <li>1.上方功能區塊</li>
+                                            <li>2.中央內容區塊</li>
+                                            <li>3.下方選單連結區塊</li>
+                                        </ul>
+                                        <br />
+                                    </li>
+                                    本網站的快速鍵﹝Accesskey﹞設定如下：
+                                    <li>
+                                        <ul>
+                                            <li>Alt+U：選單連結區塊，此區塊列有本網站主要連結。</li>
+                                            <li>Alt+C：中央內容區塊，為本頁主要內容區。</li>
+                                            <li>Alt+L：頁尾網站資訊。</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <ul class="footer-nav">
+                                <li class="footer-title">1.最新消息</li>
+                                <li><a href="@Url.Action("Index", "Facade", new { id = "News" })" title="前往最新消息">1-1.最新消息</a></li>
+                            </ul>
+                            <ul class="footer-nav">
+                                <li class="footer-title">2.課程簡介</li>
+                                <li><a href="@Url.Action("Index", "Facade", new { id = "CourseIntro" })" title="前往課程簡介">2-1.課程簡介</a></li>
+                            </ul>
+                            @*<ul class="footer-nav">
+                                <li class="footer-title">3.課程需求刊登</li>
+                                <li><a href="@Url.Action("Index", "Facade", new { id = "TeaSurvey" })" title="前往課程需求刊登">3-1.課程需求刊登</a></li>
+                            </ul>*@
+                            <ul class="footer-nav">
+                                <li class="footer-title">3.課程師資介紹</li>
+                                <li><a href="@Url.Action("Index", "Facade", new { id = "TeacherQuery" })" title="前往課程師資介紹">3-1.課程師資介紹</a></li>
+                            </ul>
+                            <ul class="footer-nav">
+                                <li class="footer-title">4.課程師資搜尋</li>
+                                <li><a href="@Url.Action("Index", "Facade", new { id = "TeacherSearch" })" title="前往課程師資搜尋">4-1.課程師資搜尋</a></li>
+                            </ul>
+                            <ul class="footer-nav">
+                                <li class="footer-title">5.登入專區</li>
+                                <li><a href="@Url.Action("Index", "Facade", new { id = "Login" })" title="前往登入專區">5-1.登入專區</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@RenderBlock()

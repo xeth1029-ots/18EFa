@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Intro"
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+    <resultMaps>
+    </resultMaps>
+
+    <cacheModel id="WDASE-cache" implementation="MEMORY" >
+    <flushInterval hours="1"/>
+    <property name="Type" value="WEAK"/>
+    </cacheModel>
+
+  <statements>
+    <!-- 取得首頁課程簡介 -->
+    <select id="GetHomeIntro"
+      resultClass="WDACC.Models.StoreExt.Store"
+      parameterClass="Hashtable"
+      cacheModel="Turbo.MVC.Base3-cache">
+      <!-- -->
+      <![CDATA[ select * from intro where id in (6, 7, 8, 9) ]]>
+    </select>
+
+  </statements>
+</sqlMap>

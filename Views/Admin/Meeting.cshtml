@@ -1,0 +1,25 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel 
+
+@{
+    ViewBag.Title = "會議活動設定";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+<div class="submenu">
+    <ul class="nav nav-tabs">
+        <li onclick="chgTab(0)" class="active"><a data-toggle="tab" id="btnmc1" name="btnmc1" href="#tabmc1" aria-expanded="false">會議活動登錄</a></li>
+        <li onclick="chgTab(1)" class=""><a data-toggle="tab" id="btnmc3" name="btnmc3" href="#tabmc3" aria-expanded="true">會議活動修改</a></li>
+    </ul>
+</div>
+<div class="news-content unit-bg-blue">
+    <div class="tab-content">
+        <div id="tabmc1" class="tab-pane fade active in">
+            @Html.Partial("Meeting/_EditForm")
+       </div>
+        <div id="tabmc3" class="tab-pane fade">
+            @Html.Partial("Meeting/_Grid")
+        </div>
+    </div>
+</div>

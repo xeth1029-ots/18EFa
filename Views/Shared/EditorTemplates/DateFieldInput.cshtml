@@ -1,0 +1,16 @@
+﻿@model  WDACC.Models.DateField
+@*DateFieldInput*@
+<span class="tb-date-container form-inline">
+    @Html.TextBoxFor(x => x.Year, new { @class = "form-normal tb-date tb-date-year numeric", style = "width: 100px", maxlength = "4" }) 年
+    @Html.LabelFor(x => x.Year,"輸入西元年",new { @class ="sr-only" })
+    @Html.TextBoxFor(x => x.Month, new { @class = "form-normal tb-date tb-date-month numeric", style="width: 80px", maxlength = "2" }) 月
+    @Html.LabelFor(x => x.Month, "輸入數字月份", new { @class = "sr-only" })
+    @Html.TextBoxFor(x => x.Day, new { @class = "form-normal tb-date tb-date-day numeric", style="width:80px", maxlength = "2" }) 日
+    @Html.LabelFor(x => x.Day, "輸入數字日期", new { @class = "sr-only" })
+</span>
+
+<script>
+    $(function () {
+        $('.numeric').decimalOnly();
+    });
+</script>

@@ -1,0 +1,28 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.StoreExt
+@using Turbo.MVC.Base3.Commons
+@{
+    //Privacy 隱私權及安全政策 Privacy.cshtml
+    ViewBag.Title = "隱私權及安全政策";
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@helper RenderBlock()
+{
+    string s_content = (string)ViewBag.Privacy;
+    s_content = (string.IsNullOrEmpty(s_content) ? "尚無資訊" : MyHelperUtil.ChangeBreakLine(s_content));
+    <div class="container-fluid content-bg">
+        <div class="unit-border">
+            <div class="clearfix"></div>
+            <!-- privacy start -->
+            <div class="unit-bg unit-bg-blue">
+                <p>@Html.Raw(s_content)</p>
+            </div>
+            <!-- privacy end -->
+        </div>
+    </div>
+}
+
+@RenderBlock()

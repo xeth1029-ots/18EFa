@@ -1,0 +1,215 @@
+﻿@model WDACC.Models.ViewModel.Facade.FacadeViewModel
+@using WDACC.Models.ViewModel.Facade
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "課程需求刊登";
+    var vs = Html.ValidationSummary(true);
+}
+
+@Html.Partial("_Breadcrumb")
+@Html.Partial("_TitleBar")
+
+@helper RenderHidehtml()
+{
+    <div class="unit-border" id="teasurvey_form">
+        <div class="">
+            <div class="unit-bg unit-bg-blue">
+                @*@if (vs != null && !string.IsNullOrEmpty(vs.ToHtmlString().Trim())) { <div class="text-center alert alert-danger"> @vs </div> }*@
+                <p class="mark-red">紅色粗體字為必填欄位</p>
+                @using (Html.BeginForm("Save", "Facade", new { id = FacadeViewModel.ActionName.TeaSurvey }, FormMethod.Post, new { id = "main_form", @class = "form-horizontal inputSet", autocomplete = "off" }))
+                {
+                    @*<label for="tsagree"><span class="sr-only">閱讀過完整的須知，同意規定事項</span></label>*@
+                    <input type="hidden" name="tsagree" value="1" />
+                    <p class="form-title">需求單位資訊</p>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.indname, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.indname, new { @class = "form-control", placeholder = "請輸入需求單位名稱", maxlength = "100" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.indcontact, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.indcontact, new { @class = "form-control", placeholder = "請輸入單位聯絡人姓名", maxlength = "100" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.indphone, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.indphone, new { @class = "form-control", placeholder = "請輸入單位聯絡電話 ex:02-22123412", maxlength = "100" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.indemail, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.indemail, new { @class = "form-control", placeholder = "請輸入單位聯絡電子信箱", maxlength = "100" })
+                        </div>
+                    </div>
+                    <p class="form-title">需求課程資訊</p>
+                    <div class="form-group">
+                        <label for="" class="control-label col-sm-2 mark-red">授課日期(必要的)</label>
+                        <div class="col-sm-5">
+                            開始 @Html.EditorFor(x => x.TeacherSurveyDetail.StartDate, "DateField")
+                        </div>
+                        <div class="col-sm-5">
+                            結束 @Html.EditorFor(x => x.TeacherSurveyDetail.EndDate, "DateField")
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*授課總時數*@
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.couhours, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.couhours, new { @class = "form-control numeric", placeholder = "請輸入授課總時數", maxlength = "10" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*授課時間說明*@
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.coutime, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-10">
+                            @Html.TextAreaFor(x => x.TeacherSurveyDetail.Teasurvey.coutime, new { @class = "form-control", placeholder = "請輸入授課時間說明" })
+                            <span class="help-block">授課時間若有特殊情況，請填列於此</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.couplace, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.couplace, new { @class = "form-control", placeholder = "請輸入授課地點", maxlength = "100" })
+                        </div>
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.teano, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.teano, new { @class = "form-control numeric", placeholder = "請輸入講師需求人數", maxlength = "10" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.stuno, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(x => x.TeacherSurveyDetail.Teasurvey.stuno, new { @class = "form-control numeric", placeholder = "請輸入學員人數", maxlength = "10" })
+                        </div>
+                        @*<label for="" class="control-label col-sm-2 mark-red">需求課程類別</label>*@
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.CouClass, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(x => x.TeacherSurveyDetail.CouClass, "ColClassField")
+                            @*
+                                <label class="checkbox-inline"><input type="checkbox" value="" name="couclass[]">DC</label><label class="checkbox-inline"><input type="checkbox" value="" name="couclass[]">BC</label><label class="checkbox-inline"><input type="checkbox" value="" name="couclass[]">KC</label>
+                            *@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*<label for="" class="control-label col-sm-2 mark-red">需求課程產業屬性</label>*@
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.indclass1, new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-10">
+                            @Html.DropDownListFor(x => x.TeacherSurveyDetail.Teasurvey.indclass1, CommonOptions.IndsClass(), "請選擇", new { @class = "form-control" })
+                            @*<select name="indclass" class="form-control"><option value="1">製造業&nbsp;-&nbsp;食品製造業</option><option value="2">製造業&nbsp;-&nbsp;飲料製造業</option><option value="3">製造業&nbsp;-&nbsp;菸草製造業</option><option value="4">製造業&nbsp;-&nbsp;紡織業</option><option value="5">製造業&nbsp;-&nbsp;成衣及服飾品製造業</option><option value="6">製造業&nbsp;-&nbsp;皮革、毛皮及其製品製造業</option><option value="7">製造業&nbsp;-&nbsp;木竹製品製造業</option><option value="8">製造業&nbsp;-&nbsp;紙漿、紙及紙製品製造業</option><option value="9">製造業&nbsp;-&nbsp;印刷及資料儲存媒體複製業</option><option value="10">製造業&nbsp;-&nbsp;石油及煤製品製造業</option><option value="11">製造業&nbsp;-&nbsp;化學材料製造業</option><option value="12">製造業&nbsp;-&nbsp;化學製品製造業</option><option value="13">製造業&nbsp;-&nbsp;藥品及醫用化學製品製造業</option><option value="14">製造業&nbsp;-&nbsp;橡膠製品製造業</option><option value="15">製造業&nbsp;-&nbsp;塑膠製品製造業</option><option value="16">製造業&nbsp;-&nbsp;非金屬礦物製品製造業</option><option value="17">製造業&nbsp;-&nbsp;基本金屬製造業</option><option value="18">製造業&nbsp;-&nbsp;金屬製品製造業</option><option value="19">製造業&nbsp;-&nbsp;電子零組件製造業</option><option value="20">製造業&nbsp;-&nbsp;電腦、電子產品及光學製品製造業</option><option value="21">製造業&nbsp;-&nbsp;電力設備製造業</option><option value="22">製造業&nbsp;-&nbsp;機械設備製造業</option><option value="23">製造業&nbsp;-&nbsp;汽車及其零件製造業</option><option value="24">製造業&nbsp;-&nbsp;其他運輸工具及其零件製造業</option><option value="25">製造業&nbsp;-&nbsp;家具製造業</option><option value="26">製造業&nbsp;-&nbsp;其他製造業</option><option value="27">製造業&nbsp;-&nbsp;產業用機械設備維修及安裝業</option><option value="28">服務業&nbsp;-&nbsp;批發及零售業</option><option value="29">服務業&nbsp;-&nbsp;運輸及倉儲業</option><option value="30">服務業&nbsp;-&nbsp;住宿及餐飲業</option><option value="31">服務業&nbsp;-&nbsp;資訊及通訊傳播業</option><option value="32">服務業&nbsp;-&nbsp;金融及保險業</option><option value="33">服務業&nbsp;-&nbsp;不動產業</option><option value="34">服務業&nbsp;-&nbsp;專業、科學及技術服務業</option><option value="35">服務業&nbsp;-&nbsp;支援服務業</option><option value="36">服務業&nbsp;-&nbsp;公共行政及國防；強制性社會安全</option><option value="37">服務業&nbsp;-&nbsp;教育服務業</option><option value="38">服務業&nbsp;-&nbsp;醫療保健及社會工作服務業</option><option value="39">服務業&nbsp;-&nbsp;藝術、娛樂及休閒服務業</option><option value="40">服務業&nbsp;-&nbsp;其他服務業</option><option value="41">其他&nbsp;-&nbsp;農、林、漁、牧業</option><option value="42">其他&nbsp;-&nbsp;礦業及土石採取業</option><option value="43">其他&nbsp;-&nbsp;電力及燃氣供應業</option><option value="44">其他&nbsp;-&nbsp;用水供應及污染整治業</option><option value="45">其他&nbsp;-&nbsp;營造業</option></select>*@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*<label for="" class="control-label col-sm-2">講師待遇</label>*@
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.salary, new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @*<textarea class="form-control" name="salary"></textarea>*@
+                            @Html.TextAreaFor(x => x.TeacherSurveyDetail.Teasurvey.salary, new { @class = "form-control" })
+                            <span class="help-block">簡單說明講師鐘點費、交通費、教材費及付款方式等資訊</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*<label for="" class="control-label col-sm-2">其他補充說明</label>*@
+                        @Html.LabelFor(x => x.TeacherSurveyDetail.Teasurvey.indinfo, new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @*<textarea class="form-control" name="indinfo"></textarea>*@
+                            @Html.TextAreaFor(x => x.TeacherSurveyDetail.Teasurvey.indinfo, new { @class = "form-control" })
+                            <span class="help-block">若有其他未盡事宜，請於此說明</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <div class="alert alert-danger text-center" id="TeacherSurveyDetail_ERRMSG"></div>
+                    </div>
+                    <div class="form-group">
+                        @*<label for="txtchknum" class="control-label col-sm-2 mark-red">請輸入驗證碼</label>*@
+                        @Html.LabelFor(x => x.ValidateCode, "請輸入驗證碼(必要的)", new { @class = "control-label col-sm-2 mark-red" })
+                        <div class="col-sm-2">
+                            @Html.TextBoxFor(x => x.ValidateCode, new { @class = "form-control", title = "請輸入驗證碼", placeholder = "請輸入驗證碼", maxlength = "10" })
+                        </div>
+                        <div class="col-sm-8">
+                            <img src="@Url.Action("GetValidateCode", "Login")" id="imgChkNum" alt="產生新驗證碼" title="驗證碼" />&nbsp;
+                            @*<span style="color:red">點擊圖片可更換驗證碼</span>*@
+                            @*<iframe name="frmPlayer" style="display:none;" src="" id="frmPlayerValidateCode" title="驗證碼語音撥放介面"></iframe>*@
+                            <br />
+                            <a href="javascript:void(0);" title="點擊刷新驗證碼" id="reflashNum"><span style="color:#CC0000">刷新驗證碼</span></a>
+                            <a href="@Url.Action("GetValidateAudio", "Login")" target="frmPlayer" title="語音撥放驗證碼"><img id="playCode" alt="撥放" src="~/images/speaker.png" height="30" /></a>
+                            <br />
+                            <iframe name="frmPlayer" src="" title="驗證碼語音播放" scrolling="no" tabindex="-1" style="border: 0; width: 330px; height: 60px; display:inline-block;"></iframe>
+                            <noscript> 不支援javascript時，請按鍵盤上的F5鍵以重新產生驗證碼。 </noscript>
+                        </div>
+                    </div>
+                    <div class="submit-bar">
+                        <button type="submit" id="save" class="btn btn-orange" name="tcsrfn" value="9aa6b9a0cdf2abd65f7a1e9baf259926900ae9fd906ebc06184e0f7fa10c1bba" title="按下後會儲存">下一步(儲存)</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    $(function () {
+        var root = $('#teasurvey_form');
+        var form = root.find('form#main_form');
+        root.on('click', '#save', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: form.attr('action'),
+                data: form.serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                if (resp && resp.status) {
+                    blockAlert('儲存成功!', null, function () {
+                        window.location = '@Url.Action("Index", "Facade", new { id = "Home" })';
+                    });
+                } else {
+                    if (resp && resp.message) {
+                        //var res = '';
+                        //$.each(resp.message, function (i, item) { res += item + '\n'; })
+                        var res_htm = '';
+                        $.each(resp.message, function (i, item) { res_htm += item; })
+                        reloadValidCode();
+                        //blockAlert(res);
+                        $("#TeacherSurveyDetail_ERRMSG").show();
+                        $("#TeacherSurveyDetail_ERRMSG").text(res_htm);
+                        if (res_htm.indexOf('驗證碼輸入有誤') > -1 && $('#ValidateCode').length > 0) { $('#ValidateCode')[0].focus(); }
+                        else if (res_htm.indexOf('需求單位名稱') > -1 && $('#TeacherSurveyDetail_Teasurvey_indname').length > 0) { $('#TeacherSurveyDetail_Teasurvey_indname')[0].focus(); }
+                        else if (res_htm.indexOf('單位聯絡人') > -1 && $('#TeacherSurveyDetail_Teasurvey_indcontact').length > 0) { $('#TeacherSurveyDetail_Teasurvey_indcontact')[0].focus(); }
+                        else if (res_htm.indexOf('單位聯絡電話') > -1 && $('#TeacherSurveyDetail_Teasurvey_indphone').length > 0) { $('#TeacherSurveyDetail_Teasurvey_indphone')[0].focus(); }
+                        else if (res_htm.indexOf('單位聯絡電子信箱') > -1 && $('#TeacherSurveyDetail_Teasurvey_indemail').length > 0) { $('#TeacherSurveyDetail_Teasurvey_indemail')[0].focus(); }
+                        else if (res_htm.indexOf('授課總時數') > -1 && $('#TeacherSurveyDetail_Teasurvey_couhours').length > 0) { $('#TeacherSurveyDetail_Teasurvey_couhours')[0].focus(); }
+                        else if (res_htm.indexOf('授課地點') > -1 && $('#TeacherSurveyDetail_Teasurvey_couplace').length > 0) { $('#TeacherSurveyDetail_Teasurvey_couplace')[0].focus(); }
+                        else if (res_htm.indexOf('講師需求人數') > -1 && $('#TeacherSurveyDetail_Teasurvey_teano').length > 0) { $('#TeacherSurveyDetail_Teasurvey_teano')[0].focus(); }
+                        else if (res_htm.indexOf('學員人數') > -1 && $('#TeacherSurveyDetail_Teasurvey_stuno').length > 0) { $('#TeacherSurveyDetail_Teasurvey_stuno')[0].focus(); }
+                        else if (res_htm.indexOf('需求課程產業屬性') > -1 && $('#TeacherSurveyDetail_Teasurvey_indclass1').length > 0) { $('#TeacherSurveyDetail_Teasurvey_indclass1')[0].focus(); }
+                        else if (res_htm.indexOf('需求課程類別') > -1 && $('#TeacherSurveyDetail_CouClass_IsDc').length > 0) {
+                            $('#TeacherSurveyDetail_CouClass_IsDc').find("input[type='checkbox']").focus();
+                        }
+
+                        //blockAlert(resp.message);
+                    }
+                }
+            });
+        });
+        $('.numeric').numeric();
+    });
+
+</script>
+
+<script type="text/javascript">
+    function reloadValidCode() {
+        blockUI();
+        $('#imgChkNum').attr("src", '@Url.Action("GetValidateCode", "Login")' + "?rand=" + new Date().getMilliseconds());
+    }
+    $(function () {
+        $('#reflashNum').on("click", function (e) { reloadValidCode(); });
+        $('#imgChkNum').on("click", function (e) { reloadValidCode(); });
+        $('#imgChkNum').on("load", function () { unblockUI(); });
+        //$('[data-toggle="tooltip"]').tooltip()
+    });
+</script>

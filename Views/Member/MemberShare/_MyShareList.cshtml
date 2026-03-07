@@ -1,0 +1,72 @@
+﻿@model WDACC.Models.ViewModel.MemberViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "我的分享";
+}
+
+<div>
+    <h3 class="news-headtitle">我的教材</h3>
+    <div class="clearfix"></div>
+    <div class="newsgroup">
+        <div class="table-responsive">
+            <table class="table-index table" border="0">
+                <thead>
+                    <tr>
+                        <th width="15%">上傳日期</th>
+                        <th width="30%">檔案標題</th>
+                        <th width="15%">職能類別</th>
+                        <th width="15%">審核狀況</th>
+                        <th width="15%">審查意見</th>
+                        <th width="10%">下載次數</th>
+                    </tr>
+                </thead>
+                <tbody id="rows">
+                    @if (Model != null && Model.MyShareFileList != null && Model.MyShareFileList.Count > 0)
+                    {
+                        foreach (var item in Model.MyShareFileList)
+                        {
+                            var row = item.GetFinder();
+                            var ckeckd = row("checked").AsText();
+                            var checkedText = "";
+                            <tr>
+                                <td>
+                                    <span style="display: none"> @row("id").AsText() </span>
+                                    @row("date").AsDateTimeText("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    @if (ckeckd == "4")
+                                    {
+                                        <a href="@Url.Action("Detail", "Member", new { id = ActionName.Member.FileShareEdit, sfid = row("id").AsText() })">@row("title").AsText()</a>
+                                    }
+                                    else
+                                    {
+                                        @row("title").AsText()
+                                    }
+                                </td>
+                                <td>
+                                    @row("classid").AsCodeText(CommonOptions.Fclass())
+                                </td>
+                                <td>
+                                    @{
+                                        switch (ckeckd)
+                                        {
+                                            case "1": checkedText = "審核中"; break;
+                                            case "2": checkedText = "通過"; break;
+                                            case "3": checkedText = "不通過"; break;
+                                            case "4": checkedText = "退回"; break;
+                                        }
+                                    }
+                                    @checkedText
+                                </td>
+                                <td> @row("reason").AsText() </td>
+                                <td> @row("downloadcount").AsInt64() </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

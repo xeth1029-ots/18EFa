@@ -1,0 +1,312 @@
+﻿
+@{
+    string action = ViewBag.action;
+    string method = ViewContext.RouteData.Values["action"].ToString();
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    HelperResult[] arr = null;
+}
+
+<div class="breadlink">
+    <a title="中間主要功能選項區" accesskey="C" id="C" href="#C" style="text-decoration:none;">:::</a>
+    <i class="fa fa-home space-right" aria-hidden="true"></i>
+    目前位置：
+    @{
+        switch (controller)
+        {
+            case "Facade":
+                arr = SelectFacade(action);
+                break;
+            case "Member":
+                arr = SelectMember(action, method);
+                break;
+            case "Admin":
+                arr = SelectAdmin(action);
+                break;
+        }
+    }
+
+    @foreach (var link in arr)
+    {
+        @link
+    }
+</div>
+
+@functions {
+    HelperResult[] SelectFacade(string action)
+    {
+        HelperResult[] arr = null;
+        switch (action)
+        {
+            case "SiteMap":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeSiteMap() };
+                break;
+            case "Privacy":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadePrivacy() };
+                break;
+            case "GovAnnounce":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeGovAnnounce() };
+                break;
+            case "Home":
+                arr = new HelperResult[] { FacadeHome() };
+                break;
+            case "News":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeNews() };
+                break;
+            case "CourseIntro":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeIntro() };
+                break;
+            case "TeaSurvey":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeTeasurvey() };
+                break;
+            case "TeaSurveyForm":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeTeasurveyForm() };
+                break;
+            case "TeacherQuery":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeTeacherQuery() };
+                break;
+            case "TeacherSearch":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeTeacherSearch() };
+                break;
+            case "TeacherDetail":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeTeacherQuery(), Slash(), FacadeTeacherDetail(true) };
+                break;
+            case "TeachShow":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeTeacherQuery(), Slash(), FacadeTeacherShow() };
+                break;
+            case "Login":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadeLogin() };
+                break;
+            case "ForgetPassword":
+                arr = new HelperResult[] { FacadeHome(), Slash(), FacadedForgetPassword() };
+                break;
+            default:
+                arr = new HelperResult[] { };
+                break;
+        }
+        return arr;
+    }
+
+    HelperResult[] SelectMember(string action, string method)
+    {
+        // TODO
+        HelperResult[] arr = null;
+        switch (action)
+        {
+            case "Home":
+                arr = new HelperResult[] { MemberHome() };
+                break;
+            case "News":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberNews() };
+                break;
+            case "Tcsv":
+                if (method == "Index")
+                {
+                    arr = new HelperResult[] { MemberHome(), Slash(), MemberTcsv() };
+                }
+                else if (method == "Detail")
+                {
+                    arr = new HelperResult[] { MemberHome(), Slash(), MemberTcsv(), Slash(), MemberTcsvDetail() };
+                }
+                break;
+            case "MemdeupHome":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberMemdeupHome() };
+                break;
+            case "ScoreHome":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberScoreHome() };
+                break;
+            case "ScoreRegister":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberScoreRegister() };
+                break;
+            case "ShareHome":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberShareHome() };
+                break;
+            case "MemberShare":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberShare() };
+                break;
+            case "TeachShow":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberTeachShow() };
+                break;
+            case "ScoreView":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberScoreView() };
+                break;
+            case "Feedback":
+                arr = new HelperResult[] { MemberHome(), Slash(), MemberFeedback() };
+                break;
+            default:
+                arr = new HelperResult[] { };
+                break;
+        }
+        return arr;
+    }
+
+    HelperResult[] SelectAdmin(string action)
+    {
+        HelperResult[] arr = null;
+        switch (action)
+        {
+            case "Home":
+                arr = new HelperResult[] { AdminHome() };
+                break;
+            case "System":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminSystem() };
+                break;
+            case "News":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminNews() };
+                break;
+            case "Teacher":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminTeacher() };
+                break;
+            case "Account":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminAccount() };
+                break;
+            case "Meeting":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminMeeting() };
+                break;
+            case "ClassReview":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminClassReview() };
+                break;
+            case "CourseAudit":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminClassReview(), Slash(), AdminCourseAudit() };
+                break;
+            case "FileAudit":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminClassReview(), Slash(), AdminFileAudit() };
+                break;
+            case "Score":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminScore() };
+                break;
+            case "Feedback":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminFeedback() };
+                break;
+            case "Recruit":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminRecruit() };
+                break;
+            case "Export":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminExport() };
+                break;
+            case "Log":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminLog() };
+                break;
+            case "MgrAccount":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminMgrAccount() };
+                break;
+            case "FileUpload":
+                arr = new HelperResult[] { AdminHome(), Slash(), AdminFileUpload() };
+                break;
+            default:
+                arr = new HelperResult[] { };
+                break;
+        }
+        return arr;
+    }
+
+}
+
+@helper FacadeSiteMap()
+{<a href="@Url.Action("Index", "Facade", new { id = "SiteMap" })" title="前往,網站導覽">網站導覽</a>}
+@helper FacadePrivacy()
+{<a href="@Url.Action("Index", "Facade", new { id = "Privacy" })" title="前往,隱私權及安全政策">隱私權及安全政策</a>}
+@helper FacadeGovAnnounce()
+{<a href="@Url.Action("Index", "Facade" , new { id="GovAnnounce" })" title="前往,政府網站資訊開放宣告">政府網站資訊開放宣告</a>}
+@helper FacadeHome()
+{<a href="@Url.Action("Index", "Facade", new { id = "Home" })" title="前往,首頁">首頁</a>}
+@helper FacadeNews()
+{<a href="@Url.Action("Index", "Facade", new { id = "News" })" title="前往,最新消息">最新消息</a>}
+@helper FacadeIntro()
+{<a href="@Url.Action("Index", "Facade", new { id = "CourseIntro" })" title="前往,課程簡介">課程簡介</a>}
+@helper FacadeTeasurvey()
+{<a href="@Url.Action("Index", "Facade", new { id = "TeaSurvey" })" title="前往,課程需求刊登">課程需求刊登</a>}
+@helper FacadeTeasurveyForm()
+{<a href="@Url.Action("Detail", "Facade", new { id = "TeaSurveyForm" })" title="前往,課程需求刊登編輯">課程需求刊登編輯</a>}
+@helper FacadeTeacherQuery()
+{<a href="@Url.Action("Index", "Facade", new { id = "TeacherQuery" })" title="前往,課程師資介紹">課程師資介紹</a>}
+
+@helper FacadeTeacherDetail(bool isReadonly)
+{
+    if (isReadonly)
+    {
+        @:課程師資明細
+    }
+    else
+    {
+        <a href="@Url.Action("Detail", "Facade", new { id = "TeacherDetail" })" title="前往,課程師資明細">課程師資明細</a>
+    }
+}
+
+@helper FacadeTeacherSearch()
+{<a href="@Url.Action("Index", "Facade", new { id = "TeacherSearch" })" title="前往,課程師資搜尋">課程師資搜尋</a>}
+
+@helper FacadeTeacherShow()
+{<span>講師授課花絮</span>}
+
+@helper FacadeLogin()
+{<a href="@Url.Action("Index", "Facade", new { id = "Login" })" title="前往,登入專區">登入專區</a>}
+
+@helper FacadedForgetPassword()
+{ <a href="@Url.Action("Index", "Facade", new { id = "ForgetPassword" })" title="前往,忘記密碼">忘記密碼</a>  }
+
+
+@helper AdminHome()
+{<a href="@Url.Action("Index", "Admin", new { id = "Home" })" title="前往,首頁">首頁</a>}
+@helper AdminSystem()
+{<a href="@Url.Action("Index", "Admin", new { id = "System" })" title="前往,系統設定">系統設定</a>}
+@helper AdminNews()
+{<a href="@Url.Action("Index", "Admin", new { id = "News" })" title="前往,最新消息">最新消息</a>}
+@helper AdminTeacher()
+{<a href="@Url.Action("Index", "Admin", new { id = "Teacher" })" title="前往,資料設定">資料設定</a>}
+@helper AdminAccount()
+{<a href="@Url.Action("Index", "Admin", new { id = "Account" })" title="前往,新增帳號">新增帳號</a>}
+@helper AdminMeeting()
+{<a href="@Url.Action("Index", "Admin", new { id = "Meeting" })" title="前往,會議活動">會議活動</a>}
+
+@helper AdminClassReview()
+{<a href="@Url.Action("Index", "Admin", new { id = "ClassReview" })" title="前往,資料審核">資料審核</a>}
+@helper AdminCourseAudit()
+{<span>課程審核編輯</span>}
+@helper AdminFileAudit()
+{<span>教材審核編輯</span>}
+
+@helper AdminScore()
+{<a href="@Url.Action("Index", "Admin", new { id = "Score" })" title="前往,積分資料">積分資料</a>}
+@helper AdminFeedback()
+{<a href="@Url.Action("Index", "Admin", new { id = "Feedback" })" title="前往,意見回饋">意見回饋</a>}
+@helper AdminRecruit()
+{<a href="@Url.Action("Index", "Admin", new { id = "Recruit" })" title="前往,師資招募">師資招募</a>}
+@helper AdminExport()
+{<a href="@Url.Action("Index", "Admin", new { id = "Export" })" title="前往,資料匯出">資料匯出</a>}
+@helper AdminLog()
+{<a href="@Url.Action("Index", "Admin", new { id = "Log" })" title="前往,Log紀錄">Log紀錄</a>}
+@helper AdminMgrAccount()
+{<a href="@Url.Action("Index", "Admin", new { id = "MgrAccount" })" title="前往,管理者帳號設定">管理者帳號設定</a>}
+@helper AdminFileUpload()
+{<a href="@Url.Action("Index", "Admin", new { id = "FileUpload" })" title="前往,教材上傳">教材上傳</a>}
+
+
+@helper MemberHome()
+{<a href="@Url.Action("Index", "Member", new { id = "Home" })" title="前往,首頁">首頁</a>}
+@helper MemberNews()
+{<a href="@Url.Action("Index", "Member", new { id = "News" })" title="前往,師資最新消息">師資最新消息</a>}
+@helper MemberTcsv()
+{<a href="@Url.Action("Index", "Member", new { id = "Tcsv" })" title="前往,師資招募">師資招募</a>}
+@helper MemberTcsvDetail()
+{<a href="@Url.Action("Detail", "Member", new { id = "Tcsv" })" title="前往,師資招募詳細資訊">師資招募詳細資訊</a>}
+@helper MemberMemdeupHome()
+{<a href="@Url.Action("Index", "Member", new { id = "MemdeupHome" })" title="前往,基本資料維護">基本資料維護</a>}
+@helper MemberScoreHome()
+{<a href="@Url.Action("Index", "Member", new { id = "ScoreHome" })" title="前往,積分課程登錄">積分課程登錄</a>}
+@helper MemberScoreRegister()
+{<a href="@Url.Action("Index", "Member", new { id = "ScoreRegisger" })" title="前往,積分課程登錄">積分課程登錄</a>}
+@helper MemberShareHome()
+{<a href="@Url.Action("Index", "Member", new { id = "ShareHome" })" title="前往,教材分享區">教材分享區</a>}
+@helper MemberShare()
+{<a href="@Url.Action("Index", "Member", new { id = "MemberShare" })" title="前往,教材分享區">教材分享區</a>}
+@helper MemberTeachShow()
+{<a href="@Url.Action("Index", "Member", new { id = "TeachShow" })" title="前往,授課花絮">授課花絮</a>}
+@helper MemberScoreView()
+{<a href="@Url.Action("Index", "Member", new { id = "ScoreView" })" title="前往,積分表">積分表</a>}
+@helper MemberFeedback()
+{<a href="@Url.Action("Index", "Member", new { id = "Feedback" })" title="前往,意見回饋">意見回饋</a>}
+
+
+@helper Slash()
+{<span> ／ </span>}
+

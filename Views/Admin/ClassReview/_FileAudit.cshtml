@@ -1,0 +1,92 @@
+﻿@model WDACC.Models.ViewModel.AdminViewModel
+@using WDACC.Models.StoreExt
+@using WDACC.Commons
+
+@{
+    ViewBag.Title = "_FileAudit";
+    int thisYear = DateTime.Now.Year;
+    var years = Enumerable.Range(thisYear - 10, 11)
+        .OrderByDescending(x => x)
+        .Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() });
+}
+
+<div id="file_audit">
+    <p class="form-title">
+        <span class="year">@Model.AuditParam.AuditYear</span> 年上傳教材審核
+    </p>
+    <div class="col-sm-8">
+        @using (Html.BeginForm("Query", "Admin", new { id = ActionName.Admin.FileAudit }, FormMethod.Post, new { id = "main_form", @class = "form-inline" }))
+        {
+            @*<input type="hidden" name="tab" value="0">*@
+            @Html.DropDownListFor(x => x.AuditParam.AuditYear, years, "請選擇", new { @class = "form-normal", id = "year_field" })
+            <input type="submit" value="年度查詢" id="query" class="btn btn-orange" />
+        }
+    </div>
+    <div class="col-sm-4 text-right">
+        @using (Html.BeginForm("Export", "Admin", new { id = ActionName.Admin.FileAudit }, FormMethod.Post,
+            new { id = "export_form", @class = "form-inline" }))
+        {
+            @Html.HiddenFor(x => x.AuditExportModel.Year, new { id = "export_year", @class = "year" })
+            @Html.HiddenFor(x => x.AuditExportModel.QueryKind, new { id = "export_query_kind" })
+        }
+        <a data-year1="2020" data-ftype="ods" data-dt="" href="javascript:void(0)" class="btn btn-green export_rpt" data-query-kind="STATISTIC">
+            <span class="year"></span>統計
+        </a>
+        <a data-year1="2020" data-ftype="ods" data-dt="1" href="javascript:void(0)" class="btn btn-green export_rpt" data-query-kind="LIST">
+            <span class="year"></span>列表
+        </a>
+    </div>
+    <div class="clearfix"></div>
+    <p></p>
+    <div class="table-responsive">
+        <table border="0" width="100%" class="table-index">
+            <tbody>
+                <tr>
+                    <th width="30%">講師</th>
+                    <th>未審核</th>
+                    <th>已審核</th>
+                    <th>未通過</th>
+                    <th>退回</th>
+                </tr>
+            </tbody>
+            <tbody class="text-center" id="rows">
+                @Html.Partial("ClassReview/_FileAuditRows")
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var root = $('div#file_audit');
+
+        function syncYear() {
+            var value = root.find('#year_field').val();
+            root.find('.year').text(value);
+            root.find('.year').val(value);
+        }
+
+        root.on('click', '#query', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: root.find('#main_form').attr('action'),
+                data: root.find('#main_form').serialize(),
+                method: 'POST'
+            }).done(function (resp) {
+                root.find('#rows').html(resp);
+                syncYear();
+            });
+        });
+
+        root.on('click', 'a.export_rpt', function (e) {
+            e.preventDefault();
+            var form = root.find('form#export_form');
+            var queryKind = $(e.currentTarget).attr('data-query-kind');
+            form.find('input#export_query_kind').val(queryKind);
+            form.submit();
+        });
+
+        syncYear();
+    });
+</script>
+
