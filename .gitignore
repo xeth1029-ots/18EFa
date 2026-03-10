@@ -6,6 +6,7 @@
 .vs/
 .idea/
 .vscode/
+Properties/
 
 # 忽略相依套件與暫存檔 
 node_modules/
@@ -15,7 +16,6 @@ Packages/
 # 忽略編譯輸出的資料夾 
 bin/
 obj/
-Properties/
 Uploads/
 
 # 忽略特定使用者設定檔 
